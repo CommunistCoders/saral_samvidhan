@@ -1,8 +1,11 @@
 /* src/styles/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 body {
-    background-color: black; /* Set the body background to black */
-    color: white; /* Optional: set text color to white for contrast */
+    background-color: white; /* Set the body background to black */
+    color: black; /* Optional: set text color to white for contrast */
     margin: 0; /* Remove default margin */
     padding: 0; /* Remove default padding */
     font-family: Arial, sans-serif; /* Optional: set a default font */
