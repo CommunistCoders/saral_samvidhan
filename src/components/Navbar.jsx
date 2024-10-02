@@ -9,16 +9,29 @@ const Navbar = () => {
     <nav style={styles.nav}>
       <ul style={styles.navList}>
         <li>
-          <Link href="/" style={styles.navLink}>Home</Link>
+          <Link href="/" style={styles.navLink}>
+            Home
+          </Link>
         </li>
         <li>
-          <Link href="/about" style={styles.navLink}>About</Link>
+          <Link href="/about" style={styles.navLink}>
+            About
+          </Link>
         </li>
         <li>
-          <Link href="/blog" style={styles.navLink}>Blog</Link> {/* Add Blog link here */}
+          <Link href="/blog" style={styles.navLink}>
+            Blog
+          </Link>
         </li>
         <li>
-          <Link href="/contact" style={styles.navLink}>Contact</Link>
+          <Link href="/contact" style={styles.navLink}>
+            Contact
+          </Link>
+        </li>
+        <li>
+          <Link href="/game" style={styles.navLink}>
+            Game
+          </Link>
         </li>
       </ul>
     </nav>
