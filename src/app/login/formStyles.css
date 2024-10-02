@@ -1,0 +1,32 @@
+/* CSS transitions for smooth form swap */
+.form-enter {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  .form-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 500ms, transform 500ms;
+  }
+  .form-exit {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .form-exit-active {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 500ms, transform 500ms;
+  }
+  
+  /* Ensure the form container is centered */
+  .min-h-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .relative {
+    position: relative;
+    transition: all 0.8s ease;
+  }
+  
