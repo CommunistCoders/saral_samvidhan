@@ -66,7 +66,7 @@ const page = () => {
           <div className="mb-4">
             <button
               type="submit"
-              className="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-50 transition duration-300"
+              className="w-full bg-neutral-800 hover:bg-neutral-700 hover:shadow-light-2 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:bg-neutral-200 focus:ring-opacity-50 transition duration-300"
             >
               Login
             </button>
