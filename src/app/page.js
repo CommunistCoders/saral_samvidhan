@@ -1,6 +1,6 @@
 // src/app/page.js
 import React from "react";
-import Navbar from "@/components/NavBar";
+import Navbar from "@/components/Navbar";
 
 const HomePage = () => {
   return (
@@ -72,6 +72,5 @@ const HomePage = () => {
     </main>
   );
 };
-
 
 export default HomePage;

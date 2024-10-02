@@ -17,4 +17,3 @@ body {
     display: flex; /* Optional: use flexbox for layout */
     flex-direction: column; /* Optional: stack child elements vertically */
   }
-  
