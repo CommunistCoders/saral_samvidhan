@@ -1,0 +1,16 @@
+/* src/styles/globals.css */
+
+body {
+    background-color: black; /* Set the body background to black */
+    color: white; /* Optional: set text color to white for contrast */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    font-family: Arial, sans-serif; /* Optional: set a default font */
+  }
+  
+  .main {
+    min-height: 100vh; /* Ensure the main content takes up at least the full viewport height */
+    display: flex; /* Optional: use flexbox for layout */
+    flex-direction: column; /* Optional: stack child elements vertically */
+  }
+  
