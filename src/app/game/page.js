@@ -32,7 +32,7 @@ const ThreeScene = () => {
 
       const stats = new Stats();
       document.body.appendChild(stats.dom);
-
+      var posx=0,posy=0,posz=0;
       // Function to Load FBX File
       function loadFBX(url) {
         const fbxLoader = new FBXLoader();
@@ -40,9 +40,13 @@ const ThreeScene = () => {
           url,
           (object) => {
             if (player) {
+              posx=player.position.x;
+              posy=player.position.y;
+              posz = player.position.z;
               scene.remove(player);
             }
             object.scale.set(0.01, 0.01, 0.01);
+            object.position.set(posx,posy,posz);
             scene.add(object);
             player = object;
 
@@ -109,8 +113,8 @@ const ThreeScene = () => {
 
         if (player) {
          player.position.z += 0.01;
-          camera.position.set(player.position.x, player.position.y+2, player.position.z+4);
-          camera.lookAt(player.position);
+          // camera.position.set(player.position.x, player.position.y+2, player.position.z+4);
+          // camera.lookAt(player.position);
         }
 
         controls.update();
