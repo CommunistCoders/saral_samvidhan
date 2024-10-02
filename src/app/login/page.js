@@ -41,7 +41,7 @@ const Page = () => {
             {/* Login Form */}
             <CSSTransition
               in={isLogin}
-              // timeout={500}
+              timeout={0}
               classNames="form"
               unmountOnExit
             >
@@ -102,7 +102,7 @@ const Page = () => {
             {/* Signup Form */}
             <CSSTransition
               in={!isLogin}
-              // timeout={500}
+              timeout={0}
               classNames="form"
               unmountOnExit
             >
