@@ -80,6 +80,13 @@ const Page = () => {
                     />
                   </div>
 
+          <div className="mb-6">
+            <label className="flex items-center">
+              <input type="checkbox" className="form-checkbox" />
+              <span className="ml-2 text-gray-700">Remember me</span>
+            </label>
+          </div>
+
                   <div className="mb-4">
                     <button
                       type="submit"
