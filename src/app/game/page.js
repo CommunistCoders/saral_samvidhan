@@ -1,4 +1,4 @@
-import CityScene from "@/components/CityScene";
+import CityScene from "@/components/cityscene";
 
 export default function gamePage() {
   return (
