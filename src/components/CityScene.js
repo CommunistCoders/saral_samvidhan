@@ -5,12 +5,21 @@ import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 
+// City component
 function City() {
   // Load the GLB city model
   const { scene } = useGLTF("/models/ccity_building_set_1.glb"); // Adjust the path as needed
   return <primitive object={scene} scale={0.05} />;
 }
 
+// Car component
+function Car() {
+  // Load the GLB car model
+  const { scene } = useGLTF("/models/Lamborghini V12 Vision.glb"); // Adjust the path as needed
+  return <primitive object={scene} scale={30} position={[0, 0, 5]} />;
+}
+
+// Player component
 function Player({ cameraRef, mixer, actions, currentAction }) {
   const playerRef = useRef();
   const clock = new THREE.Clock();
@@ -95,7 +104,7 @@ function Player({ cameraRef, mixer, actions, currentAction }) {
 
       // Update camera position to smoothly follow the player
       cameraRef.current.position.lerp(
-        new THREE.Vector3(playerPosition.x, playerPosition.y + 90, playerPosition.z + 120),
+        new THREE.Vector3(playerPosition.x, playerPosition.y + 150, playerPosition.z + 150),
         0.1
       );
 
@@ -107,6 +116,7 @@ function Player({ cameraRef, mixer, actions, currentAction }) {
   return playerRef.current ? <primitive object={playerRef.current} /> : null; // Render player only when loaded
 }
 
+// Main CityScene component
 export default function CityScene() {
   const mixer = useRef();
   const actions = useRef({});
@@ -124,6 +134,9 @@ export default function CityScene() {
 
       {/* Load City */}
       <City />
+
+      {/* Load Car */}
+      <Car />
 
       {/* Load Player */}
       <Player cameraRef={cameraRef} mixer={mixer} actions={actions} currentAction={currentAction} />
