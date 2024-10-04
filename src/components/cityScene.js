@@ -2,7 +2,7 @@
 import React, { useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
-import { Player } from "./Player";
+import { Player } from "./player";
 import { Car } from "./car";
 
 // City component

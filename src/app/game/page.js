@@ -1,4 +1,4 @@
-import CityScene from "@/components/CityScene";
+import CityScene from "@/components/cityScene";
 
 export default function gamePage() {
   THREE.Cache.clear();

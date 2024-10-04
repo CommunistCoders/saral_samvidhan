@@ -1,7 +1,7 @@
 // app/layout.js
 import React from "react";
 import "../../styles/globals.css"; // Make sure to import your global styles
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 
 export default function RootLayout({ children }) {
