@@ -1,7 +1,6 @@
 import CityScene from "@/components/cityScene";
 
 export default function gamePage() {
-  THREE.Cache.clear();
   return (
     <div
       style={{
