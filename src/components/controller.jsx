@@ -33,6 +33,13 @@ export function ControlManager({ camera }) {
         break;
       case "e":
         setIsPlayerActive(true);
+        const carPosition = carRef.current.getPosition();
+        const carRotation = carRef.current.getRotation();
+        const playerOffset = new THREE.Vector3(30, 0, 0); // Camera offset: 5 units up, 10 units behind
+        playerOffset.applyEuler(carRotation);
+        carPosition.add(playerOffset);
+        playerRef.current.setPosition(carPosition);
+        playerRef.current.setRotation(carRotation);
         break;
       default:
         console.log(isPlayerActive);

@@ -21,6 +21,7 @@ export const Car = forwardRef(
 
     useImperativeHandle(ref, () => ({
       getPosition: () => group.current.position.clone(),
+      getRotation: () => group.current.rotation.clone(),
     }));
 
     useFrame(() => {
