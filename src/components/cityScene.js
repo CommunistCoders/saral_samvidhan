@@ -2,8 +2,7 @@
 import React, { useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
-import { Player } from "./player";
-import { Car } from "./car";
+import { ControlManager } from "./controller";
 
 // City component
 function City() {
@@ -13,9 +12,6 @@ function City() {
 }
 // Main CityScene component
 export default function CityScene() {
-  const mixer = useRef();
-  const actions = useRef({});
-  const currentAction = useRef();
   let [cameraState, setCamera] = useState(null);
   //
   return (
@@ -30,11 +26,8 @@ export default function CityScene() {
       {console.log(cameraState)}
       <City />
 
-      {/* Load Car */}
-      <Car scale={30} />
+      <ControlManager camera={cameraState}></ControlManager>
 
-      {/* Load Player */}
-      <Player position={[30, 3, 0]} camera={cameraState} />
       <OrbitControls></OrbitControls>
     </Canvas>
   );
