@@ -36,6 +36,9 @@ const [isOpen, setIsOpen] = useState(false);
             <Link href="/game" className="text-gray-700 hover:text-blue-600">
               Game
             </Link>
+            <Link href="/news" className="text-gray-700 hover:text-blue-600">
+              News
+            </Link>
             <Link href="/login" className="text-gray-700 hover:text-blue-600">
               Login
             </Link>
