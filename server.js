@@ -17,7 +17,7 @@ app.get('/news', async (req, res) => {
     const response = await axios.get(NEWS_API_URL, {
       params: {
         q: 'law',
-        from: '2024-09-05',
+        from: '2024-09-06',
         sortBy: 'publishedAt',
         apiKey: API_KEY,
       },

@@ -30,6 +30,9 @@ const [isOpen, setIsOpen] = useState(false);
             <Link href="/blog" className="text-gray-700 hover:text-blue-600">
               Blog
             </Link>
+            <Link href="/news" className="text-gray-700 hover:text-blue-600">
+              News
+            </Link>
             <Link href="/contact" className="text-gray-700 hover:text-blue-600">
               Contact
             </Link>
