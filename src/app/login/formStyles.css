@@ -33,15 +33,16 @@
   align-items: center;
 }
 
+/* Form Wrapper with Increased Size */
 .form-wrapper {
-  width: 500px; /* Increased from 350px to 500px */
+  width: 500px;
   background: #fff;
-  padding: 50px; /* Increased padding for better spacing */
+  padding: 50px;
   border-radius: 10px;
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
 }
 
-/* Form Styles */
+/* Toggle Buttons for Login/Signup */
 .toggle-buttons {
   display: flex;
   justify-content: space-between;
@@ -50,20 +51,29 @@
 
 .toggle-buttons button {
   width: 50%;
-  padding: 15px; /* Increased button padding */
+  padding: 15px;
   background: transparent;
   border: none;
   cursor: pointer;
   font-size: 18px;
   font-weight: 600;
-  transition: color 0.3s;
+  transition: all 0.3s ease;
 }
 
+/* Inactive state */
+.toggle-buttons button {
+  color: #666; /* Gray text for inactive buttons */
+}
+
+/* Active state with color changes */
 .toggle-buttons button.active {
-  color: #1e3c72;
-  border-bottom: 2px solid #1e3c72;
+  color: #fff; /* White text when active */
+  background-color: #1e3c72; /* Add background color when active */
+  border-bottom: 3px solid #2a5298; /* Optional border bottom for highlight */
+  transition: background-color 0.3s ease, border-bottom 0.3s ease;
 }
 
+/* Form Styles */
 .form-content {
   display: flex;
   flex-direction: column;
@@ -76,11 +86,11 @@
 
 .field input {
   width: 100%;
-  padding: 12px; /* Slightly larger input padding */
+  padding: 12px;
   border: none;
   border-bottom: 2px solid #ccc;
   outline: none;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s ease;
 }
 
 .field input:focus {
@@ -106,7 +116,7 @@
 
 .submit-btn {
   width: 100%;
-  padding: 12px; /* Slightly larger button padding */
+  padding: 12px;
   background: #1e3c72;
   color: white;
   border: none;
@@ -119,3 +129,4 @@
 .submit-btn:hover {
   background-color: #2a5298;
 }
+
