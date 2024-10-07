@@ -68,7 +68,7 @@
 /* Active state with color changes */
 .toggle-buttons button.active {
   color: #fff; /* White text when active */
-  background-color: #1e3c72; /* Add background color when active */
+  background-color: #004080; /* Add background color when active */
   border-bottom: 3px solid #2a5298; /* Optional border bottom for highlight */
   transition: background-color 0.3s ease, border-bottom 0.3s ease;
 }
@@ -94,7 +94,7 @@
 }
 
 .field input:focus {
-  border-bottom: 2px solid #1e3c72;
+  border-bottom: 2px solid #004080;
 }
 
 .field label {
@@ -111,13 +111,13 @@
 .field input:not(:placeholder-shown) ~ label {
   top: -5px;
   font-size: 12px;
-  color: #1e3c72;
+  color: #004080;
 }
 
 .submit-btn {
   width: 100%;
   padding: 12px;
-  background: #1e3c72;
+  background: #004080;
   color: white;
   border: none;
   border-radius: 5px;
