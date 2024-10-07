@@ -1,32 +1,132 @@
-/* CSS transitions for smooth form swap */
-.form-enter {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  .form-enter-active {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 500ms, transform 500ms;
-  }
-  .form-exit {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .form-exit-active {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 500ms, transform 500ms;
-  }
-  
-  /* Ensure the form container is centered */
-  .min-h-screen {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .relative {
-    position: relative;
-    transition: all 0.8s ease;
-  }
-  
+/* Navbar Styles */
+.navbar {
+  width: 100%;
+  background-color: #004080;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-size: 24px;
+}
+
+/* Footer Styles */
+.footer {
+  width: 100%;
+  background-color: #004080;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+}
+
+/* Form Wrapper Positioned Between Navbar and Footer */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Form Wrapper with Increased Size */
+.form-wrapper {
+  width: 500px;
+  background: #fff;
+  padding: 50px;
+  border-radius: 10px;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Toggle Buttons for Login/Signup */
+.toggle-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.toggle-buttons button {
+  width: 50%;
+  padding: 15px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+/* Inactive state */
+.toggle-buttons button {
+  color: #666; /* Gray text for inactive buttons */
+}
+
+/* Active state with color changes */
+.toggle-buttons button.active {
+  color: #fff; /* White text when active */
+  background-color: #004080; /* Add background color when active */
+  border-bottom: 3px solid #2a5298; /* Optional border bottom for highlight */
+  transition: background-color 0.3s ease, border-bottom 0.3s ease;
+}
+
+/* Form Styles */
+.form-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.field {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.field input {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.field input:focus {
+  border-bottom: 2px solid #004080;
+}
+
+.field label {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #aaa;
+  pointer-events: none;
+  transition: top 0.3s, font-size 0.3s;
+}
+
+.field input:focus ~ label,
+.field input:not(:placeholder-shown) ~ label {
+  top: -5px;
+  font-size: 12px;
+  color: #004080;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  background: #004080;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+  background-color: #2a5298;
+}
+
