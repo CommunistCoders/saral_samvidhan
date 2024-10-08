@@ -28,12 +28,18 @@ app.use(passport.session());
 const NEWS_API_URL = "https://newsapi.org/v2/everything";
 const API_KEY = process.env.NEWSAPI;
 
+var today = new Date();
+var dd = String(today.getDate()).padStart(2, "0");
+var mm = String(today.getMonth()).padStart(2, "0");
+var yyyy = today.getFullYear();
+var date = yyyy + "-" + mm + "-" + dd;
+
 app.get("/news", async (req, res) => {
   try {
     const response = await axios.get(NEWS_API_URL, {
       params: {
         q: "law",
-        from: "2024-09-06",
+        from: date,
         sortBy: "publishedAt",
         apiKey: API_KEY,
       },
