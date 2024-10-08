@@ -9,7 +9,7 @@ const bcrypt = require("bcrypt");
 const session = require("express-session");
 const Strategy = require("passport-local").Strategy;
 
-env.config();
+env.config(); // Loading .env
 app.use(cors()); // This will allow all origins
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -22,7 +22,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Replace 'YOUR_API_KEY' with your actual API key
+/**
+ * News API Route
+ */
 const NEWS_API_URL = "https://newsapi.org/v2/everything";
 const API_KEY = process.env.NEWSAPI;
 
@@ -62,7 +64,9 @@ const userSchema = new mongoose.Schema({
 });
 
 const User = mongoose.model("User", userSchema);
-
+/**
+ * Login Route
+ */
 app.post("/login", async (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
@@ -81,7 +85,9 @@ app.post("/login", async (req, res, next) => {
     });
   })(req, res, next);
 });
-
+/**
+ * Register route
+ */
 app.post("/register", async (req, res) => {
   const email = req.body.username;
   const password = req.body.password;
@@ -114,7 +120,9 @@ app.post("/register", async (req, res) => {
     console.log(err);
   }
 });
-
+/**
+ * Passport stratergy
+ */
 passport.use(
   new Strategy(async function verify(username, password, cb) {
     try {
@@ -158,7 +166,9 @@ passport.deserializeUser(async (id, cb) => {
     cb(err);
   }
 });
-
+/**
+ * Running the app
+ */
 app.listen(5000, () => {
   console.log("Server running on port 5000");
 });
