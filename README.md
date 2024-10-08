@@ -88,7 +88,8 @@ By implementing these features, the project aims to create an inclusive and enga
   - Created the sentiment analysis feature which will further be used into moderation of community forum.
   - Frontend fixes.
 
-- **Nayak**: 
+- **Nayak**:
+  - Developed the Login and SignUp pages.
   - Designed and implemented the news block section.
   - Helped in fronted development. 
 
