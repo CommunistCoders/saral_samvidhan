@@ -1,9 +1,3 @@
-
-<figure>
-    <img src="Media/banner.png" alt="Image 1" width="100%" height ="" />
-</figure>
-<h2><strong>Description</strong></h2>
-
 <p> The project, Saral Samvidhan, aims to create a digital solution that transforms complex legal language into engaging content, making constitutional rights accessible to citizens. By presenting information on the three branches of government—Legislature, Executive, and Judiciary—through relatable stories and interactive features, users can understand the practical implications of laws like the newly implemented Bharatiya Nyaya Sanhita(BNS). The platform will include a resource center with a legal glossary, FAQs and news ensuring a user-friendly experience across multiple languages and devices. This initiative not only educates but also empowers citizens to actively engage with their rights and responsibilities.
 </p>
 
@@ -153,7 +147,3 @@ By implementing these features, the project aims to create an inclusive and enga
      npm run dev
      ```
 
-
-<h2><strong>Conclusion</strong></h2>
-
-<p></p>
