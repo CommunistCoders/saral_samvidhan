@@ -93,9 +93,9 @@ const Page = () => {
       </main>
 
       {/* Footer */}
-      <footer className="footer">
+      {/* <footer className="footer">
         <p>© 2024  Copyright IIT Tirupati. All rights reserved.</p>
-      </footer>
+      </footer> */}
     </div>
   );
 };

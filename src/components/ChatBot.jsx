@@ -5,6 +5,7 @@ const ChatBot = () => {
   const [isVisible, setIsVisible] = useState(false); // State to track visibility of the div
   const [message, setMessage] = useState(''); // State to handle the input field value
 
+  const [response,setResponse] = useState('');
   const clickOn = () => {
     setIsVisible(!isVisible); // Toggle visibility when button is clicked
   };

@@ -38,11 +38,12 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4  mt-5 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
+          <div id="google_translate_element" className="mt-5"></div>
           <div className="flex-shrink-0">
             <Link href="/" className="text-2xl font-bold text-blue-600">
               Samvidhan
             </Link>
-            {/* <div id="google_translate_element" className="mt-5"></div> */}
+           
            
           </div>
 
@@ -60,8 +61,8 @@ const Navbar = () => {
             <Link href="/about" className="text-gray-700 hover:text-blue-600">
               About
             </Link>
-            <Link href="/blog" className="text-gray-700 hover:text-blue-600">
-              Blog
+            <Link href="/glossary" className="text-gray-700 hover:text-blue-600">
+            Glossary
             </Link>
             <Link href="/news" className="text-gray-700 hover:text-blue-600">
               News
@@ -134,8 +135,8 @@ const Navbar = () => {
           <Link href="/about" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-white hover:bg-blue-600">
             About
           </Link>
-          <Link href="/blog" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-white hover:bg-blue-600">
-            Blog
+          <Link href="/glossary" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-white hover:bg-blue-600">
+          Glossary
           </Link>
           <Link href="/contact" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-white hover:bg-blue-600">
             Contact
