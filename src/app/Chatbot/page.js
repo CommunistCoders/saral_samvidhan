@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import './page.css';
+import './chatbot.css';
 
 function App() {
     const [input, setInput] = useState('');
