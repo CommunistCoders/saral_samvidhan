@@ -1,12 +1,13 @@
 "use client";
 // app/blog/page.js
 import React from "react";
-import Navbar from "@/components/Navbar";
+import { UserIcon } from "@heroicons/react/solid"; // Make sure you have installed heroicons.
 
 export default function ChroniclesPage() {
-  const [data, setData] = React.useState("");
-  const [loading, setLoading] = React.useState("");
+  const [data, setData] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState("");
+
   React.useEffect(() => {
     async function fetchData() {
       try {
@@ -17,10 +18,8 @@ export default function ChroniclesPage() {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const result = await response.json();
-        console.log("result = ", result);
-        setData(result.articles || result); // Depending on the response structure.
+        setData(result.chronicles); // Assuming result.chronicles contains the array of data
       } catch (error) {
-        console.error("Error fetching data:", error);
         setError(error.message);
       } finally {
         setLoading(false);
@@ -37,9 +36,31 @@ export default function ChroniclesPage() {
   if (error) {
     return <p>Error: {error}</p>;
   }
+
   return (
-    <div className="max-w-lg mx-auto my-10 p-5 border rounded shadow-lg">
-      <h1 className="text-2xl font-bold text-center mb-6">Law Chronicles</h1>
+    <div className="w-full mx-auto my-10 p-5 border rounded shadow-lg">
+      <h1 className="text-2xl font-bold text-center mb-6 text-blue-700">
+        Law Chronicles
+      </h1>
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {data.map((item) => (
+          <div
+            key={item._id}
+            className="p-4 border rounded-md shadow-sm bg-white"
+          >
+            <div className="flex items-center">
+              {/* Person Icon */}
+              <UserIcon className="h-10 w-10 text-blue-700 mr-4" />
+              <div>
+                <p className="text-lg font-semibold text-blue-700">{item.email}</p>
+                <p className="text-gray-700">{item.content}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
+
+
   );
 }
