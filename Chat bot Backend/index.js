@@ -6,7 +6,7 @@ const SAMPLE_INPUT = 'Here is the sample input:';
 const SAMPLE_OUTPUT = 'Here is the sample output:';
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5500;
 
 const geminiApiKey = 'AIzaSyAAZts2s1PRyS0wVl6HosLy1Nm46j2PbXM';
 const googleAI = new GoogleGenerativeAI(geminiApiKey);
