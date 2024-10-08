@@ -10,13 +10,18 @@ const session = require("express-session");
 const Strategy = require("passport-local").Strategy;
 
 env.config(); // Loading .env
-app.use(cors()); // This will allow all origins
+app.use(cors({ origin: "http://localhost:3000", credentials: true })); // This will allow all origins
 app.use(express.json());
 app.use(
   session({
     secret: process.env.SESSION_PASSWORD,
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: false,
+      sameSite: false, // Allow cross-site usage
+    },
   })
 );
 app.use(passport.initialize());
@@ -80,10 +85,12 @@ const Chronicle = mongoose.model("Chronicle", chronicleSchema);
  * Access all chronicles
  */
 app.get("/chronicles", async (req, res) => {
+  if (!req.isAuthenticated) {
+    return res.status(403).json({ error: "Not logged In" });
+  }
   const chronicles = await Chronicle.find();
   console.log(chronicles);
   return res.json({ chronicles });
-  //return res.status(403).json({ error: "Not logged In" });
 });
 /**
  * Add chronicles when logged in
@@ -154,6 +161,17 @@ app.post("/register", async (req, res) => {
   } catch (err) {
     console.log(err);
   }
+});
+/**
+ * Logout route
+ */
+app.get("/logout", (req, res) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    return res.json({ message: "Logged Out" });
+  });
 });
 /**
  * Passport stratergy

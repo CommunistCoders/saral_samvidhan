@@ -10,7 +10,7 @@ export default function ChroniclesPage() {
   React.useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch(`http://localhost:5000/chronicles`, {
+        const response = await fetch(`http://127.0.0.1:5000/chronicles`, {
           credentials: "include",
         });
         if (!response.ok) {
