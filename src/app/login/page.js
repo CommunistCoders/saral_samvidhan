@@ -1,14 +1,87 @@
 "use client";
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 // import { CSSTransition } from 'react-transition-group';
-import './formStyles.css'; // Import custom CSS for transitions
+import "./formStyles.css"; // Import custom CSS for transitions
 
 const Page = () => {
   const [isLogin, setIsLogin] = useState(true);
-
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const toggleForm = () => {
     setIsLogin(!isLogin);
+  };
+  /**
+   * @param {*} event
+   * Handles the login by using the state variables
+   * Sends request to server
+   */
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    const credential = {
+      username: userName,
+      password: password,
+    };
+    try {
+      const response = await fetch("http://127.0.0.1:5000/login", {
+        method: "POST",
+        //credentials: "include",
+        headers: {
+          "Content-Type": "application/json", // Set the content type to JSON
+        },
+        body: JSON.stringify(credential), // Convert the data to JSON
+      });
+
+      if (!response.ok) {
+        alert("Network response was not ok");
+        return;
+      }
+
+      const data = await response.json(); // Parse the JSON response
+      console.log(data);
+      alert(`${data.message}`);
+
+      // Handle successful login (e.g., redirect, show a message, etc.)
+    } catch (error) {
+      alert(`Error: ${error}`); // Handle errors (e.g., show an error message)
+    }
+  };
+  /**
+   *
+   * @param {*} event
+   * @returns null
+   * Handles the user register event
+   */
+  const handleRegister = async (event) => {
+    event.preventDefault();
+    if (newPassword != confirmPassword) {
+      alert("Passwords Don't match");
+      return;
+    }
+    const credential = {
+      username: email,
+      password: newPassword,
+    };
+    try {
+      const response = await fetch("http://127.0.0.1:5000/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credential), // Convert the data to JSON
+      });
+      if (!response.ok) {
+        alert("Network response was not ok");
+        return;
+      }
+      const data = await response.json(); // Parse the JSON response
+      alert(`${data.message}`);
+    } catch (error) {
+      alert(`Error: ${error}`);
+    }
   };
 
   return (
@@ -22,14 +95,14 @@ const Page = () => {
             {/* Toggle Buttons */}
             <div className="toggle-buttons">
               <motion.button
-                className={isLogin ? 'active' : ''}
+                className={isLogin ? "active" : ""}
                 whileHover={{ scale: 1.1 }}
                 onClick={() => setIsLogin(true)}
               >
                 Login
               </motion.button>
               <motion.button
-                className={!isLogin ? 'active' : ''}
+                className={!isLogin ? "active" : ""}
                 whileHover={{ scale: 1.1 }}
                 onClick={() => setIsLogin(false)}
               >
@@ -45,13 +118,25 @@ const Page = () => {
               className="form-content"
             >
               {isLogin ? (
-                <motion.form className="login-form">
+                <motion.form className="login-form" onSubmit={handleLogin}>
                   <div className="field">
-                    <input type="email" required />
+                    <input
+                      type="email"
+                      required
+                      id="username"
+                      value={userName}
+                      onChange={(e) => setUserName(e.target.value)}
+                    />
                     <label>Email Address</label>
                   </div>
                   <div className="field">
-                    <input type="password" required />
+                    <input
+                      type="password"
+                      required
+                      id="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
                     <label>Password</label>
                   </div>
                   <motion.button
@@ -64,17 +149,38 @@ const Page = () => {
                   </motion.button>
                 </motion.form>
               ) : (
-                <motion.form className="signup-form">
+                <motion.form className="signup-form" onSubmit={handleRegister}>
                   <div className="field">
-                    <input type="email" required />
+                    <input
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                      }}
+                    />
                     <label>Email Address</label>
                   </div>
                   <div className="field">
-                    <input type="password" required />
+                    <input
+                      type="password"
+                      required
+                      value={newPassword}
+                      onChange={(e) => {
+                        setNewPassword(e.target.value);
+                      }}
+                    />
                     <label>Password</label>
                   </div>
                   <div className="field">
-                    <input type="password" required />
+                    <input
+                      type="password"
+                      required
+                      value={confirmPassword}
+                      onChange={(e) => {
+                        setConfirmPassword(e.target.value);
+                      }}
+                    />
                     <label>Confirm Password</label>
                   </div>
                   <motion.button

@@ -11,6 +11,13 @@ pnpm dev
 # or
 bun dev
 ```
+
+For backend server
+
+```bash
+node server.js
+```
+
 ```
 saral_samvidhan/
 ├── app/                      # App Router directory

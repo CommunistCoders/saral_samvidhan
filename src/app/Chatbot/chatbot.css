@@ -4,10 +4,10 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
 }
-
+/* 
 h1 {
     color: #333;
-}
+} */
 
 textarea {
     width: 100%;
@@ -19,7 +19,7 @@ textarea {
     font-size: 16px;
     resize: none;
 }
-
+/* 
 button {
     padding: 10px 15px;
     background-color: #4CAF50;
@@ -28,11 +28,11 @@ button {
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
-}
-
+} */
+/* 
 button:hover {
     background-color: #45a049;
-}
+} */
 
 #response {
     margin-top: 20px;
@@ -49,9 +49,9 @@ button:hover {
     background-color: #ffe6e6;
 }
 
-.success {
+/* .success {
     margin-top: 20px;
     border: 1px solid green;
     padding: 10px;
     background-color: #e6ffe6;
-}
+} */
