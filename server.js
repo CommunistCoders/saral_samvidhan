@@ -69,7 +69,36 @@ const userSchema = new mongoose.Schema({
   password: String,
 });
 
+const chronicleSchema = new mongoose.Schema({
+  email: String,
+  content: String,
+});
+
 const User = mongoose.model("User", userSchema);
+const Chronicle = mongoose.model("Chronicle", chronicleSchema);
+/**
+ * Access all chronicles
+ */
+app.get("/chronicles", async (req, res) => {
+  const chronicles = await Chronicle.find();
+  console.log(chronicles);
+  return res.json({ chronicles });
+  //return res.status(403).json({ error: "Not logged In" });
+});
+/**
+ * Add chronicles when logged in
+ */
+app.post("/add/chronicles", async (req, res) => {
+  if (req.isAuthenticated()) {
+    const email = req.body.username;
+    const content = req.body.content;
+    const newChronicle = new Chronicle({ email, content });
+    await newChronicle.save();
+    return res.status(200).json({ message: "Added" });
+  }
+  return res.status(403).json({ error: "Not logged In" });
+});
+
 /**
  * Login Route
  */
