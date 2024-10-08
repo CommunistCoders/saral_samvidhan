@@ -11,7 +11,7 @@ const Strategy = require("passport-local").Strategy;
 
 env.config(); // Loading .env
 app.use(cors()); // This will allow all origins
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(
   session({
     secret: process.env.SESSION_PASSWORD,
