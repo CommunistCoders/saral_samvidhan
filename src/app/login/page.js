@@ -14,6 +14,11 @@ const Page = () => {
   const toggleForm = () => {
     setIsLogin(!isLogin);
   };
+  /**
+   * @param {*} event
+   * Handles the login by using the state variables
+   * Sends request to server
+   */
   const handleLogin = async (event) => {
     event.preventDefault();
     const credential = {
@@ -22,7 +27,6 @@ const Page = () => {
     };
     try {
       const response = await fetch("http://127.0.0.1:5000/login", {
-        // Replace with your API endpoint
         method: "POST",
         headers: {
           "Content-Type": "application/json", // Set the content type to JSON
@@ -30,9 +34,10 @@ const Page = () => {
         body: JSON.stringify(credential), // Convert the data to JSON
       });
 
-      // if (!response.ok) {
-      //   throw new Error('Network response was not ok');
-      // }
+      if (!response.ok) {
+        alert("Network response was not ok");
+        return;
+      }
 
       const data = await response.json(); // Parse the JSON response
 
@@ -43,7 +48,12 @@ const Page = () => {
       alert(`Error: ${error}`); // Handle errors (e.g., show an error message)
     }
   };
-
+  /**
+   *
+   * @param {*} event
+   * @returns null
+   * Handles the user register event
+   */
   const handleRegister = async (event) => {
     event.preventDefault();
     if (newPassword != confirmPassword) {
@@ -56,24 +66,20 @@ const Page = () => {
     };
     try {
       const response = await fetch("http://127.0.0.1:5000/register", {
-        // Replace with your API endpoint
         method: "POST",
         headers: {
-          "Content-Type": "application/json", // Set the content type to JSON
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(credential), // Convert the data to JSON
       });
-
-      // if (!response.ok) {
-      //   throw new Error('Network response was not ok');
-      // }
-
+      if (!response.ok) {
+        alert("Network response was not ok");
+        return;
+      }
       const data = await response.json(); // Parse the JSON response
       alert(`${data.message}`);
-
-      // Handle successful login (e.g., redirect, show a message, etc.)
     } catch (error) {
-      alert(`Error: ${error}`); // Handle errors (e.g., show an error message)
+      alert(`Error: ${error}`);
     }
   };
 
