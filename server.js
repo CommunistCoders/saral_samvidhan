@@ -90,6 +90,7 @@ app.get("/chronicles", async (req, res) => {
   }
   const chronicles = await Chronicle.find();
   console.log(chronicles);
+  console.log(req.session.user);
   return res.json({ chronicles });
 });
 /**
@@ -123,6 +124,7 @@ app.post("/login", async (req, res, next) => {
         console.error("Error logging in:", err);
         return res.status(500).json({ message: "Internal server error" });
       }
+      req.session.user = user;
       return res.status(200).json({ message: "Login successful" });
     });
   })(req, res, next);
