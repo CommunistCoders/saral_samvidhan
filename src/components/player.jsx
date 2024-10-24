@@ -95,7 +95,7 @@ export const Player = React.forwardRef(
     return (
       <group ref={group} {...props} dispose={null}>
         <group name="Scene">
-          <group name="Character" rotation={[Math.PI / 2, 0, 0]} scale={0.2}>
+          <group name="Character" rotation={[Math.PI / 2, 0, 0]} scale={0.1}>
             <primitive object={nodes.mixamorigHips} />
             <skinnedMesh
               name="Beta_Joints"

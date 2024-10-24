@@ -1,5 +1,6 @@
 import { Player } from "./player";
 import { Car } from "./car";
+import { NavigationIcon } from "./navigationicon";
 import React from "react";
 import * as THREE from "three";
 
@@ -98,6 +99,11 @@ export function ControlManager({ camera }) {
         onCreated={(object) => {
           setCar(object);
         }}
+      />
+      <NavigationIcon
+        playerRef={playerRef}
+        carRef={carRef}
+        isPlayerActive={isPlayerActive}
       />
     </>
   );

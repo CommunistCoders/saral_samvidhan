@@ -53,7 +53,7 @@ export const Car = forwardRef(
       }
     });
     return (
-      <group ref={group} {...props} dispose={null}>
+      <group ref={group} {...props} dispose={null} scale={15}>
         <mesh geometry={nodes.Цилиндр001.geometry} material={materials.B} />
         <mesh geometry={nodes.Цилиндр003.geometry} material={materials.B} />
         <mesh geometry={nodes.Цилиндр005.geometry} material={materials.B} />
