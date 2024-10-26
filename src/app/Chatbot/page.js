@@ -1,17 +1,23 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './chatbot.css';
 
 function App() {
     const [input, setInput] = useState('');
-    const [response, setResponse] = useState('');
+    const [conversations, setConversations] = useState([{ name: 'Conversation 1', history: [] }]);
+    const [currentConversationIndex, setCurrentConversationIndex] = useState(0);
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const chatEndRef = useRef(null);
+    
 
     const handleSubmit = async () => {
-        if (!input) {
-            alert('Please enter a question.');
-            return;
-        }
+        console.log(conversations);
+        if (!input || loading) return;  // Prevent duplicate submissions
+
+        setLoading(true);
+        // Save the current question before the API call
+        const currentQuestion = input;
 
         try {
             const res = await fetch('http://localhost:5500/ask', {
@@ -27,64 +33,118 @@ function App() {
             }
 
             const data = await res.json();
-            setResponse(data.response);
+            // Update conversation history with question and response
+            setConversations(prevConversations => {
+                const updatedConversations = [...prevConversations];
+                updatedConversations[currentConversationIndex].history.push({
+                    question: currentQuestion,
+                    answer: data.response
+                });
+                return updatedConversations;
+            });
+
+            setInput('');
             setError('');
         } catch (err) {
             console.error('Error:', err);
             setError('An error occurred while fetching the response.');
-            setResponse('');
+        } finally {
+            setLoading(false);
+            // Scroll to the bottom after updating
+            chatEndRef.current.scrollIntoView({ behavior: "smooth" });
         }
     };
 
+    const startNewConversation = () => {
+        const newConversation = { name: `Conversation ${conversations.length + 1}`, history: [] };
+        setConversations([...conversations, newConversation]);
+        setCurrentConversationIndex(conversations.length);
+        setInput('');
+        setError('');
+    };
+
+    const renameConversation = (index) => {
+        const newName = prompt("Enter a new name for this conversation:");
+        if (newName) {
+            setConversations(prevConversations => {
+                const updatedConversations = [...prevConversations];
+                updatedConversations[index].name = newName;
+                return updatedConversations;
+            });
+        }
+    };
+
+    const deleteConversation = (index) => {
+        if (conversations.length === 1) {
+            alert("Cannot delete the last remaining conversation.");
+            return;
+        }
+
+        setConversations(prevConversations => {
+            const updatedConversations = prevConversations.filter((_, i) => i !== index);
+            if (currentConversationIndex >= updatedConversations.length) {
+                setCurrentConversationIndex(updatedConversations.length - 1);
+            }
+            return updatedConversations;
+        });
+    };
+
     return (
-        <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-            <h1>AI Lawyer Assistant</h1>
-            <textarea
-                style={{ width: '100%', height: '100px', marginBottom: '10px' }}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask a question about the Indian Constitution..."
-            />
-            <button
-                style={{
-                    padding: '10px 15px',
-                    backgroundColor: '#4CAF50',
-                    color: 'white',
-                    border: 'none',
-                    cursor: 'pointer',
-                }}
-                onClick={handleSubmit}
-            >
-                Submit
-            </button>
+        <div className="main-container">
+            <div className="sidebar">
+                <h2>Conversations</h2>
+                <button onClick={startNewConversation}>+ New Conversation</button>
+                <ul>
+                    {conversations.map((conversation, index) => (
+                        <li
+                            key={index}
+                            onClick={() => setCurrentConversationIndex(index)}
+                            className={currentConversationIndex === index ? 'active' : ''}
+                            onDoubleClick={() => renameConversation(index)}
+                        >
+                            {conversation.name}
+                            <button className="delete-button" onClick={() => deleteConversation(index)}>🗑️</button>
+                        </li>
+                    ))}
+                </ul>
+            </div>
 
-            {response && (
-                <div
-                    style={{
-                        marginTop: '20px',
-                        border: '1px solid #ccc',
-                        padding: '10px',
-                        backgroundColor: '#f9f9f9',
-                    }}
-                >
-                    <h3>Response:</h3>
-                    <p>{response}</p>
+            <div className="chat-container">
+                <h1>{conversations[currentConversationIndex].name}</h1>
+                <div className="chat-history" ref={chatEndRef}>
+                    {conversations[currentConversationIndex].history.map((chat, index) => (
+                        <div key={index} className="chat-message fade-in">
+                            <div className="user-question">
+                                <p><strong>You:</strong> {chat.question}</p>
+                            </div>
+                            <div className="bot-answer">
+                                <p><strong>AI:</strong> {chat.answer}</p>
+                            </div>
+                        </div>
+                    ))}
                 </div>
-            )}
 
-            {error && (
-                <div
-                    style={{
-                        marginTop: '20px',
-                        border: '1px solid red',
-                        padding: '10px',
-                        backgroundColor: '#ffe6e6',
-                    }}
+                {error && (
+                    <div className="chat-error fade-in">
+                        <h3>Error:</h3>
+                        <p>{error}</p>
+                    </div>
+                )}
+
+                <textarea
+                    className="chat-input"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder="Ask a question..."
+                />
+                <button
+                    className="chat-submit-button"
+                    onClick={handleSubmit}
+                    disabled={loading}
                 >
-                    <h3>Error:</h3>
-                    <p>{error}</p>
-                </div>
-            )}
+                    {loading ? <div className="loading-spinner"></div> : 'Submit'}
+                </button>
+            </div>
         </div>
     );
 }
