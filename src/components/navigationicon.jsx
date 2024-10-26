@@ -1,12 +1,16 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
-import { Html } from "@react-three/drei";
+import { GradientTexture, Html, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 
 export function NavigationIcon({ playerRef, carRef, isPlayerActive }) {
   const iconRef = useRef();
   const [playerPosition, setPlayerPosition] = useState(null);
+  
+  // Load the arrow model
+  const { scene } = useGLTF("/models/cc0_arrow_5.glb");
+
 
   useFrame(() => {
     const updateIcon = () => {
@@ -51,28 +55,23 @@ export function NavigationIcon({ playerRef, carRef, isPlayerActive }) {
 
   return (
     playerPosition && (
-      //   <Html
-      //     position={[playerPosition.x, playerPosition.y + 30, playerPosition.z]}
-      //     center
-      //   >
-      //     <div
-      //       ref={iconRef}
-      //       style={{
-      //         width: "50px",
-      //         height: "50px",
-      //         background: "url('/icons/nav.png') no-repeat center",
-      //         backgroundSize: "contain",
-      //       }}
-      //     />
-      //   </Html>
+      <>
       <mesh
         ref={iconRef}
-        position={[playerPosition.x, playerPosition.y + 30, playerPosition.z]}
+        position={[playerPosition.x, playerPosition.y + 40, playerPosition.z]}
         rotation={[Math.PI / 2, 0, 0]}
       >
-        <coneGeometry args={[1, 2, 8]} />
-        <meshBasicMaterial color="black" />
-      </mesh>
-    )
+        <coneGeometry args={[5, 12, 20]} />
+        <meshBasicMaterial color="red" />
+      </mesh>    
+         {/* <primitive
+          ref={iconRef}
+          object={scene}
+          position={[playerPosition.x, playerPosition.y + 30, playerPosition.z]}
+          rotation={[Math.PI / 2, 0, 0]}
+          scale={[40, 40, 40]} 
+        />  */}
+        </>
+      )
   );
 }
