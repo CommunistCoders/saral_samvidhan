@@ -1,98 +1,99 @@
 "use client";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-// import { CSSTransition } from 'react-transition-group';
-import "./formStyles.css"; // Import custom CSS for transitions
+import { signIn } from "next-auth/react";
+import { useSession, signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import "./formStyles.css";
 
 const Page = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "loading") return; // Don't render anything until session check is complete
+    if (session) router.push("/"); // Redirect to the main page if logged in
+  }, [session, status, router]);
+  
   const toggleForm = () => {
     setIsLogin(!isLogin);
   };
-  /**
-   * @param {*} event
-   * Handles the login by using the state variables
-   * Sends request to server
-   */
+
   const handleLogin = async (event) => {
     event.preventDefault();
-    const credential = {
-      username: userName,
-      password: password,
-    };
+    setLoading(true);
+
     try {
-      const response = await fetch("http://127.0.0.1:5000/login", {
-        method: "POST",
-        //credentials: "include",
-        headers: {
-          "Content-Type": "application/json", // Set the content type to JSON
-        },
-        body: JSON.stringify(credential), // Convert the data to JSON
+      const result = await signIn("credentials", {
+        email: userName,
+        password,
+        redirect: false,
       });
 
-      if (!response.ok) {
-        alert("Network response was not ok");
-        return;
+      if (result?.error) {
+        alert(`Login failed: ${result.error}`);
+      } else {
+        alert("Login successful!");
+        window.location.href = "/"; // Adjust to your protected route
       }
-
-      const data = await response.json(); // Parse the JSON response
-      console.log(data);
-      alert(`${data.message}`);
-
-      // Handle successful login (e.g., redirect, show a message, etc.)
     } catch (error) {
-      alert(`Error: ${error}`); // Handle errors (e.g., show an error message)
+      alert(`Error: ${error}`);
+    } finally {
+      setLoading(false);
     }
   };
-  /**
-   *
-   * @param {*} event
-   * @returns null
-   * Handles the user register event
-   */
+
   const handleRegister = async (event) => {
     event.preventDefault();
-    if (newPassword != confirmPassword) {
-      alert("Passwords Don't match");
+    if (newPassword !== confirmPassword) {
+      alert("Passwords don't match");
       return;
     }
-    const credential = {
-      username: email,
-      password: newPassword,
-    };
+
+    setLoading(true);
+
     try {
-      const response = await fetch("http://127.0.0.1:5000/register", {
+      const response = await fetch("/api/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(credential), // Convert the data to JSON
+        body: JSON.stringify({
+          name: email.split("@")[0], // Derive name from email
+          email,
+          password: newPassword,
+        }),
       });
+
       if (!response.ok) {
-        alert("Network response was not ok");
+        const errorData = await response.json();
+        alert(`Signup failed: ${errorData.message || "Server Error"}`);
         return;
       }
-      const data = await response.json(); // Parse the JSON response
+
+      const data = await response.json();
       alert(`${data.message}`);
+      window.location.href = "/"; // Adjust to your protected route
     } catch (error) {
       alert(`Error: ${error}`);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="page-container">
-      {/* Navbar */}
-
-      {/* Main Content */}
       <main className="main-content">
         <div className="form-wrapper">
           <div className="form-container">
-            {/* Toggle Buttons */}
             <div className="toggle-buttons">
               <motion.button
                 className={isLogin ? "active" : ""}
@@ -110,7 +111,6 @@ const Page = () => {
               </motion.button>
             </div>
 
-            {/* Form Content */}
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
@@ -144,8 +144,9 @@ const Page = () => {
                     className="submit-btn"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    disabled={loading}
                   >
-                    Login
+                    {loading ? "Processing..." : "Login"}
                   </motion.button>
                 </motion.form>
               ) : (
@@ -155,9 +156,7 @@ const Page = () => {
                       type="email"
                       required
                       value={email}
-                      onChange={(e) => {
-                        setEmail(e.target.value);
-                      }}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                     <label>Email Address</label>
                   </div>
@@ -166,9 +165,7 @@ const Page = () => {
                       type="password"
                       required
                       value={newPassword}
-                      onChange={(e) => {
-                        setNewPassword(e.target.value);
-                      }}
+                      onChange={(e) => setNewPassword(e.target.value)}
                     />
                     <label>Password</label>
                   </div>
@@ -177,9 +174,7 @@ const Page = () => {
                       type="password"
                       required
                       value={confirmPassword}
-                      onChange={(e) => {
-                        setConfirmPassword(e.target.value);
-                      }}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                     <label>Confirm Password</label>
                   </div>
@@ -188,8 +183,9 @@ const Page = () => {
                     className="submit-btn"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    disabled={loading}
                   >
-                    Signup
+                    {loading ? "Processing..." : "Signup"}
                   </motion.button>
                 </motion.form>
               )}
@@ -197,11 +193,6 @@ const Page = () => {
           </div>
         </div>
       </main>
-
-      {/* Footer */}
-      {/* <footer className="footer">
-        <p>© 2024  Copyright IIT Tirupati. All rights reserved.</p>
-      </footer> */}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import NewsCard from "@/components/newscard";
+import NewsCard from "@/app/components/newscard";
 
 function NewsBlock() {
   const [data, setData] = useState([]);
