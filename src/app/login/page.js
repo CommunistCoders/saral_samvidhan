@@ -1,190 +1,199 @@
 "use client";
-import React, { useState } from 'react';
-import { CSSTransition } from 'react-transition-group';
-import './formStyles.css'; // Import custom CSS for transitions
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { signIn } from "next-auth/react";
+import { useSession, signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import "./formStyles.css";
 
 const Page = () => {
-  // State for toggling between login and signup forms
   const [isLogin, setIsLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const { data: session } = useSession();
+  const router = useRouter();
 
-  // State for login form fields
-  const [email, setEmail] = useState('');
-  const [Password, setPassword] = useState('');
-
-  // State for signup form fields
-  const [signUpName, setSignUpName] = useState('');
-  const [signUpEmail, setSignUpEmail] = useState('');
-  const [signUpPassword, setSignUpPassword] = useState('');
-
-  // Handle login form submission
-  const handleLoginSubmit = (e) => {
-    e.preventDefault();
-    console.log({ email, Password });
-  };
-
-  // Handle signup form submission
-  const handleSignUpSubmit = (e) => {
-    e.preventDefault();
-    console.log({ signUpName, signUpEmail, signUpPassword });
-  };
-
-  // Toggle between login and signup forms
+  useEffect(() => {
+    if (status === "loading") return; // Don't render anything until session check is complete
+    if (session) router.push("/"); // Redirect to the main page if logged in
+  }, [session, status, router]);
+  
   const toggleForm = () => {
     setIsLogin(!isLogin);
   };
 
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+
+    try {
+      const result = await signIn("credentials", {
+        email: userName,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        alert(`Login failed: ${result.error}`);
+      } else {
+        alert("Login successful!");
+        window.location.href = "/"; // Adjust to your protected route
+      }
+    } catch (error) {
+      alert(`Error: ${error}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRegister = async (event) => {
+    event.preventDefault();
+    if (newPassword !== confirmPassword) {
+      alert("Passwords don't match");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch("/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: email.split("@")[0], // Derive name from email
+          email,
+          password: newPassword,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(`Signup failed: ${errorData.message || "Server Error"}`);
+        return;
+      }
+
+      const data = await response.json();
+      alert(`${data.message}`);
+      window.location.href = "/"; // Adjust to your protected route
+    } catch (error) {
+      alert(`Error: ${error}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <>
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="relative w-full max-w-2xl bg-white p-8 shadow-md rounded-lg transition-all duration-500">
-          <div className="flex flex-row space-x-8 relative">
-            {/* Login Form */}
-            <CSSTransition
-              in={isLogin}
-              timeout={0}
-              classNames="form"
-              unmountOnExit
+    <div className="page-container">
+      <main className="main-content">
+        <div className="form-wrapper">
+          <div className="form-container">
+            <div className="toggle-buttons">
+              <motion.button
+                className={isLogin ? "active" : ""}
+                whileHover={{ scale: 1.1 }}
+                onClick={() => setIsLogin(true)}
+              >
+                Login
+              </motion.button>
+              <motion.button
+                className={!isLogin ? "active" : ""}
+                whileHover={{ scale: 1.1 }}
+                onClick={() => setIsLogin(false)}
+              >
+                Signup
+              </motion.button>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="form-content"
             >
-              <div className="w-full">
-                <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
-                <form onSubmit={handleLoginSubmit}>
-                  <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                      Email Address
-                    </label>
+              {isLogin ? (
+                <motion.form className="login-form" onSubmit={handleLogin}>
+                  <div className="field">
                     <input
                       type="email"
-                      id="email"
-                      name="email"
+                      required
+                      id="username"
+                      value={userName}
+                      onChange={(e) => setUserName(e.target.value)}
+                    />
+                    <label>Email Address</label>
+                  </div>
+                  <div className="field">
+                    <input
+                      type="password"
+                      required
+                      id="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <label>Password</label>
+                  </div>
+                  <motion.button
+                    type="submit"
+                    className="submit-btn"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    disabled={loading}
+                  >
+                    {loading ? "Processing..." : "Login"}
+                  </motion.button>
+                </motion.form>
+              ) : (
+                <motion.form className="signup-form" onSubmit={handleRegister}>
+                  <div className="field">
+                    <input
+                      type="email"
+                      required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      required
-                      className="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-indigo-500"
-                      placeholder="Enter your email"
                     />
+                    <label>Email Address</label>
                   </div>
-
-                  <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-                      Password
-                    </label>
+                  <div className="field">
                     <input
                       type="password"
-                      id="password"
-                      name="password"
-                      value={Password}
-                      onChange={(e) => setPassword(e.target.value)}
                       required
-                      className="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-indigo-500"
-                      placeholder="Enter your password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
                     />
+                    <label>Password</label>
                   </div>
-
-          <div className="mb-6">
-            <label className="flex items-center">
-              <input type="checkbox" className="form-checkbox" />
-              <span className="ml-2 text-gray-700">Remember me</span>
-            </label>
-          </div>
-
-                  <div className="mb-4">
-                    <button
-                      type="submit"
-                      className="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-50 transition duration-300"
-                    >
-                      Login
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </CSSTransition>
-
-            {/* Signup Form */}
-            <CSSTransition
-              in={!isLogin}
-              timeout={0}
-              classNames="form"
-              unmountOnExit
-            >
-              <div className="w-full">
-                <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
-                <form onSubmit={handleSignUpSubmit}>
-                  <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={signUpName}
-                      onChange={(e) => setSignUpName(e.target.value)}
-                      required
-                      className="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-indigo-500"
-                      placeholder="Enter your full name"
-                    />
-                  </div>
-
-                  <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email-signup">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      id="email-signup"
-                      name="email-signup"
-                      value={signUpEmail}
-                      onChange={(e) => setSignUpEmail(e.target.value)}
-                      required
-                      className="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-indigo-500"
-                      placeholder="Enter your email"
-                    />
-                  </div>
-
-                  <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password-signup">
-                      Password
-                    </label>
+                  <div className="field">
                     <input
                       type="password"
-                      id="password-signup"
-                      name="password-signup"
-                      value={signUpPassword}
-                      onChange={(e) => setSignUpPassword(e.target.value)}
                       required
-                      className="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-indigo-500"
-                      placeholder="Enter your password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                     />
+                    <label>Confirm Password</label>
                   </div>
-
-                  <div className="mb-4">
-                    <button
-                      type="submit"
-                      className="w-full bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 transition duration-300"
-                    >
-                      Sign Up
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </CSSTransition>
-          </div>
-
-          {/* OR Separator with switch button */}
-          <div className="text-center mt-4">
-            <span className="text-gray-600">OR</span>
-            <div className="mt-4">
-              <button
-                onClick={toggleForm}
-                className="text-indigo-500 hover:text-indigo-600 transition duration-300"
-              >
-                {isLogin ? 'Create an account' : 'Already have an account? Login'}
-              </button>
-            </div>
+                  <motion.button
+                    type="submit"
+                    className="submit-btn"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    disabled={loading}
+                  >
+                    {loading ? "Processing..." : "Signup"}
+                  </motion.button>
+                </motion.form>
+              )}
+            </motion.div>
           </div>
         </div>
-      </div>
-    </>
+      </main>
+    </div>
   );
 };
 

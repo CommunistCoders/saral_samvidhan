@@ -1,6 +1,32 @@
-const GoogleGenerativeAI = require("@google/generative-ai").GoogleGenerativeAI;
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 const SAMPLE_INPUT = 'Here is the sample input:';
 const SAMPLE_OUTPUT = 'Here is the sample output:';
+
+const app = express();
+const PORT = process.env.PORT || 5500;
+
+const geminiApiKey = 'AIzaSyAAZts2s1PRyS0wVl6HosLy1Nm46j2PbXM';
+const googleAI = new GoogleGenerativeAI(geminiApiKey);
+const geminiConfig = {
+  temperature: 0.3,
+  topP: 1,
+  topK: 2,
+  maxOutputTokens: 4096,
+};
+
+const geminiModel = googleAI.getGenerativeModel({
+  model: 'models/gemini-1.0-pro-latest',
+  geminiConfig,
+});
+
+// Middleware
+app.use(cors()); // Enable CORS
+app.use(bodyParser.json());
+
+// AI Prompt Template
 const PROMPT = `
 You are a helpful AI assistant, called the "Communist Lawyer", who helps students understand the Indian Constitution in simple language. You should only answer questions pertaining to Constitution of India.
 
@@ -86,34 +112,31 @@ ${SAMPLE_OUTPUT}
     Imagine there is a public park in your city, and anyone can visit it. If the government says only boys can enter and not girls, that would be against the Right to Equality. The law ensures that both boys and girls have the right to use the park without any discrimination.`;
 
 
-const gemini_api_key = 'AIzaSyAAZts2s1PRyS0wVl6HosLy1Nm46j2PbXM';
-const googleAI = new GoogleGenerativeAI(gemini_api_key);
-const geminiConfig = {
-  temperature: 0.3,
-  topP: 1,
-  topK: 2,
-  maxOutputTokens: 4096,
-};
- 
-const geminiModel = googleAI.getGenerativeModel({
-  model: "models/gemini-1.0-pro-latest",
-  geminiConfig,
-});
- 
-const generate = async () => {
-  try {
-    const input = "What is right to kill a person?";
-    const FINAL_PROMPT = `${PROMPT}
-    ${SAMPLE_INPUT}
-    ${input}
-    ${SAMPLE_OUTPUT}
-    `;
-    const result = await geminiModel.generateContent(FINAL_PROMPT);
-    const response = result.response;
-    console.log(response.text());
-  } catch (error) {
-    console.log("response error", error);
+// Endpoint to handle input text
+app.post('/ask', async (req, res) => {
+  const { input } = req.body;
+
+  if (!input) {
+    return res.status(400).send({ error: 'Input text is required' });
   }
-};
- 
-generate();
+
+  try {
+    const FINAL_PROMPT = `${PROMPT}
+    Here is the sample input:
+    ${input}
+    Here is the sample output:`;
+
+    const result = await geminiModel.generateContent(FINAL_PROMPT);
+    const response = result.response.text();
+
+    res.send({ response });
+  } catch (error) {
+    console.error("Response error", error);
+    res.status(500).send({ error: 'An error occurred while generating the response.' });
+  }
+});
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
