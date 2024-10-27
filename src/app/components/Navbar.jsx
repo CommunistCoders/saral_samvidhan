@@ -2,10 +2,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { data: session } = useSession(); // Get session data
 
   useEffect(() => {
     // Load Google Translate script once
@@ -68,9 +70,18 @@ const Navbar = () => {
             <Link href="/contact" className="text-gray-700 hover:text-blue-600">
               Contact
             </Link>
-            <Link href="/login" className="text-gray-700 hover:text-blue-600">
-              Login
-            </Link>
+            {session ? ( // Conditionally render logout button
+              <button
+                onClick={() => signOut()}
+                className="text-gray-700 hover:text-blue-600"
+              >
+                Logout
+              </button>
+            ) : (
+              <Link href="/login" className="text-gray-700 hover:text-blue-600">
+                Login
+              </Link>
+            )}
             <Link
               href="/lawchronicles"
               className="text-gray-700 hover:text-blue-600"
