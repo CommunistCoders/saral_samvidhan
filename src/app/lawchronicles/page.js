@@ -1,66 +1,77 @@
-"use client";
-// app/blog/page.js
-import React from "react";
-import { UserIcon } from "@heroicons/react/solid"; // Make sure you have installed heroicons.
+'use client'
+import React, { useState } from 'react';
+import './LawChronicles.css';
+// import Navbar from './Navbar'; // Import the Navbar component
 
-export default function ChroniclesPage() {
-  const [data, setData] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState("");
 
-  React.useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(`http://127.0.0.1:5000/chronicles`, {
-          credentials: "include",
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const result = await response.json();
-        setData(result.chronicles); // Assuming result.chronicles contains the array of data
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    }
+const LawChronicles = () => {
+  const [selectedTag, setSelectedTag] = useState(null);
+  const [viewedHistory, setViewedHistory] = useState([]);
+  
+  // Array of cases
+  const cases = [
+    { title: "Theft Case", description: "Details of a theft case involving stolen goods." },
+    { title: "Property Dispute", description: "Case study of a family property dispute." },
+    { title: "Employee Rights", description: "A case about unfair dismissal in the workplace." },
+    { title: "Patent Violation", description: "Exploration of a case involving a patent infringement." },
+    { title: "Domestic Issue", description: "Details of a domestic violence case handled in court." },
+    { title: "Tax Evasion", description: "A case of corporate tax evasion and subsequent legal action." },
+    { title: "Breach of Contract", description: "Business dispute due to a breach of contract terms." },
+    { title: "Cyber Fraud", description: "A case study of online financial fraud and justice served." },
+    { title: "Environmental Law", description: "Legal battle over environmental violations." },
+    { title: "Public Nuisance", description: "Case about a public nuisance lawsuit in an urban area." },
+  ];
 
-    fetchData();
-  }, []);
+  const tags = [" * Crime Case", " * Civil Case", " * Family Law", " * Employment Law", " * Intellectual Law", " * Other"];
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
+  const handleTagClick = (tag) => {
+    setSelectedTag(tag);
+    setViewedHistory([...viewedHistory, { title: tag, description: `Recently viewed case in ${tag}` }]);
+  };
 
   return (
-    <div className="w-full mx-auto my-10 p-5 border rounded shadow-lg">
-      <h1 className="text-2xl font-bold text-center mb-6 text-blue-700">
-        Law Chronicles
-      </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {data.map((item) => (
-          <div
-            key={item._id}
-            className="p-4 border rounded-md shadow-sm bg-white"
-          >
-            <div className="flex items-center">
-              {/* Person Icon */}
-              <UserIcon className="h-10 w-10 text-blue-700 mr-4" />
-              <div>
-                <p className="text-lg font-semibold text-blue-700">{item.email}</p>
-                <p className="text-gray-700">{item.content}</p>
-              </div>
-            </div>
-          </div>
-        ))}
+    <div className="law-chronicles-container">
+      {/* Left Sidebar with Tags */}
+
+      <div className="sidebar">
+        <h3>Case Type</h3>
+        <ul>
+          {tags.map((tag, index) => (
+            <li key={index} onClick={() => handleTagClick(tag)} className={tag === selectedTag ? 'active' : ''}>
+              {tag}
+            </li>
+          ))}
+        </ul>
       </div>
-    </div>
 
 
+
+      {/* Main Content with Case Cards */}
+      <div className="main-content">
+        <div className="card-grid">
+          {cases.map((caseItem, index) => (
+            <div key={index} className="case-card">
+              <h2>{caseItem.title}</h2>
+              <p>{caseItem.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Right Sidebar with Viewed History */}
+      <div className="sidebar">
+        <h3>Recently Viewed</h3>
+        <ul>
+          {viewedHistory.map((history, index) => (
+            <li key={index}>
+              <strong>{history.title}</strong>
+              <p>{history.description}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>  
   );
-}
+};
+
+export default LawChronicles;
