@@ -58,17 +58,17 @@ const Navbar = () => {
             <Link href="/Chatbot" className="text-gray-700 hover:text-blue-600">
               Chatbot
             </Link>
-            <Link href="/about" className="text-gray-700 hover:text-blue-600">
-              About
+            <Link href="/discussionforum" className="text-gray-700 hover:text-blue-600">
+              Discussion Forum
             </Link>
-            <Link href="/glossary" className="text-gray-700 hover:text-blue-600">
+            {/* <Link href="/glossary" className="text-gray-700 hover:text-blue-600">
             Glossary
-            </Link>
+            </Link> */}
             <Link href="/news" className="text-gray-700 hover:text-blue-600">
               News
             </Link>
-            <Link href="/contact" className="text-gray-700 hover:text-blue-600">
-              Contact
+            <Link href="/game" className="text-gray-700 hover:text-blue-600">
+              Game
             </Link>
             {session ? ( // Conditionally render logout button
               <button
@@ -146,17 +146,17 @@ const Navbar = () => {
             Home
           </Link>
           <Link
-            href="/about"
+            href="/discussionforum"
             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-white hover:bg-blue-600"
           >
-            About
+            Discussion Forum
           </Link>
-          <Link
+          {/* <Link
             href="/glossary"
             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-white hover:bg-blue-600"
           >
           Glossary
-          </Link>
+          </Link> */}
           <Link
             href="/contact"
             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-white hover:bg-blue-600"

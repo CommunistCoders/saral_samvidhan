@@ -1,5 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from 'react';
+import { useSession, signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import './chatbot.css';
 
 function App() {
@@ -9,7 +11,16 @@ function App() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const chatEndRef = useRef(null);
+    const { data: session } = useSession();
+    const router = useRouter();
     
+    useEffect(() => {
+        if (status === "loading") return; // Don't render anything until session check is complete
+        if (!session) {
+            alert("Please Login to use the Chatbot");
+            router.push("/login"); 
+        }
+    }, [session, router]);
 
     const handleSubmit = async () => {
         console.log(conversations);
