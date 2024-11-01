@@ -11,13 +11,12 @@ function NewsBlock() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch(`http://localhost:5000/news`);
+        const response = await fetch("/api/news");
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const result = await response.json();
-        console.log("result = ", result);
-        setData(result.articles || result); // Depending on the response structure.
+        setData(result);
       } catch (error) {
         console.error("Error fetching data:", error);
         setError(error.message);
@@ -25,7 +24,6 @@ function NewsBlock() {
         setLoading(false);
       }
     }
-
     fetchData();
   }, []);
 
@@ -45,28 +43,35 @@ function NewsBlock() {
 
   return (
     <div>
-        <h1 className="bg-blue-900 text-white p-7 text-4xl text-center font-bold">Today's News</h1>
-        <div className="flex flex-wrap justify-between mt-3">
+      <h1 className="bg-blue-900 text-white p-7 text-4xl text-center font-bold">
+        Today's News
+      </h1>
+      <div className="flex flex-wrap justify-between mt-3">
         {visibleData.length > 0 ? (
-            visibleData.map((item, index) => (
-            <div key={index} className="flex-grow mb-6 w-full md:w-1/2 lg:w-1/3 px-2"> {/* Full width on small screens, 50% on medium, 33% on large */}
-                <NewsCard {...item} />
+          visibleData.map((item, index) => (
+            <div
+              key={index}
+              className="flex-grow mb-6 w-full md:w-1/2 lg:w-1/3 px-2"
+            >
+              {" "}
+              {/* Full width on small screens, 50% on medium, 33% on large */}
+              <NewsCard {...item} />
             </div>
-            ))
+          ))
         ) : (
-            <p>No news available.</p>
+          <p>No news available.</p>
         )}
         {visibleData.length < data.length && ( // Show button if more articles are available
-            <div className="w-full mt-4">
+          <div className="w-full mt-4">
             <button
-                onClick={handleLoadMore}
-                className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              onClick={handleLoadMore}
+              className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
             >
-                Load More
+              Load More
             </button>
-            </div>
+          </div>
         )}
-        </div>
+      </div>
     </div>
   );
 }
