@@ -19,7 +19,7 @@ const Page = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (session === undefined) return; // Don't render anything until session check is complete
+    if (!session) return; // Don't render anything until session check is complete
     if (session) router.push("/"); // Redirect to the main page if logged in
   }, [session, router]);
 
