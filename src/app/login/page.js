@@ -2,9 +2,9 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { signIn } from "next-auth/react";
-import { useSession, signOut } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import "./formStyles.css";
 
 const Page = () => {
@@ -19,10 +19,10 @@ const Page = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (status === "loading") return; // Don't render anything until session check is complete
+    if (session === undefined) return; // Don't render anything until session check is complete
     if (session) router.push("/"); // Redirect to the main page if logged in
-  }, [session, status, router]);
-  
+  }, [session, router]);
+
   const toggleForm = () => {
     setIsLogin(!isLogin);
   };
