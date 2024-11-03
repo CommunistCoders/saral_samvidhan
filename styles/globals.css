@@ -4,6 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 body {
     background-color: white; /* Set the body background to black */
     color: black; /* Optional: set text color to white for contrast */
