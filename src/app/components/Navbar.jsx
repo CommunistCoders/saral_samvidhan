@@ -42,13 +42,13 @@ const Navbar = () => {
     <nav className=" bg-black fixed left-0 right-0 top-2  border border-amber-200/30 rounded-lg z-50">
       <div className="max-w-7xl mx-auto px-4  sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-6">
-         
+
           <div className="flex-shrink-0">
             <Link href="/" className="text-3xl font-bold text-amber-400">
               Samvidhan
             </Link>
-           
-           
+
+
           </div>
 
           {/* Links and Search Form */}
@@ -66,7 +66,7 @@ const Navbar = () => {
             <Link href="/news" className="text-stone-50 hover:text-amber-600">
               News
             </Link>
-            <Link href="/game" className="text-gray-50 hover:text-amber-600">
+            <Link href="/game2" className="text-gray-50 hover:text-amber-600">
               Game
             </Link>
             {session ? ( // Conditionally render logout button
@@ -94,7 +94,7 @@ const Navbar = () => {
           <div className="-mr-2 flex md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)} className="text-white">
-              {isOpen ? <FaTimes className='m-2 h-6 w-5' /> : <FaBars className='m-2 h-6 w-5'/>}
+              {isOpen ? <FaTimes className='m-2 h-6 w-5' /> : <FaBars className='m-2 h-6 w-5' />}
             </button>
           </div>
         </div>
@@ -127,7 +127,7 @@ const Navbar = () => {
           >
             Login
           </Link>
-         
+
         </div>
       )}
 
