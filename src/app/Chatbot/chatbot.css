@@ -4,17 +4,25 @@
     width: 85%;
     height: 85vh;
     margin: 20px auto;
-    background-color: #f0f4f8;
+    background-color: #0d0d0d;
     border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+        width: 95%;
+        height: auto;
+    }
 }
 
 /* Sidebar styling */
 .sidebar {
     width: 20%;
     padding: 20px;
-    background-color: #004080;
-    color: #ffffff;
+    background-color: #0a0a0a;
+    color: #b3b3b3;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     overflow-y: auto;
@@ -24,14 +32,14 @@
 .sidebar h2 {
     font-size: 1.2rem;
     margin-bottom: 10px;
-    color: #ffcb74;
+    color: #ffaa00;
 }
 
 .sidebar button {
     width: 100%;
     padding: 10px;
-    background-color: #4a6572;
-    color: #ffcb74;
+    background-color: #1a1a1a;
+    color: #ffaa00;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -40,7 +48,8 @@
 }
 
 .sidebar button:hover {
-    background-color: #004080;
+    background-color: #f1ad26;
+    color: #0a0a0a;
 }
 
 .sidebar ul {
@@ -49,17 +58,42 @@
 }
 
 .sidebar li {
+    display: flex;
+    justify-content: space-between;
     padding: 8px;
-    cursor: pointer;
-    background-color: #4a6572;
+    background-color: #1a1a1a;
+    color: #8a8a87;
     border-radius: 5px;
     margin-bottom: 8px;
     transition: background-color 0.3s ease;
+    position: relative;
 }
 
 .sidebar li.active, .sidebar li:hover {
-    background-color: #ffcb74;
-    color: #004080;
+    background-color: #ffaa00;
+    color: #0a0a0a;
+}
+
+.sidebar li .delete-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #ffaa00;
+    font-size: 1rem;
+    margin-left: 10px;
+    transition: color 0.3s ease;
+}
+
+.sidebar li .delete-button:hover {
+    color: #b24a4a;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        border-radius: 10px 10px 0 0;
+        padding: 10px;
+    }
 }
 
 /* Chat container styling */
@@ -70,16 +104,16 @@
     flex-direction: column;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
-    background-color: #e9eff4;
+    background-color: #0d0d0d;
 }
 
 .chat-history {
     flex: 1;
     overflow-y: auto;
     padding: 10px;
-    background-color: #ffffff;
+    background-color: #161616;
     border-radius: 8px;
-    box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.4);
     margin-bottom: 15px;
 }
 
@@ -90,31 +124,38 @@
     animation: fadeIn 0.3s ease-in-out;
 }
 
-.user-question, .bot-answer {
-    margin: 5px 0;
-    padding: 10px;
+.user-question {
+    background-color: #1a1a1a;
+    color: #ffaa00;
+    align-self: flex-end;
+    text-align: right;
     border-radius: 8px;
+    padding: 10px;
     font-size: 0.95rem;
 }
 
-.user-question {
-    background-color: #004080;
-    color: white;
-    align-self: flex-end;
-    text-align: right;
-}
-
 .bot-answer {
-    background-color: #ffcb74;
-    color: #004080;
+    background-color: #ffaa00;
+    color: #0d0d0d;
     align-self: flex-start;
     text-align: left;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+    .chat-container {
+        width: 100%;
+        border-radius: 0 0 10px 10px;
+        padding: 10px;
+    }
 }
 
 /* Error message */
 .chat-error {
     padding: 10px;
-    background-color: #ff6161;
+    background-color: #b24a4a;
     color: white;
     border-radius: 8px;
     animation: fadeIn 0.3s ease-in-out;
@@ -127,30 +168,48 @@
     padding: 10px;
     font-size: 1rem;
     border-radius: 8px;
-    border: 1px solid #004080;
-    margin-bottom: 10px;
+    border: 1px solid #1a1a1a;
+    background-color: #161616;
+    color: #b3b3b3;
     resize: none;
 }
 
+@media (max-width: 768px) {
+    .chat-input {
+        height: 50px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Submit button */
 .chat-submit-button {
     padding: 10px 20px;
     font-size: 1rem;
     border-radius: 8px;
-    background-color: #004080;
-    color: #ffffff;
+    background-color: #ffaa00;
+    color: #0a0a0a;
     cursor: pointer;
     transition: background-color 0.3s ease;
     border: none;
 }
 
 .chat-submit-button:hover {
-    background-color: #4a6572;
+    background-color: #b3b3b3;
+    color: #0a0a0a;
 }
 
+@media (max-width: 768px) {
+    .sidebar button, .chat-submit-button {
+        font-size: 0.85rem;
+        padding: 8px;
+    }
+}
+
+/* Loading spinner */
 .loading-spinner {
     width: 18px;
     height: 18px;
-    border: 3px solid #ffffff;
+    border: 3px solid #b3b3b3;
     border-top: 3px solid transparent;
     border-radius: 50%;
     animation: spin 1s linear infinite;
@@ -164,31 +223,4 @@
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-}
-
-/* Sidebar list styling with delete button */
-.sidebar li {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px;
-    cursor: pointer;
-    background-color: #4a6572;
-    border-radius: 5px;
-    margin-bottom: 8px;
-    transition: background-color 0.3s ease;
-    position: relative;
-}
-
-.sidebar li .delete-button {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: #ffcb74;
-    font-size: 1rem;
-    margin-left: 10px;
-    transition: color 0.3s ease;
-}
-
-.sidebar li .delete-button:hover {
-    color: #ff6161;
 }
