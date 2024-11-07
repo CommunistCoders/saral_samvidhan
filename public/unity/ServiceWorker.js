@@ -1,9 +1,9 @@
 const cacheName = "SaralSamvidhan-Game-0.1";
 const contentToCache = [
-    "Build/Web-trial.loader.js",
-    "Build/Web-trial.framework.js.br",
-    "Build/Web-trial.data.br",
-    "Build/Web-trial.wasm.br",
+    "Build/unity.loader.js",
+    "Build/unity.framework.js",
+    "Build/unity.data",
+    "Build/unity.wasm",
     "TemplateData/style.css"
 
 ];
