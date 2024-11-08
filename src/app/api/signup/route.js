@@ -4,30 +4,27 @@ import User from '@/app/models/User';
 import bcrypt from 'bcrypt';
 
 export async function POST(req) {
-  // Parse the incoming request data
-  const { name, email, password } = await req.json();
+  const { email, password, username } = await req.json();
 
   try {
-    // Connect to the database
     await dbConnect();
+    console.log("Database connected successfully"); // Log for connection success
 
-    // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return new Response(JSON.stringify({ message: 'User already exists' }), { status: 409 });
     }
 
-    // Hash the password before saving
     const hashedPassword = await bcrypt.hash(password, 10);
+    console.log("Password hashed successfully"); // Log for password hashing
 
-    // Create a new user with the hashed password
-    const newUser = new User({ name, email, password: hashedPassword });
+    const newUser = new User({ email, password: hashedPassword, username });
     await newUser.save();
+    console.log("User created successfully:", newUser); // Log for user creation
 
-    // Return success response
     return new Response(JSON.stringify({ message: 'User created successfully' }), { status: 201 });
   } catch (error) {
-    console.error('Error creating user:', error);
-    return new Response(JSON.stringify({ message: 'Error creating user' }), { status: 500 });
+    console.error("Detailed Error:", error); // Log the full error for debugging
+    return new Response(JSON.stringify({ message: `Error creating user: ${error.message}` }), { status: 500 });
   }
 }

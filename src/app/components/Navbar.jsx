@@ -37,9 +37,12 @@ const Navbar = () => {
   const handleTranslateClick = () => {
     setIsOpen((prev) => !prev);
   };
-
+  const handleSignOut = async () => {
+    await signOut({ redirect: false });
+    // Optionally, you could update the UI or add custom logic after logging out
+  };
   return (
-    <nav className=" bg-black fixed left-0 right-0 top-2  border border-amber-200/30 rounded-lg z-50">
+    <nav className="fixed left-0 right-0 top-0 z-50 bg-black border border-amber-200/30 rounded-lg  transition duration-300">
       <div className="max-w-7xl mx-auto px-4  sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-6">
 
@@ -71,7 +74,8 @@ const Navbar = () => {
             </Link>
             {session ? ( // Conditionally render logout button
               <button
-                onClick={() => signOut()}
+                onClick={handleSignOut}
+                // onClick={() => signOut({redirect: false})}
                 className="text-stone-50 hover:text-amber-600"
               >
                 Logout

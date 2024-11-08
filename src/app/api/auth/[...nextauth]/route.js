@@ -54,6 +54,7 @@ export const authOptions = {
       return token;
     },
     async session({ session, token }) {
+      session.user.id = token._id; // Attach the user's ID to the session
       session.user.email = token.email;
       return session;
     },

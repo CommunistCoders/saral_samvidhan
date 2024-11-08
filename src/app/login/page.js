@@ -10,7 +10,7 @@ import "./formStyles.css";
 const Page = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [userName, setUserName] = useState("");
+  const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -20,7 +20,8 @@ const Page = () => {
 
   useEffect(() => {
     if (!session) return; // Don't render anything until session check is complete
-    if (session) router.push("/"); // Redirect to the main page if logged in
+    if (session) window.location.href = "/";
+      // router.push("/"); // Redirect to the main page if logged in
   }, [session, router]);
 
   const toggleForm = () => {
@@ -33,7 +34,7 @@ const Page = () => {
 
     try {
       const result = await signIn("credentials", {
-        email: userName,
+        email: email,
         password,
         redirect: false,
       });
@@ -67,9 +68,10 @@ const Page = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: email.split("@")[0], // Derive name from email
-          email,
+          // name: email.split("@")[0], // Derive name from email
+          email:email,
           password: newPassword,
+          username:username
         }),
       });
 
@@ -123,9 +125,9 @@ const Page = () => {
                     <input
                       type="email"
                       required
-                      id="username"
-                      value={userName}
-                      onChange={(e) => setUserName(e.target.value)}
+                      id="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                     <label>Email Address</label>
                   </div>
@@ -151,6 +153,16 @@ const Page = () => {
                 </motion.form>
               ) : (
                 <motion.form className="signup-form" onSubmit={handleRegister}>
+                  <div className="field">
+                    <input
+                      type="username"
+                      required
+                      id="username"
+                      value={username}
+                      onChange={(e) => setUserName(e.target.value)}
+                    />
+                    <label>Username</label>
+                  </div>
                   <div className="field">
                     <input
                       type="email"
