@@ -11,6 +11,11 @@ import { FaTimes } from 'react-icons/fa';
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { data: session } = useSession(); // Get session data
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setDropdownOpen((prev) => !prev);
+  };
 
   // useEffect(() => {
   //   // Load Google Translate script once
@@ -42,13 +47,14 @@ const Navbar = () => {
     // Optionally, you could update the UI or add custom logic after logging out
   };
   return (
-    <nav className="fixed left-0 right-0 top-0 z-50 bg-black border border-amber-200/30 rounded-lg  transition duration-300">
+    <nav className="sticky left-0 right-0 top-0 z-50 bg-black border border-amber-200/30  transition duration-300">
+
       <div className="max-w-7xl mx-auto px-4  sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-6">
 
           <div className="flex-shrink-0">
             <Link href="/" className="text-3xl font-bold text-amber-400">
-              Samvidhan
+              Saral Samvidhan
             </Link>
 
 
@@ -72,7 +78,13 @@ const Navbar = () => {
             <Link href="/game2" className="text-gray-50 hover:text-amber-600">
               Game
             </Link>
-            {session ? ( // Conditionally render logout button
+            <Link
+              href="/lawchronicles"
+              className="text-stone-50 hover:text-amber-600"
+            >
+              Law Chronicles
+            </Link>
+            {/* {session ? ( // Conditionally render logout button
               <button
                 onClick={handleSignOut}
                 // onClick={() => signOut({redirect: false})}
@@ -84,13 +96,43 @@ const Navbar = () => {
               <Link href="/login" className="text-stone-50 hover:text-amber-600">
                 Login
               </Link>
-            )}
-            <Link
-              href="/lawchronicles"
-              className="text-stone-50 hover:text-amber-600"
-            >
-              Law Chronicles
+            )} */}
+            {session ? (
+            <div className="relative">
+              {/* Profile photo */}
+              <button onClick={toggleDropdown} className="flex items-center">
+                <img
+                  // src={session.user.image} // Assume `session.user.image` contains the profile photo URL
+                  src="https://via.placeholder.com/150"
+                  alt="Profile"
+                  className="w-8 h-8 rounded-full border border-stone-50"
+                />
+              </button>
+
+              {/* Dropdown menu */}
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg py-2 z-10">
+                  <Link
+                    href="/profile"
+                    className="block px-4 py-2 text-stone-50 hover:bg-gray-600"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className="block w-full text-left px-4 py-2 text-stone-50 hover:bg-gray-600"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link href="/login" className="text-stone-50 hover:text-amber-600">
+              Login
             </Link>
+          )}
 
           </div>
 
@@ -130,6 +172,12 @@ const Navbar = () => {
             className="block px-3 py-2 rounded-md text-base font-medium text-stone-50 hover:bg-amber-600"
           >
             Login
+          </Link>
+          <Link
+            href="/profile"
+            className="block px-3 py-2 rounded-md text-base font-medium text-stone-50 hover:bg-amber-600"
+          >
+            Profile
           </Link>
 
         </div>

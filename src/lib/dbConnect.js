@@ -1,5 +1,6 @@
 // src/lib/dbConnect.js
 import mongoose from 'mongoose';
+import { GridFSBucket } from 'mongodb';
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
@@ -14,9 +15,7 @@ if (!cached) {
 }
 
 async function dbConnect() {
-  if (cached.conn) {
-    return cached.conn;
-  }
+  if (cached.conn) return cached.conn;
 
   if (!cached.promise) {
     const opts = { bufferCommands: false };
@@ -27,3 +26,10 @@ async function dbConnect() {
 }
 
 export default dbConnect;
+
+// Helper to get GridFS bucket
+export async function getBucket() {
+  const conn = await dbConnect();
+  const bucket = new GridFSBucket(conn.connection.db, { bucketName: 'images' });
+  return bucket;
+}

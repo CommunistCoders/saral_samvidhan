@@ -138,7 +138,7 @@ const Page = () => {
       {/* Left Column */}
       <div className="bg-black bg-opacity-95 p-4">
         <div 
-          className='flex items-center p-2 rounded-lg hover:bg-amber-600 text-amber-600 hover:text-stone-900 transition duration-200 cursor-pointer mt-[70px]'
+          className='flex items-center p-2 rounded-lg hover:bg-amber-600 text-amber-600 hover:text-stone-900 transition duration-200 cursor-pointer '
           onClick={handleHomeClick}
         >
           <GoHome className='h-7 w-7' />
@@ -201,7 +201,7 @@ const Page = () => {
       {/* Conditional Middle Column */}
       <div className="col-span-1 md:col-span-3 flex flex-col overflow-hidden">
         {showNewPost ? (
-          <div className="mt-[250px] ml-[200px]">
+          <div className=" ml-[200px]">
             <NewPost />
           </div>  
         ) : (
@@ -214,10 +214,9 @@ const Page = () => {
             }}
           >
             <div className="flex flex-col items-center space-y-4 p-4 rounded-lg ">
-              <h1 className="font-bold text-2xl text-stone-50 mt-[70px] fixed z-[10] px-4 py-2 bg-black/70 rounded-lg shadow-md">
+              <h1 className="font-bold text-2xl text-stone-50  fixed z-[10] px-4 py-2 bg-black/70 rounded-lg shadow-md">
                 Posts
               </h1>
-              <div className="mt-[500px]">/\</div>
                 {cardData.map((card, index) => (
                   <PostCard card={card} index={index} key={index}/>
                 ))}
@@ -231,7 +230,7 @@ const Page = () => {
       {/* Right Column - Hidden in New Post View */}
       {!showNewPost && (
         <div className="bg-amber-900 opacity-85 p-4 hidden md:block">
-          <div className='max-w-full border border-amber-400 bg-black rounded-lg mt-[70px]'>
+          <div className='max-w-full border border-amber-400 bg-black rounded-lg '>
             <div className='text-slate-800 p-3 text-sm'>
               <p>POPULAR COMMUNITIES</p>
               {cardData.slice(0, visibleCommunities).map(card => (

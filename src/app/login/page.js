@@ -20,7 +20,7 @@ const Page = () => {
 
   useEffect(() => {
     if (!session) return; // Don't render anything until session check is complete
-    if (session) window.location.href = "/discussionforum";
+    if (session) window.location.href = "/profile";
       // router.push("/"); // Redirect to the main page if logged in
   }, [session, router]);
 

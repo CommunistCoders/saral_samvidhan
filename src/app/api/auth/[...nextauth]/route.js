@@ -32,12 +32,26 @@ export const authOptions = {
           });
 
           await newUser.save();
-          return { email: newUser.email };
+          return {
+            email: newUser.email,
+            id: newUser._id,
+            username: newUser.username,
+            languagePreference: newUser.languagePreference,
+            tags: newUser.tags,
+            profilePhoto: newUser.profilePhoto, 
+          };
         } else {
           // Login logic
           const user = await User.findOne({ email: credentials.email });
           if (user && await bcrypt.compare(credentials.password, user.password)) {
-            return { email: user.email ,id: user._id};
+            return {
+              email: user.email,
+              id: user._id,
+              username: user.username,
+              languagePreference: user.languagePreference,
+              tags: user.tags,
+              profilePhoto: user.profilePhoto || 'https://via.placeholder.com/150',
+            };
           }
           throw new Error('Invalid email or password');
         }
@@ -50,13 +64,21 @@ export const authOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.email = user.email;
-        token.id = user._id || user.id; // Ensure user ID is stored in the token
+        token.id = user.id;
+        token.username = user.username;
+        token.languagePreference = user.languagePreference;
+        token.tags = user.tags;
+        token.profilePhoto = user.profilePhoto;
       }
       return token;
     },
     async session({ session, token }) {
-      session.user.id = token.id; // Attach the user's ID to the session
+      session.user.id = token.id;
       session.user.email = token.email;
+      session.user.username = token.username;
+      session.user.languagePreference = token.languagePreference;
+      session.user.tags = token.tags;
+      session.user.profilePhoto = token.profilePhoto;
       return session;
     },
   },
