@@ -88,19 +88,6 @@ const Navbar = () => {
             >
               Law Chronicles
             </Link>
-            {/* {session ? ( // Conditionally render logout button
-              <button
-                onClick={handleSignOut}
-                // onClick={() => signOut({redirect: false})}
-                className="text-stone-50 hover:text-amber-600"
-              >
-                Logout
-              </button>
-            ) : (
-              <Link href="/login" className="text-stone-50 hover:text-amber-600">
-                Login
-              </Link>
-            )} */}
             {session ? (
             <div className="relative">
               {/* Profile photo */}
@@ -123,6 +110,15 @@ const Navbar = () => {
                   >
                     Profile
                   </Link>
+                  {session?.user?.role === 'admin' ? (
+                    <Link
+                      href="/admin"
+                      className="block px-4 py-2 text-stone-50 hover:bg-gray-600"
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      Admin Dashboard
+                    </Link>
+                  ) : null}
                   <button
                     onClick={handleSignOut}
                     className="block w-full text-left px-4 py-2 text-stone-50 hover:bg-gray-600"

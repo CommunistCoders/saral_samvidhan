@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 
 export default function NewPost() {
   const { data: session } = useSession(); // Get the current session
+  const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [location, setLocation] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -58,7 +59,7 @@ export default function NewPost() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userId, content, location, imageUrl:data1.url }),
+        body: JSON.stringify({ userId,title, content, location, imageUrl:data1.url }),
       });
 
       const data = await response.json();
@@ -72,6 +73,7 @@ export default function NewPost() {
 
       // Clear the form and remove selected image
       setContent("");
+      setTitle("");
       setLocation("");
       setSelectedImage(null); // Reset selected image after post creation
     } catch (error) {
@@ -87,6 +89,14 @@ export default function NewPost() {
       <h2 className="text-lg font-bold mb-4">Create a New Post</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
+          <textarea
+            className="w-full p-2 rounded-md bg-gray-700 text-stone-50 focus:outline-none"
+            rows="4"
+            placeholder="what is the title ?"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
           <textarea
             className="w-full p-2 rounded-md bg-gray-700 text-stone-50 focus:outline-none"
             rows="4"

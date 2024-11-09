@@ -3,7 +3,7 @@ import dfPost from "@/app/models/dfPost";
 import User from "@/app/models/User";
 
 export async function POST(req) {
-  const { userId, content, location, imageUrl } = await req.json(); // Accept imageUrl as part of the request
+  const { userId,title, content, location, imageUrl } = await req.json(); // Accept imageUrl as part of the request
 
   try {
     await dbConnect();
@@ -13,10 +13,10 @@ export async function POST(req) {
     // Create a new post with the imageUrl
     const newPost = new dfPost({
       user: userId,
+      title,
       content,
       location,
       imageUrl: imageUrl,  // Ensure this field is included
-      liked:"Akilesh",
       timestamp: Date.now(),
     });
 

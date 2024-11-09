@@ -1,11 +1,12 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import "./chatbot.css";
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 function App() {
+  const [countdown, setCountdown] = useState(5); // Countdown starting at 5 seconds
   const [input, setInput] = useState("");
   const [conversations, setConversations] = useState([
     { name: "Conversation 1", history: [] },
@@ -25,7 +26,24 @@ function App() {
     topP: 1,
     topK: 2,
     maxOutputTokens: 4096,
-  };
+  };  
+  // If the user is not logged in
+  useEffect(() => {
+    if (!session) {
+      const timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer); // Clear timer when countdown ends
+            window.location.href = "/login"; // Adjust to your protected route
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer); // Cleanup timer on component unmount
+    }
+  }, [session]);
+
   const PROMPT = `
     You are a helpful AI assistant, called the "Communist Lawyer", who helps students understand the Indian Constitution in simple language. You should only answer questions pertaining to Constitution of India.
 
@@ -115,14 +133,6 @@ function App() {
     geminiConfig,
   });
 
-  useEffect(() => {
-    if (status === "loading") return; // Don't render anything until session check is complete
-    if (!session) {
-      alert("Please Login to use the Chatbot");
-      router.push("/login");
-    }
-  }, [session, router]);
-
   const handleSubmit = async () => {
     if (!input || loading) return;
     setLoading(true);
@@ -200,6 +210,19 @@ function App() {
     });
   };
 
+  // Unauthorized access message with countdown
+  if (!session) {
+    return (
+      <div className="my-5 flex flex-col items-center justify-center bg-gray-100">
+        <p className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md font-semibold mb-4">
+          ⚠️ Login to use the Chatbot
+        </p>
+        <p className="text-gray-700">
+          Redirecting to the Login page in <span className="font-bold">{countdown}</span> seconds...
+        </p>
+      </div>
+    );
+  }
   return (
     <div className="main-container">
       <div className="sidebar">
