@@ -1,17 +1,54 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IoSearch, IoMail } from "react-icons/io5";
 import { GoHome } from "react-icons/go";
 import { TbCircleArrowUpRight } from "react-icons/tb";
 import { RiArrowDownWideFill } from "react-icons/ri";
 import NewPost from '../components/NewPost';
 import PostCard from '../components/PostCard';
+import Loading from '../components/Loading';
 
 const Page = () => {
   const [isTopicsOpen, setIsTopicsOpen] = useState(false);
   const [isResourcesOpen, setIsResourcesOpen] = useState(false);
   const [visibleCommunities, setVisibleCommunities] = useState(3);
   const [showNewPost, setShowNewPost] = useState(false);
+  const [cardData, setCardData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Function to load posts
+  const loadPosts = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/discussionforum/get?page=${page}&limit=3`);
+      const newPosts = await response.json();
+      setCardData((prevData) => [...prevData, ...newPosts]);
+      setPage((prevPage) => prevPage + 1);
+    } catch (error) {
+      console.error("Error loading posts:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Scroll event listener
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !isLoading) {
+        loadPosts();
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isLoading]);
+
+  // Initial load
+  useEffect(() => {
+    loadPosts();
+  }, []);
+
 
   const handleShowMore = () => {
     setVisibleCommunities(prev => prev + 3);
@@ -29,72 +66,72 @@ const Page = () => {
     setShowNewPost(false);
   };
 
-  const cardData = [
-    {
-      id: 1,
-      username: '8fact',
-      location: 'Asheville, North Carolina',
-      content: 'This is a text post. Lorem ipsum dolor sit amet...',
-      avatarUrl: 'https://picsum.photos/id/1027/150/150',
-    },
-    {
-      id: 2,
-      username: 'anotherUser',
-      location: 'Somewhere, USA',
-      content: 'Another interesting text post goes here.',
-      avatarUrl: 'https://picsum.photos/id/1031/150/150',
-    },
-    {
-      id: 3,
-      username: 'anotherUser',
-      location: 'Somewhere, USA',
-      content: 'Another interesting text post goes here.',
-      avatarUrl: 'https://picsum.photos/id/1031/150/150',
-    },
-    {
-      id: 4,
-      username: 'anotherUser',
-      location: 'Somewhere, USA',
-      content: 'Another interesting text post goes here.',
-      avatarUrl: 'https://picsum.photos/id/1031/150/150',
-    },
-    {
-      id: 5,
-      username: 'anotherUser',
-      location: 'Somewhere, USA',
-      content: 'Another interesting text post goes here.',
-      avatarUrl: 'https://picsum.photos/id/1031/150/150',
-    },
-    {
-      id: 6,
-      username: 'anotherUser',
-      location: 'Somewhere, USA',
-      content: 'Another interesting text post goes here.',
-      avatarUrl: 'https://picsum.photos/id/1031/150/150',
-    },
-    {
-      id: 7,
-      username: 'anotherUser',
-      location: 'Somewhere, USA',
-      content: 'Another interesting text post goes here.',
-      avatarUrl: 'https://picsum.photos/id/1031/150/150',
-    },
-    {
-      id: 8,
-      username: 'anotherUser',
-      location: 'Somewhere, USA',
-      content: 'Another interesting text post goes here.',
-      avatarUrl: 'https://picsum.photos/id/1031/150/150',
-    },
-    {
-      id: 9,
-      username: 'anotherUser',
-      location: 'Somewhere, USA',
-      content: 'Another interesting text post goes here.',
-      avatarUrl: 'https://picsum.photos/id/1031/150/150',
-    },
-    // Add more card data as needed...
-  ];
+  // const cardData = [
+  //   {
+  //     id: 1,
+  //     username: '8fact',
+  //     location: 'Asheville, North Carolina',
+  //     content: 'This is a text post. Lorem ipsum dolor sit amet...',
+  //     avatarUrl: 'https://picsum.photos/id/1027/150/150',
+  //   },
+  //   {
+  //     id: 2,
+  //     username: 'anotherUser',
+  //     location: 'Somewhere, USA',
+  //     content: 'Another interesting text post goes here.',
+  //     avatarUrl: 'https://picsum.photos/id/1031/150/150',
+  //   },
+  //   {
+  //     id: 3,
+  //     username: 'anotherUser',
+  //     location: 'Somewhere, USA',
+  //     content: 'Another interesting text post goes here.',
+  //     avatarUrl: 'https://picsum.photos/id/1031/150/150',
+  //   },
+  //   {
+  //     id: 4,
+  //     username: 'anotherUser',
+  //     location: 'Somewhere, USA',
+  //     content: 'Another interesting text post goes here.',
+  //     avatarUrl: 'https://picsum.photos/id/1031/150/150',
+  //   },
+  //   {
+  //     id: 5,
+  //     username: 'anotherUser',
+  //     location: 'Somewhere, USA',
+  //     content: 'Another interesting text post goes here.',
+  //     avatarUrl: 'https://picsum.photos/id/1031/150/150',
+  //   },
+  //   {
+  //     id: 6,
+  //     username: 'anotherUser',
+  //     location: 'Somewhere, USA',
+  //     content: 'Another interesting text post goes here.',
+  //     avatarUrl: 'https://picsum.photos/id/1031/150/150',
+  //   },
+  //   {
+  //     id: 7,
+  //     username: 'anotherUser',
+  //     location: 'Somewhere, USA',
+  //     content: 'Another interesting text post goes here.',
+  //     avatarUrl: 'https://picsum.photos/id/1031/150/150',
+  //   },
+  //   {
+  //     id: 8,
+  //     username: 'anotherUser',
+  //     location: 'Somewhere, USA',
+  //     content: 'Another interesting text post goes here.',
+  //     avatarUrl: 'https://picsum.photos/id/1031/150/150',
+  //   },
+  //   {
+  //     id: 9,
+  //     username: 'anotherUser',
+  //     location: 'Somewhere, USA',
+  //     content: 'Another interesting text post goes here.',
+  //     avatarUrl: 'https://picsum.photos/id/1031/150/150',
+  //   },
+  //   // Add more card data as needed...
+  // ];
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-5 h-screen overflow-hidden">
@@ -181,9 +218,11 @@ const Page = () => {
                 Posts
               </h1>
               <div className="mt-[500px]">/\</div>
-              {cardData.map((card, index) => (
-                <PostCard card={card} index={index} key={index}/>
-              ))}
+                {cardData.map((card, index) => (
+                  <PostCard card={card} index={index} key={index}/>
+                ))}
+                {/* {isLoading && <p>Loading more posts...</p>} */}
+                {isLoading && <Loading />}
             </div>
           </div>
         )}

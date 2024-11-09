@@ -1,3 +1,4 @@
+// src/app/api/discussionforum/post/route.js
 import dbConnect from "@/lib/dbConnect";
 import Post from "@/app/models/Post";
 
@@ -17,4 +18,3 @@ export async function POST(req) {
     return new Response(JSON.stringify({ message: "Error creating post" }), { status: 500 });
   }
 }
-

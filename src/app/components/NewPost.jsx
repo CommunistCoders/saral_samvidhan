@@ -1,3 +1,4 @@
+//New Post for Discussion Forum
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 
@@ -21,7 +22,7 @@ export default function NewPost() {
     const userId = session.user.id; // Assuming user ID is stored here in session
 
     try {
-      const response = await fetch("/api/post", {
+      const response = await fetch("/api/discussionforum/post", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
