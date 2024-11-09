@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-
+// Attached to car
 public class CarUIController : MonoBehaviour
 {
     public CarMovement carMovement; // Reference to CarMovement script
