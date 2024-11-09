@@ -3,18 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { useSession, signOut } from "next-auth/react";
 
 function Profile() {
-  const { data: session, status } = useSession(); // Get session data and status
-  const [photoUrl, setPhotoUrl] = useState("https://via.placeholder.com/150"); // Default placeholder URL
+  const { data: session, status,update } = useSession(); // Get session data and status
+  const [photoUrl, setPhotoUrl] = useState(); // Default placeholder URL
   const [newPhoto, setNewPhoto] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  useEffect(() => {
-    if (session && session.user.profilePhoto !== photoUrl) {
-      // Set the user's profile photo URL when session data is available
-      setPhotoUrl(session.user.profilePhoto || "https://via.placeholder.com/150");
-    }
-  }, [session, photoUrl]); // Dependency array includes `photoUrl` to prevent infinite re-renders
 
   if (status === "loading") {
     return <div>Loading...</div>; // Show loading state until session is available
@@ -49,6 +44,7 @@ function Profile() {
       const data = await response.json();
       if (response.ok) {
         setPhotoUrl(data.url); // Set the uploaded image URL
+        console.log("photoUrl : ",photoUrl);
         setUploadSuccess(true); // Set upload success message
       } else {
         console.error(data.message);
@@ -62,10 +58,10 @@ function Profile() {
 
   const handleConfirmPhoto = async () => {
     try {
-      // Send the new photo URL to the backend to update the user's profile
+
       const response = await fetch('/api/updateprofile', {
         method: 'POST',
-        body: JSON.stringify({ profilePhoto: photoUrl }),
+        body: JSON.stringify({ profilePhoto: photoUrl, userId: session.user.id }),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -73,33 +69,42 @@ function Profile() {
 
       const data = await response.json();
       if (response.ok) {
-        console.log('Profile photo updated successfully');
-        if (data && data.message) {
-          console.log(data.message);
-        } else {
-          console.error("No message in response:", data);
-        }
+        // Success: Update session and show message
+        setIsSuccess(true); // Show success message with animation
+        setTimeout(() => {
+          setIsSuccess(false); // Hide message after some time (animation duration)
+        }, 3000); // Adjust the time for the animation
       } else {
-        console.error("Error : ",data.message);
+        console.error("Error: ", data.message);
       }
     } catch (error) {
       console.error('Error updating profile photo:', error);
     }
   };
+
+  const deafultProfilePhoto = "https://t3.ftcdn.net/jpg/06/33/54/78/360_F_633547842_AugYzexTpMJ9z1YcpTKUBoqBF0CUCk10.jpg" ; 
+  
   return (
     <div className="min-h-screen bg-cover bg-center text-yellow-400" style={{ backgroundImage: "url('/bg1.jpg')" }}>
       {/* Header Section */}
       <header className="bg-black bg-opacity-80 p-4 md:p-6 lg:p-8">
-      <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-8">
-        {/* Profile Photo */}
-        <div className="flex-shrink-0">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-8">
+          {/* Profile Photo */}
+          <div className="flex-shrink-0">
           <img
-            src={photoUrl}
+              src={session.user.profilePhoto ===  deafultProfilePhoto ? deafultProfilePhoto: `/api/images/${session.user.profilePhoto}`}
             alt="Profile"
-            className="w-24 h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 rounded-full border-4 border-yellow-400 shadow-lg"
+            className="w-24 h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 rounded-full border-4 border-yellow-400 shadow-lg object-cover"
           />
+
+        {/* Success Message with Tailwind Animation */}
+        {isSuccess && (
+          <div className="fixed top-20 left-10 z-100 w-[300px] px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg shadow-lg">
+            Profile Photo Updated Successfully! Logout and Login to see the changes
+          </div>
+        )}
+          
         </div>
-        
         {/* Profile Info */}
         <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-2 sm:space-y-4">
           <h2 className="text-3xl sm:text-4xl font-bold">{session.user.username}</h2>

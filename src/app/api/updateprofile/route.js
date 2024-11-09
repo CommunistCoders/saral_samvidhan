@@ -1,31 +1,39 @@
 // app/api/updateprofile/route.js
-import { getServerSession } from "next-auth";
 import User from '@/app/models/User';
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-export async function POST(req, res) {
+export async function POST(req) {
   try {
-    const { profilePhoto } = await req.json();
+    const { profilePhoto, userId } = await req.json(); // Destructure `userId`
 
-    // Retrieve session using getServerSession instead of useSession
-    const session = await getServerSession(authOptions);
-
-    if (!session) {
-      return res.status(401).json({ message: 'Unauthorized' });
+    // Validate `userId`
+    if (!userId) {
+      return new Response(JSON.stringify({ message: 'User ID is required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     // Find the user and update their profile photo
-    const user = await User.findById(session.user.id);
+    const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return new Response(JSON.stringify({ message: 'User not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     user.profilePhoto = profilePhoto;
     await user.save();
 
-    return res.status(200).json({ message: 'Profile photo updated successfully' });
+    return new Response(JSON.stringify({ message: 'Profile photo updated successfully' }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
   } catch (error) {
     console.error('Error updating profile photo:', error);
-    return res.status(500).json({ message: 'Error updating profile photo' });
+    return new Response(JSON.stringify({ message: 'Error updating profile photo' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }

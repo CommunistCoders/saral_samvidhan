@@ -1,7 +1,6 @@
-//api/upload/route.js
 import { getBucket } from '@/lib/dbConnect';
 import { Readable } from 'stream';
-import { finished } from 'stream';
+import { finished } from 'stream/promises'; // Import promises version for better handling
 
 export async function POST(req) {
   try {
@@ -30,18 +29,16 @@ export async function POST(req) {
 
     readableStream.pipe(uploadStream);
 
-    // Use 'finished' to wait for the stream to complete or fail
-    return new Promise((resolve, reject) => {
-      finished(uploadStream, (err) => {
-        if (err) {
-          console.error('Error uploading file:', err);
-          reject(new Response('Error uploading file', { status: 500 }));
-        } else {
-          const fileUrl = `https://your-cloud-storage.com/${file.name}`; // Update with actual URL
-          resolve(new Response(JSON.stringify({ message: 'Image uploaded successfully', url: fileUrl }), { status: 201 }));
-        }
-      });
-    });
+    // Await the stream completion using finished from stream/promises
+    await finished(uploadStream);
+
+    // Generate the file URL
+    const fileUrl = `${uploadStream.id}`; // Replace with actual base URL and setup
+
+    return new Response(
+      JSON.stringify({ message: 'Image uploaded successfully', url: fileUrl }),
+      { status: 201, headers: { 'Content-Type': 'application/json' } }
+    );
   } catch (error) {
     console.error('Error uploading image:', error);
     return new Response(JSON.stringify({ message: 'Error uploading image' }), { status: 500 });

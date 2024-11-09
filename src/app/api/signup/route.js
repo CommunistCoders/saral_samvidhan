@@ -8,7 +8,7 @@ export async function POST(req) {
 
   try {
     await dbConnect();
-    console.log("Database connected successfully"); // Log for connection success
+    console.log("Database connected successfully");
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -16,15 +16,25 @@ export async function POST(req) {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log("Password hashed successfully"); // Log for password hashing
+    console.log("Password hashed successfully");
 
-    const newUser = new User({ email, password: hashedPassword, username });
+    // Set default profilePhoto manually if not provided
+    const newUser = new User({
+      email,
+      password: hashedPassword,
+      username,
+      profilePhoto: "https://t3.ftcdn.net/jpg/06/33/54/78/360_F_633547842_AugYzexTpMJ9z1YcpTKUBoqBF0CUCk10.jpg" // Default profile photo URL
+    });
+
+    // Save the user
     await newUser.save();
-    console.log("User created successfully:", newUser); // Log for user creation
+
+    console.log("User created successfully:", newUser);
+    console.log("Assigned profilePhoto URL:", newUser.profilePhoto);
 
     return new Response(JSON.stringify({ message: 'User created successfully' }), { status: 201 });
   } catch (error) {
-    console.error("Detailed Error:", error); // Log the full error for debugging
+    console.error("Detailed Error:", error);
     return new Response(JSON.stringify({ message: `Error creating user: ${error.message}` }), { status: 500 });
   }
 }
