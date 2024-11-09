@@ -1,15 +1,34 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useSession, signOut } from "next-auth/react";
+import PostCard from '../components/PostCard';
 
 function Profile() {
-  const { data: session, status,update } = useSession(); // Get session data and status
+  const { data: session, status } = useSession(); // Get session data and status
   const [photoUrl, setPhotoUrl] = useState(); // Default placeholder URL
   const [newPhoto, setNewPhoto] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [cardData, setCardData] = useState([]);
 
+  // Hook to load posts after session is available
+  useEffect(() => {
+    if (session) {
+      loadPosts(); // Load posts when session is available
+    }
+  }, [session]); // This effect runs every time session changes
+
+  // Function to load posts
+  const loadPosts = async () => {
+    try {
+      const response = await fetch(`/api/discussionforum/get?userId=${session.user.id}`);
+      const newPosts = await response.json();
+      setCardData(newPosts);
+    } catch (error) {
+      console.error("Error loading posts:", error);
+    }
+  };
 
   if (status === "loading") {
     return <div>Loading...</div>; // Show loading state until session is available
@@ -81,7 +100,6 @@ function Profile() {
       console.error('Error updating profile photo:', error);
     }
   };
-
   const deafultProfilePhoto = "https://t3.ftcdn.net/jpg/06/33/54/78/360_F_633547842_AugYzexTpMJ9z1YcpTKUBoqBF0CUCk10.jpg" ; 
   
   return (
@@ -190,21 +208,20 @@ function Profile() {
         </section>
 
         {/* Posts Section */}
-        <section className="text-base sm:text-lg text-gray-300 space-y-2 sm:space-y-4">
-          <h3 className="text-xl sm:text-2xl font-semibold text-yellow-400">My Posts</h3>
-          <div className="space-y-4">
-            {[
-              { title: "Understanding React Hooks", date: "Sep 25, 2024" },
-              { title: "Node.js vs. Django: Which is Better?", date: "Oct 3, 2024" },
-              { title: "Introduction to Web Accessibility", date: "Oct 10, 2024" },
-            ].map(post => (
-              <div key={post.title} className="bg-gray-800 p-3 sm:p-4 rounded-lg shadow-md">
-                <h4 className="text-yellow-400 font-semibold text-base sm:text-lg">{post.title}</h4>
-                <p className="text-xs sm:text-sm text-gray-400">{post.date}</p>
+        <div className="flex flex-col items-center space-y-4 p-4 rounded-lg ">
+          <h1 className="font-bold text-2xl text-stone-50 fixed z-[10] px-4 py-2 bg-black/70 rounded-lg shadow-md">
+            Posts
+          </h1>
+          <div className="flex space-x-4 overflow-x-auto pb-4 w-full">
+            {cardData.map((card, index) => (
+              <div className="flex-shrink-0" key={index}>
+                <PostCard card={card} index={index} />
               </div>
             ))}
           </div>
-        </section>
+        </div>
+
+
 
         {/* Edit Profile Button */}
         <button className="mt-4 bg-yellow-400 text-black py-2 px-6 rounded-md font-semibold hover:bg-yellow-500 transition duration-300">
