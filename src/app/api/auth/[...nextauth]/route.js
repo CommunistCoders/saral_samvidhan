@@ -37,7 +37,7 @@ export const authOptions = {
           // Login logic
           const user = await User.findOne({ email: credentials.email });
           if (user && await bcrypt.compare(credentials.password, user.password)) {
-            return { email: user.email };
+            return { email: user.email ,id: user._id};
           }
           throw new Error('Invalid email or password');
         }
@@ -50,11 +50,12 @@ export const authOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.email = user.email;
+        token.id = user._id || user.id; // Ensure user ID is stored in the token
       }
       return token;
     },
     async session({ session, token }) {
-      session.user.id = token._id; // Attach the user's ID to the session
+      session.user.id = token.id; // Attach the user's ID to the session
       session.user.email = token.email;
       return session;
     },
