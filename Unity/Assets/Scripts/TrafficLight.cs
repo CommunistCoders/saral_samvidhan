@@ -1,9 +1,12 @@
 using UnityEngine;
-
+using TMPro;
+using System;
 public class TrafficLight : MonoBehaviour
 {
     public GameObject redLight;
     public GameObject greenLight;
+
+    public TMP_Text timer_text;
 
     public bool isRed;
 
@@ -25,6 +28,7 @@ public class TrafficLight : MonoBehaviour
             time = 0;
             switchColor();
         }
+        timer_text.text = Convert.ToString((int)(10 - time + 1));
 
     }
     void switchColor()
@@ -34,12 +38,14 @@ public class TrafficLight : MonoBehaviour
             redLight.gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.black);
             greenLight.gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
             isRed = false;
+            timer_text.color = Color.green;
         }
         else
         {
             redLight.gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
             greenLight.gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.black);
             isRed = true;
+            timer_text.color = Color.red;
         }
     }
 }
