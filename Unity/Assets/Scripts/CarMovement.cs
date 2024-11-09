@@ -7,6 +7,8 @@ public class CarMovement : MonoBehaviour
     private bool canDrive = false;
     public GameObject player;
 
+    public GameObject arrow;
+
     public float buildingCollisions = 0;
     private Rigidbody rb;
     public Camera carCamera;
@@ -16,6 +18,10 @@ public class CarMovement : MonoBehaviour
         if (carCamera != null)
         {
             carCamera.gameObject.SetActive(false); // Initially disable car camera
+        }
+        if (arrow != null)
+        {
+            arrow.gameObject.SetActive(false);
         }
     }
 
@@ -41,6 +47,7 @@ public class CarMovement : MonoBehaviour
         if (carCamera != null)
         {
             carCamera.gameObject.SetActive(true); // Activate car camera
+            arrow.gameObject.SetActive(true);
         }
     }
 

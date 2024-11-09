@@ -4,6 +4,7 @@ public class CheckPointSystem : MonoBehaviour
 {
     public GameObject[] checkpoints; // Array of checkpoint GameObjects
     public GameObject[] trafficLights;
+    public ArrowController arrowController;
     private int currentCheckpointIndex = 0;
     public float trafficViolations = 0;
 
@@ -14,6 +15,7 @@ public class CheckPointSystem : MonoBehaviour
         {
             checkpoints[i].SetActive(i == currentCheckpointIndex);
         }
+        arrowController.target = checkpoints[currentCheckpointIndex].GetComponent<Transform>();
     }
 
     void OnTriggerEnter(Collider other)
@@ -40,6 +42,7 @@ public class CheckPointSystem : MonoBehaviour
             // Activate the next checkpoint if it exists
             if (currentCheckpointIndex < checkpoints.Length)
             {
+                arrowController.target = checkpoints[currentCheckpointIndex].GetComponent<Transform>();
                 checkpoints[currentCheckpointIndex].SetActive(true);
             }
         }
