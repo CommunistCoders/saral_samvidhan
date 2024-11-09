@@ -42,10 +42,14 @@ const Navbar = () => {
   const handleTranslateClick = () => {
     setIsOpen((prev) => !prev);
   };
+  
   const handleSignOut = async () => {
     await signOut({ redirect: false });
     // Optionally, you could update the UI or add custom logic after logging out
   };
+
+  const deafultProfilePhoto = "https://t3.ftcdn.net/jpg/06/33/54/78/360_F_633547842_AugYzexTpMJ9z1YcpTKUBoqBF0CUCk10.jpg" ; 
+  
   return (
     <nav className="sticky left-0 right-0 top-0 z-50 bg-black border border-amber-200/30  transition duration-300">
 
@@ -103,7 +107,7 @@ const Navbar = () => {
               <button onClick={toggleDropdown} className="flex items-center">
                 <img
                   // src={session.user.image} // Assume `session.user.image` contains the profile photo URL
-                  src="https://via.placeholder.com/150"
+                  src={session.user.profilePhoto ===  deafultProfilePhoto ? deafultProfilePhoto: `/api/images/${session.user.profilePhoto}`}
                   alt="Profile"
                   className="w-8 h-8 rounded-full border border-stone-50"
                 />

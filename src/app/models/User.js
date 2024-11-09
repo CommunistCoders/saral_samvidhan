@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
   tags: { type: [String], default: [] }, // Array of tags/interests
   communitiesJoined: { type: [String], default: [] }, // Array of communities the user has joined
   posts: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "Post" } // Reference to Post Schema
+    { type: mongoose.Schema.Types.ObjectId, ref: "dfPost" } // Reference to Post Schema
   ],
   createdAt: { type: Date, default: Date.now } // Date of account creation
 });

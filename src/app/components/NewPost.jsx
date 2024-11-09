@@ -1,5 +1,4 @@
-//New Post for Discussion Forum
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useSession } from "next-auth/react";
 
 export default function NewPost() {
@@ -7,6 +6,21 @@ export default function NewPost() {
   const [content, setContent] = useState("");
   const [location, setLocation] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null); // State to hold selected image
+  const [newPhoto, setNewPhoto] = useState(null);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setNewPhoto(file);
+      // Set the selected image for preview
+      setSelectedImage(URL.createObjectURL(file));
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setSelectedImage(null); // Remove the selected image
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,13 +35,30 @@ export default function NewPost() {
 
     const userId = session.user.id; // Assuming user ID is stored here in session
 
+    const formData = new FormData();
+    formData.append('file', newPhoto);
+
+
     try {
-      const response = await fetch("/api/discussionforum/post", {
+      //First Uploading
+      let response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data1 = await response.json();
+      if (response.ok) {
+        console.log("data1 :",data1.url);
+      } else {
+        console.error(data.message);
+      }
+      //Now uploading the post
+      response = await fetch("/api/discussionforum/post", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userId, content, location }),
+        body: JSON.stringify({ userId, content, location, imageUrl:data1.url }),
       });
 
       const data = await response.json();
@@ -39,9 +70,10 @@ export default function NewPost() {
 
       alert(data.message || "Post created successfully");
 
-      // Clear the form
+      // Clear the form and remove selected image
       setContent("");
       setLocation("");
+      setSelectedImage(null); // Reset selected image after post creation
     } catch (error) {
       console.error("Error creating post:", error);
       alert("Error creating post. Please try again.");
@@ -73,6 +105,32 @@ export default function NewPost() {
             onChange={(e) => setLocation(e.target.value)}
           />
         </div>
+
+        {/* Image Upload Section */}
+        <div>
+          <input
+            type="file"
+            className="w-full p-2 rounded-md bg-gray-700 text-stone-50 focus:outline-none"
+            onChange={handleFileChange}
+          />
+          {selectedImage && (
+            <div className="mt-4">
+              <img
+                src={selectedImage}
+                alt="Selected preview"
+                className="max-w-full h-auto rounded-lg shadow-md"
+              />
+              <button
+                type="button"
+                onClick={handleRemoveImage}
+                className="mt-2 text-red-500 hover:text-red-700"
+              >
+                Remove Image
+              </button>
+            </div>
+          )}
+        </div>
+
         <button
           type="submit"
           className="w-full p-2 bg-amber-600 rounded-md text-stone-50 hover:bg-amber-700"

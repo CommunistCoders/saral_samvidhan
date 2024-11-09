@@ -1,16 +1,37 @@
-// src/app/api/discussionforum/post/route.js
 import dbConnect from "@/lib/dbConnect";
-import Post from "@/app/models/Post";
+import dfPost from "@/app/models/dfPost";
+import User from "@/app/models/User";
 
 export async function POST(req) {
-  const { userId, content, location } = await req.json();
+  const { userId, content, location, imageUrl } = await req.json(); // Accept imageUrl as part of the request
 
   try {
     await dbConnect();
 
-    // Create a new post
-    const newPost = new Post({ user: userId, content, location, timestamp: Date.now() });
-    await newPost.save();
+    console.log("post image : ", imageUrl);  // Log image URL
+
+    // Create a new post with the imageUrl
+    const newPost = new dfPost({
+      user: userId,
+      content,
+      location,
+      imageUrl: imageUrl,  // Ensure this field is included
+      liked:"Akilesh",
+      timestamp: Date.now(),
+    });
+
+    console.log("New post before saving:", newPost);  // Log the new post object
+
+    await newPost.save();  // Save the new post
+
+    // Add the new post's ObjectId to the user's posts array
+    const user = await User.findById(userId);
+    if (!user) {
+      return new Response(JSON.stringify({ message: "User not found" }), { status: 404 });
+    }
+
+    user.posts.push(newPost._id);  // Add the new post's ObjectId to the user's posts array
+    await user.save();
 
     return new Response(JSON.stringify({ message: "Post created successfully" }), { status: 201 });
   } catch (error) {
