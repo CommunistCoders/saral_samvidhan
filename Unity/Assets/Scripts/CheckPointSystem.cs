@@ -24,13 +24,15 @@ public class CheckPointSystem : MonoBehaviour
         {
             // Update the last checkpoint position
             Debug.Log("Checkpoint :" + (currentCheckpointIndex + 1));
-
-            TrafficLight tl = trafficLights[currentCheckpointIndex].GetComponent<TrafficLight>();
-            if (tl != null)
+            if (currentCheckpointIndex != 1)
             {
-                if (tl.isRed)
+                TrafficLight tl = trafficLights[currentCheckpointIndex].GetComponent<TrafficLight>();
+                if (tl != null)
                 {
-                    trafficViolations += 1;
+                    if (tl.isRed)
+                    {
+                        trafficViolations += 1;
+                    }
                 }
             }
             // Deactivate the current checkpoint
