@@ -23,7 +23,7 @@ const Page = () => {
     try {
       const response = await fetch(`/api/discussionforum/get?page=${page}&limit=3`);
       const newPosts = await response.json();
-      setCardData((prevData) => [...prevData, ...newPosts]);
+      setCardData(newPosts);
       setPage((prevPage) => prevPage + 1);
     } catch (error) {
       console.error("Error loading posts:", error);
@@ -33,16 +33,16 @@ const Page = () => {
   };
 
   // Scroll event listener
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !isLoading) {
-        loadPosts();
-      }
-    };
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !isLoading) {
+  //       loadPosts();
+  //     }
+  //   };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isLoading]);
+  //   window.addEventListener('scroll', handleScroll);
+  //   return () => window.removeEventListener('scroll', handleScroll);
+  // }, [isLoading]);
 
   // Initial load
   useEffect(() => {
@@ -231,7 +231,7 @@ const Page = () => {
       {!showNewPost && (
         <div className="bg-amber-900 opacity-85 p-4 hidden md:block">
           <div className='max-w-full border border-amber-400 bg-black rounded-lg '>
-            <div className='text-slate-800 p-3 text-sm'>
+            {/* <div className='text-slate-800 p-3 text-sm'>
               <p>POPULAR COMMUNITIES</p>
               {cardData.slice(0, visibleCommunities).map(card => (
                 <div key={card.id} className="flex items-center my-2">
@@ -249,7 +249,7 @@ const Page = () => {
               ) : (
                 <button className='text-blue-400 text-sm' onClick={handleShowLess}>Show less..</button>
               )}
-            </div>
+            </div> */}
           </div>
         </div>
       )}
