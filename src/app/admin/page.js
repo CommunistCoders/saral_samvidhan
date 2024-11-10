@@ -18,7 +18,9 @@ export default function AdminPage() {
         setCountdown((prev) => {
           if (prev <= 1) {
             clearInterval(timer);
-            window.location.href = "/";
+            if (typeof window !== "undefined") {
+              window.location.href = "/";
+            }
           }
           return prev - 1;
         });

@@ -34,7 +34,9 @@ function App() {
         setCountdown((prev) => {
           if (prev <= 1) {
             clearInterval(timer); // Clear timer when countdown ends
-            window.location.href = "/login"; // Adjust to your protected route
+            if (typeof window !== "undefined") {
+              window.location.href = "/login"; // Adjust to your protected route
+            }
           }
           return prev - 1;
         });
