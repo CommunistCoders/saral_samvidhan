@@ -53,8 +53,8 @@ const Navbar = () => {
   const deafultProfilePhoto = "https://t3.ftcdn.net/jpg/06/33/54/78/360_F_633547842_AugYzexTpMJ9z1YcpTKUBoqBF0CUCk10.jpg"; 
 
   const isActive = (path) => {
-    console.log("route : ",window.location.pathname);
-    return window.location.pathname === path ? " bg-amber-400 font-bold " : " hover:bg-amber-600 "; // Check if the link is active
+    // console.log("route : ",window.location.pathname);
+    // return window.location.pathname === path ? " bg-amber-400 font-bold " : " hover:bg-amber-600 "; // Check if the link is active
   };
 
   return (
