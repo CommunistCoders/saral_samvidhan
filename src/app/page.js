@@ -159,31 +159,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Dynamic Testimonials Slider */}
-      <section className="bg-gray-200 py-12">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold mb-8">What Our Clients Say</h2>
-          <div className="carousel">
-            <div className="carousel-item">
-              <blockquote className="bg-white shadow-lg rounded-lg p-6">
-                <p className="text-lg">"Saral Samvidhan provided me with excellent legal support. Highly recommend!"</p>
-                <footer className="mt-4 font-bold">- Client A</footer>
-              </blockquote>
-            </div>
-            <div className="carousel-item">
-              <blockquote className="bg-white shadow-lg rounded-lg p-6">
-                <p className="text-lg">"Their expertise in constitutional law helped me understand my rights better."</p>
-                <footer className="mt-4 font-bold">- Client B</footer>
-              </blockquote>
-            </div>
-            {/* Add more testimonials here */}
-          </div>
-        </div>
-      </section>
-
-      
-
-
       <section className="bg-gradient-to-r from-yellow-400 to-yellow-500 py-16">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-4xl font-semibold text-gray-800 mb-4">Stay Updated with Our Newsletter</h2>
