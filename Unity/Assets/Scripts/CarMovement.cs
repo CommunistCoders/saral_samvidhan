@@ -11,11 +11,13 @@ public class CarMovement : MonoBehaviour
 
     public KnowledgeUI kui;
 
+    private bool trespass;
     public float buildingCollisions = 0;
     private Rigidbody rb;
     public Camera carCamera;
     void Start()
     {
+        trespass = false;
         rb = GetComponent<Rigidbody>();
         if (carCamera != null)
         {
@@ -101,6 +103,13 @@ public class CarMovement : MonoBehaviour
                 kui.setCollisionData();
                 kui.enableBad();
                 buildingCollisions += 1;
+            }
+            if (collision.gameObject.CompareTag("Trespassing") && !trespass)
+            {
+                kui.setTrespassData();
+                kui.enableBad();
+                canDrive = true;
+                trespass = true;
             }
         }
     }
