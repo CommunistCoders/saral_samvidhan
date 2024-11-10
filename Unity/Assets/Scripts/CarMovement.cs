@@ -1,5 +1,5 @@
 using UnityEngine;
-
+// Attached to car
 public class CarMovement : MonoBehaviour
 {
     public float moveSpeed = 200f;
@@ -8,6 +8,8 @@ public class CarMovement : MonoBehaviour
     public GameObject player;
 
     public GameObject arrow;
+
+    public KnowledgeUI kui;
 
     public float buildingCollisions = 0;
     private Rigidbody rb;
@@ -35,7 +37,6 @@ public class CarMovement : MonoBehaviour
         {
             player.SetActive(true);
             player.transform.position = transform.position + new Vector3(10, 0, 100); // Adjust offset as needed
-            // Optionally, reset the player's rotation to match world orientation
             player.transform.rotation = Quaternion.Euler(90, 180, 0);
             canDrive = false;
         }
@@ -97,6 +98,8 @@ public class CarMovement : MonoBehaviour
             canDrive = false;
             if (collision.gameObject.CompareTag("BuildingColliders"))
             {
+                kui.setCollisionData();
+                kui.enableBad();
                 buildingCollisions += 1;
             }
         }

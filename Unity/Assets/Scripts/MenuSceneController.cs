@@ -6,15 +6,15 @@ public class MenuController : MonoBehaviour
 {
     public TextMeshProUGUI titleText;
     public GameObject driverButton;
-    public GameObject doctorButton;
-    public GameObject exitButton;
+    // public GameObject doctorButton;
+    // public GameObject exitButton;
 
     void Start()
     {
         // Set up the button click listeners
         driverButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(OnDriverClick);
-        doctorButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(OnDoctorClick);
-        exitButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(OnExitClick);
+        // doctorButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(OnDoctorClick);
+        // exitButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(OnExitClick);
     }
 
     public void OnDriverClick()

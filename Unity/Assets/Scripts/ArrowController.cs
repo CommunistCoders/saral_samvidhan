@@ -1,4 +1,5 @@
 using UnityEngine;
+// Attached to Arrow
 public class ArrowController : MonoBehaviour
 {
     public Transform target; // Assign your target in the inspector
