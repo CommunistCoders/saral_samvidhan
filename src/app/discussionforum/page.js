@@ -7,6 +7,7 @@ import { RiArrowDownWideFill } from "react-icons/ri";
 import NewPost from '../components/NewPost';
 import PostCard from '../components/PostCard';
 import Loading from '../components/Loading';
+import Link from "next/link";
 
 const Page = () => {
   const [isTopicsOpen, setIsTopicsOpen] = useState(false);
@@ -151,7 +152,9 @@ const Page = () => {
                   Posts
                 </h1>
                   {cardData.map((card, index) => (
-                    <PostCard card={card} index={index} key={index}/>
+                    <Link href={`/discussionforum/posts/${card._id}`}  key={index}>
+                      <PostCard card={card} index={index}/>
+                    </Link>
                   ))}
                   {/* {isLoading && <p>Loading more posts...</p>} */}
                   {isLoading && <Loading />}

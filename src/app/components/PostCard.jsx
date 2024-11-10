@@ -5,11 +5,14 @@ import { LuArrowBigUp, LuArrowBigDown } from "react-icons/lu";
 import { FaRegComment } from "react-icons/fa";
 import { PiShareFatBold } from "react-icons/pi";
 import { motion } from "framer-motion";
+import { useRouter } from 'next/navigation';
+
 
 const PostCard = ({ card, index }) => {
   const { data: session } = useSession(); // Get the current session
   const [isLiked, setIsLiked] = useState(false); // Track like button state
   const [isDisliked, setIsDisliked] = useState(false); // Track dislike button state
+  const router = useRouter();
 
   useEffect(() => {
     if (session && card) {
@@ -101,19 +104,18 @@ const PostCard = ({ card, index }) => {
     }
   };
 
-  const currentTimestamp = Date.now(); 
-  const date = new Date(currentTimestamp);
-  
-
 
   return (
     <motion.div
       key={card.id}
+      onClick={() => {
+        router.push(`/discussionforum/posts/${card._id}`);  // Navigate to the detailed view
+      }}
       initial={{ x: -100, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: -100, opacity: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="w-full max-w-lg mb-4"
+      className="w-full max-w-lg mb-4 cursor-pointer"
     >
       <div className="bg-zinc-950 bg-opacity-75 backdrop-blur-3xl border rounded-xl border-amber-600/40 cursor-pointer transform transition-all duration-200 ease-in-out hover:scale-95">
         <div className="flex items-center px-4 py-3">
