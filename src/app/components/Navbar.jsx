@@ -58,7 +58,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky left-0 right-0 top-0 z-50 bg-black border border-amber-200/30  transition duration-300">
+    <nav className="sticky left-0 right-0 top-0 z-150 bg-black border border-amber-200/30  transition duration-300">
 
       <div className="max-w-7xl mx-auto px-4  sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-6">
