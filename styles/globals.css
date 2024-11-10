@@ -19,29 +19,92 @@ body {
     flex-direction: column; /* Optional: stack child elements vertically */
   }
 /* In your global CSS or a CSS module */
-
 @keyframes marquee {
   0% {
     transform: translateX(0);
   }
-  50% {
-    transform: translateX(-100%);
-  }
   100% {
-    transform: translateX(-200%);
+    transform: translateX(-100%);
   }
 }
 
 .animate-marquee {
   display: flex;
+  width: 100%;
   animation: marquee 20s linear infinite;
 }
 
 .postcard-container {
   display: flex;
   overflow: hidden;
+  width: 100%;
+}
+
+.postcard-container .postcard-wrap {
+  display: flex;
+  flex: none;
 }
 
 .postcard-container .postcard {
   margin-right: 16px; /* Space between postcards */
+  flex-shrink: 0; /* Prevent shrinking */
+}
+.ticker-wrapper {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.ticker-content {
+  display: inline-block;
+  white-space: nowrap;
+  animation: ticker 15s linear infinite;
+}
+
+.ticker-item {
+  display: inline-block;
+  padding: 0 2rem;
+  font-size: 1.1rem;
+  color: #1e3a8a;
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Carousel Styles */
+.carousel {
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+.carousel-item {
+  min-width: 100%;
+  transition: transform 0.5s ease;
+}
+
+@keyframes moveCards {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.card-marquee {
+  display: flex;
+  animation: moveCards 20s linear infinite;
+}
+.
+.ticker-container {
+  overflow: hidden;
+  position: relative;
 }

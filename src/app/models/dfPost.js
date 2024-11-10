@@ -7,6 +7,7 @@ const dfPostSchema = new mongoose.Schema({
   location: { type: String },
   imageUrl: { type: String },
   likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", default: [] }], // Set default to an empty array
+  dislikedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", default: [] }], // Set default to an empty array
   timestamp: { type: Date, default: Date.now },
   sentimentMetrics: {
     type: Map,

@@ -7,6 +7,7 @@ import { RiArrowDownWideFill } from "react-icons/ri";
 import NewPost from '../components/NewPost';
 import PostCard from '../components/PostCard';
 import Loading from '../components/Loading';
+import Link from "next/link";
 
 const Page = () => {
   const [isTopicsOpen, setIsTopicsOpen] = useState(false);
@@ -65,73 +66,6 @@ const Page = () => {
   const handleHomeClick = () => {
     setShowNewPost(false);
   };
-
-  // const cardData = [
-  //   {
-  //     id: 1,
-  //     username: '8fact',
-  //     location: 'Asheville, North Carolina',
-  //     content: 'This is a text post. Lorem ipsum dolor sit amet...',
-  //     avatarUrl: 'https://picsum.photos/id/1027/150/150',
-  //   },
-  //   {
-  //     id: 2,
-  //     username: 'anotherUser',
-  //     location: 'Somewhere, USA',
-  //     content: 'Another interesting text post goes here.',
-  //     avatarUrl: 'https://picsum.photos/id/1031/150/150',
-  //   },
-  //   {
-  //     id: 3,
-  //     username: 'anotherUser',
-  //     location: 'Somewhere, USA',
-  //     content: 'Another interesting text post goes here.',
-  //     avatarUrl: 'https://picsum.photos/id/1031/150/150',
-  //   },
-  //   {
-  //     id: 4,
-  //     username: 'anotherUser',
-  //     location: 'Somewhere, USA',
-  //     content: 'Another interesting text post goes here.',
-  //     avatarUrl: 'https://picsum.photos/id/1031/150/150',
-  //   },
-  //   {
-  //     id: 5,
-  //     username: 'anotherUser',
-  //     location: 'Somewhere, USA',
-  //     content: 'Another interesting text post goes here.',
-  //     avatarUrl: 'https://picsum.photos/id/1031/150/150',
-  //   },
-  //   {
-  //     id: 6,
-  //     username: 'anotherUser',
-  //     location: 'Somewhere, USA',
-  //     content: 'Another interesting text post goes here.',
-  //     avatarUrl: 'https://picsum.photos/id/1031/150/150',
-  //   },
-  //   {
-  //     id: 7,
-  //     username: 'anotherUser',
-  //     location: 'Somewhere, USA',
-  //     content: 'Another interesting text post goes here.',
-  //     avatarUrl: 'https://picsum.photos/id/1031/150/150',
-  //   },
-  //   {
-  //     id: 8,
-  //     username: 'anotherUser',
-  //     location: 'Somewhere, USA',
-  //     content: 'Another interesting text post goes here.',
-  //     avatarUrl: 'https://picsum.photos/id/1031/150/150',
-  //   },
-  //   {
-  //     id: 9,
-  //     username: 'anotherUser',
-  //     location: 'Somewhere, USA',
-  //     content: 'Another interesting text post goes here.',
-  //     avatarUrl: 'https://picsum.photos/id/1031/150/150',
-  //   },
-  //   // Add more card data as needed...
-  // ];
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-5 h-screen overflow-hidden">
@@ -218,7 +152,9 @@ const Page = () => {
                   Posts
                 </h1>
                   {cardData.map((card, index) => (
-                    <PostCard card={card} index={index} key={index}/>
+                    <Link href={`/discussionforum/posts/${card._id}`}  key={index}>
+                      <PostCard card={card} index={index}/>
+                    </Link>
                   ))}
                   {/* {isLoading && <p>Loading more posts...</p>} */}
                   {isLoading && <Loading />}
