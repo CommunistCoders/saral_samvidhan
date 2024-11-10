@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useSession } from "next-auth/react";
 import { LuArrowBigUp, LuArrowBigDown } from "react-icons/lu";
 import { FaRegComment } from "react-icons/fa";
@@ -11,6 +11,20 @@ const PostCard = ({ card, index }) => {
   const [isLiked, setIsLiked] = useState(false); // Track like button state
   const [isDisliked, setIsDisliked] = useState(false); // Track dislike button state
 
+  useEffect(() => {
+    if (session && card) {
+      // Check if the post was initially liked by the user
+      let temp = card.likedBy.indexOf(session.user.id);
+      if (temp !== -1) {
+        setIsLiked(true); // Set as liked if user already liked the post
+      }
+      temp = card.dislikedBy.indexOf(session.user.id);
+      if (temp !== -1) {
+        setIsDisliked(true); // Set as liked if user already liked the post
+      }
+    }
+  }, [session, card]); // Only run when session or card changes
+
   const handleLikeClick = async () => {
     // Check if the user is logged in
     if (!session) {
@@ -19,7 +33,7 @@ const PostCard = ({ card, index }) => {
     }
   
     const userId = session.user.id;
-    const postId = card.id; // Assuming `card.id` is the post ID
+    const postId = card._id; // Assuming `card.id` is the post ID
   
     try {
       const response = await fetch('/api/discussionforum/like', {
@@ -27,12 +41,15 @@ const PostCard = ({ card, index }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ postId, userId }),
+        body: JSON.stringify({ postId:postId, userId:userId}),
       });
   
       if (response.ok) {
         setIsLiked(!isLiked);
-        if (isDisliked) setIsDisliked(false); // Ensure dislike is cleared if like is toggled on
+        if (isDisliked){
+          // setIsDisliked(false); // Ensure dislike is cleared if like is toggled on
+          handleDislikeClick();
+        } 
       } else {
         // If the response is not ok, log the error message from the server
         const errorData = await response.json();
@@ -46,10 +63,42 @@ const PostCard = ({ card, index }) => {
     }
   };
   
+
+  const handleDislikeClick = async () => {    // Check if the user is logged in
+    if (!session) {
+      alert("You must be logged in to like a post.");
+      return;
+    }
   
-  const handleDislikeClick = () => {
-    setIsDisliked(!isDisliked);
-    if (isLiked) setIsLiked(false); // Ensure like is cleared if dislike is toggled on
+    const userId = session.user.id;
+    const postId = card._id; // Assuming `card.id` is the post ID
+  
+    try {
+      const response = await fetch('/api/discussionforum/dislike', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ postId:postId, userId:userId}),
+      });
+  
+      if (response.ok) {
+        setIsDisliked(!isDisliked);
+        if (isLiked){
+          // setIsLiked(false); // Ensure dislike is cleared if like is toggled on
+          handleLikeClick();
+        }
+      } else {
+        // If the response is not ok, log the error message from the server
+        const errorData = await response.json();
+        console.error("Failed to like the post:", errorData.message || "Unknown error");
+        alert(`Failed to like the post: ${errorData.message || "Unknown error"}`);
+      }
+    } catch (error) {
+      // Log any unexpected errors (e.g., network issues)
+      console.error("Error liking post:", error);
+      alert("An error occurred while trying to like the post. Please try again later.");
+    }
   };
 
   const currentTimestamp = Date.now(); 
@@ -113,7 +162,7 @@ const PostCard = ({ card, index }) => {
                     isLiked ? 'text-green-500 fill-current' : 'text-green-600'
                   }`}
                 />
-                <span className="text-md text-green-500 font-semibold">20</span>
+                <span className="text-md text-green-500 font-semibold">{card.likedBy.length}</span>
               </button>
 
               {/* Dislike Button */}
@@ -128,7 +177,7 @@ const PostCard = ({ card, index }) => {
                     isDisliked ? 'text-red-500 fill-current' : 'text-red-600'
                   }`}
                 />
-                <span className="text-md text-red-500 font-semibold">20</span>
+                <span className="text-md text-red-500 font-semibold">{card.dislikedBy.length}</span>
               </button>
             </div>
           </div>

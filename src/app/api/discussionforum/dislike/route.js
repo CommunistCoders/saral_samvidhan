@@ -12,15 +12,15 @@ export async function POST(req) {
         const post = await dfPost.findById(postId);
         console.log("post : ",post);
         // Check if the user already liked the post
-        const index = post.likedBy.indexOf(userId);
+        const index = post.dislikedBy.indexOf(userId);
         console.log("index : ",index);
         if (index === -1) {
             console.log("came here");
-            // If not liked, add the user's ID to likedBy
-            post.likedBy.push(userId);
+            // If not liked, add the user's ID to dislikedBy
+            post.dislikedBy.push(userId);
           } else {
-            // If already liked, remove the user's ID from likedBy
-            post.likedBy.splice(index, 1);
+            // If already liked, remove the user's ID from dislikedBy
+            post.dislikedBy.splice(index, 1);
           }
         
         await post.save();

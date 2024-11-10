@@ -42,7 +42,7 @@ const Page = () => {
       if (result?.error) {
         alert(`Login failed: ${result.error}`);
       } else {
-        alert("Login successful!");
+        // alert("Login successful!");
         window.location.href = "/discussionforum"; // Adjust to your protected route
       }
     } catch (error) {
