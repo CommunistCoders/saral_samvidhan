@@ -103,6 +103,8 @@ const PostCard = ({ card, index }) => {
 
   const currentTimestamp = Date.now(); 
   const date = new Date(currentTimestamp);
+  
+
 
   return (
     <motion.div
@@ -113,7 +115,7 @@ const PostCard = ({ card, index }) => {
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className="w-full max-w-lg mb-4"
     >
-      <div className="bg-zinc-950 bg-opacity-75 backdrop-blur-3xl border rounded-xl border-amber-600/40">
+      <div className="bg-zinc-950 bg-opacity-75 backdrop-blur-3xl border rounded-xl border-amber-600/40 cursor-pointer transform transition-all duration-200 ease-in-out hover:scale-95">
         <div className="flex items-center px-4 py-3">
           <img
             className="h-10 w-10 rounded-full border border-amber-600/40"
