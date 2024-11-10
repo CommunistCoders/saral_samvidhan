@@ -6,17 +6,17 @@ const dfPostSchema = new mongoose.Schema({
   content: { type: String, required: true },
   location: { type: String },
   imageUrl: { type: String },
-  liked: { type: String },
+  likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", default: [] }], // Set default to an empty array
   timestamp: { type: Date, default: Date.now },
   sentimentMetrics: {
     type: Map,
     of: String, // Maps sentiment categories to values (e.g., positive, negative)
     required: true,
     default: {
-      "Hate Speech": "negative",             // Default is 'negative' (can change to 'positive' if desired)
-      "Harassment and Bullying": "negative", // Default is 'negative'
-      "Sexual Content": "negative",          // Default is 'negative'
-      "Spam and Scams": "negative"           // Default is 'negative'
+      "Hate Speech": "negative",
+      "Harassment and Bullying": "negative",
+      "Sexual Content": "negative",
+      "Spam and Scams": "negative"
     }
   }
 });

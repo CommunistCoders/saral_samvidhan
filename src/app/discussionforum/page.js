@@ -200,35 +200,35 @@ const Page = () => {
 
       {/* Conditional Middle Column */}
       <div className="col-span-1 md:col-span-3 flex flex-col overflow-hidden">
-        {showNewPost ? (
-          <div className=" ml-[200px]">
-            <NewPost />
-          </div>  
-        ) : (
-          <div
-            className="flex-grow overflow-y-auto p-4"
-            style={{
-              backgroundImage: 'url(/bg3.jpg)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
-          >
-            <div className="flex flex-col items-center space-y-4 p-4 rounded-lg ">
-              <h1 className="font-bold text-2xl text-stone-50  fixed z-[10] px-4 py-2 bg-black/70 rounded-lg shadow-md">
-                Posts
-              </h1>
-                {cardData.map((card, index) => (
-                  <PostCard card={card} index={index} key={index}/>
-                ))}
-                {/* {isLoading && <p>Loading more posts...</p>} */}
-                {isLoading && <Loading />}
-            </div>
-          </div>
-        )}
+        <div
+          className="flex-grow overflow-y-auto p-4"
+          style={{
+            backgroundImage: 'url(/bg3.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        >
+          {showNewPost ? (
+            <div>
+              <NewPost />
+            </div>  
+          ) : (
+              <div className="flex flex-col items-center space-y-4 p-4 rounded-lg ">
+                <h1 className="font-bold text-2xl text-stone-50  fixed z-[10] px-4 py-2 bg-black/70 rounded-lg shadow-md">
+                  Posts
+                </h1>
+                  {cardData.map((card, index) => (
+                    <PostCard card={card} index={index} key={index}/>
+                  ))}
+                  {/* {isLoading && <p>Loading more posts...</p>} */}
+                  {isLoading && <Loading />}
+              </div>
+          )}
+        </div>
       </div>
 
       {/* Right Column - Hidden in New Post View */}
-      {!showNewPost && (
+      {/* {!showNewPost && ( */}
         <div className="bg-amber-900 opacity-85 p-4 hidden md:block">
           <div className='max-w-full border border-amber-400 bg-black rounded-lg '>
             {/* <div className='text-slate-800 p-3 text-sm'>
@@ -252,7 +252,7 @@ const Page = () => {
             </div> */}
           </div>
         </div>
-      )}
+      {/* )} */}
     </div>
   );
 };

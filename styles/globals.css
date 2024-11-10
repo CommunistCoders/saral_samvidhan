@@ -18,3 +18,30 @@ body {
     display: flex; /* Optional: use flexbox for layout */
     flex-direction: column; /* Optional: stack child elements vertically */
   }
+/* In your global CSS or a CSS module */
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(-200%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  animation: marquee 20s linear infinite;
+}
+
+.postcard-container {
+  display: flex;
+  overflow: hidden;
+}
+
+.postcard-container .postcard {
+  margin-right: 16px; /* Space between postcards */
+}

@@ -89,9 +89,9 @@ export default function NewPost() {
       <h2 className="text-lg font-bold mb-4">Create a New Post</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <textarea
+          <input
+            type="text"
             className="w-full p-2 rounded-md bg-gray-700 text-stone-50 focus:outline-none"
-            rows="4"
             placeholder="what is the title ?"
             value={title}
             onChange={(e) => setTitle(e.target.value)}

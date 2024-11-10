@@ -20,7 +20,7 @@ const Page = () => {
 
   useEffect(() => {
     if (!session) return; // Don't render anything until session check is complete
-    if (session) window.location.href = "/profile";
+    if (session) window.location.href = "/discussionforum";
       // router.push("/"); // Redirect to the main page if logged in
   }, [session, router]);
 
@@ -43,7 +43,7 @@ const Page = () => {
         alert(`Login failed: ${result.error}`);
       } else {
         alert("Login successful!");
-        window.location.href = "/"; // Adjust to your protected route
+        window.location.href = "/discussionforum"; // Adjust to your protected route
       }
     } catch (error) {
       alert(`Error: ${error}`);
@@ -83,7 +83,7 @@ const Page = () => {
 
       const data = await response.json();
       alert(`${data.message}`);
-      window.location.href = "/"; // Adjust to your protected route
+      window.location.href = "/login"; // Adjust to your protected route
     } catch (error) {
       alert(`Error: ${error}`);
     } finally {
