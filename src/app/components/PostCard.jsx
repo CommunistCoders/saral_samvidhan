@@ -103,7 +103,33 @@ const PostCard = ({ card, index }) => {
       alert("An error occurred while trying to like the post. Please try again later.");
     }
   };
-
+  
+  const handleShare = () => {
+    const postUrl = `saral-samvidhan-oph5.vercel.app/discussionforum/posts/${card._id}`;
+  
+    // Create a temporary textarea element
+    const textarea = document.createElement('textarea');
+    textarea.value = postUrl;
+    
+    // Append the textarea to the body (it needs to be in the DOM to work)
+    document.body.appendChild(textarea);
+    
+    // Select the content of the textarea
+    textarea.select();
+    textarea.setSelectionRange(0, 99999); // For mobile devices
+    
+    try {
+      // Execute the 'copy' command to copy the content to the clipboard
+      document.execCommand('copy');
+      alert('Post URL copied to clipboard!');
+    } catch (error) {
+      console.error('Error copying URL:', error);
+      alert('Failed to copy URL.');
+    }
+  
+    // Remove the textarea from the DOM
+    document.body.removeChild(textarea);
+  };
 
   return (
     <motion.div
@@ -193,7 +219,10 @@ const PostCard = ({ card, index }) => {
             </button>
 
             {/* Share Button */}
-            <button className="flex items-center space-x-1 p-2 rounded-full text-amber-600 hover:bg-amber-700/20 transition-all duration-200 ease-in-out">
+            <button 
+              className="flex items-center space-x-1 p-2 rounded-full text-amber-600 hover:bg-amber-700/20 transition-all duration-200 ease-in-out"
+              onClick={handleShare}
+            >
               <PiShareFatBold className="h-8 w-8" />
               <span className="text-sm font-semibold">Share</span>
             </button>
