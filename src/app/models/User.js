@@ -1,3 +1,4 @@
+// app/models/User.js
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
@@ -11,7 +12,12 @@ const userSchema = new mongoose.Schema({
   posts: [
     { type: mongoose.Schema.Types.ObjectId, ref: "dfPost" } // Reference to Post Schema
   ],
-  createdAt: { type: Date, default: Date.now } // Date of account creation
+  createdAt: { type: Date, default: Date.now }, // Date of account creation
+  role: { 
+    type: String, 
+    enum: ['user', 'admin'], // Only allow 'user' or 'admin'
+    default: 'user' // Default role is 'user'
+  }
 });
 
 export default mongoose.models.User || mongoose.model("User", userSchema);

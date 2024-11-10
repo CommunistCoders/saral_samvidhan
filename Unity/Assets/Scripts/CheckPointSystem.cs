@@ -1,12 +1,17 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class CheckPointSystem : MonoBehaviour
 {
     public GameObject[] checkpoints; // Array of checkpoint GameObjects
     public GameObject[] trafficLights;
     public ArrowController arrowController;
+
+    public KnowledgeUI knowledgeUI;
     private int currentCheckpointIndex = 0;
     public float trafficViolations = 0;
+
+    public HashSet<int> signals = new HashSet<int> { 1, 3, 5, 6, 8 };
 
     void Start()
     {
@@ -24,14 +29,20 @@ public class CheckPointSystem : MonoBehaviour
         {
             // Update the last checkpoint position
             Debug.Log("Checkpoint :" + (currentCheckpointIndex + 1));
-            if (currentCheckpointIndex != 1)
+            if (!signals.Contains(currentCheckpointIndex))
             {
                 TrafficLight tl = trafficLights[currentCheckpointIndex].GetComponent<TrafficLight>();
                 if (tl != null)
                 {
+                    knowledgeUI.setTrafficData();
                     if (tl.isRed)
                     {
                         trafficViolations += 1;
+                        knowledgeUI.enableBad();
+                    }
+                    else
+                    {
+                        knowledgeUI.enableGood();
                     }
                 }
             }

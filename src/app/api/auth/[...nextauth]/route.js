@@ -29,6 +29,7 @@ export const authOptions = {
           const newUser = new User({
             email: credentials.email,
             password: hashedPassword,
+            role: 'user', // Set default role to 'user' for new users
           });
 
           await newUser.save();
@@ -36,9 +37,10 @@ export const authOptions = {
             email: newUser.email,
             id: newUser._id,
             username: newUser.username,
+            role: newUser.role, // Include role in the returned user object
             languagePreference: newUser.languagePreference,
             tags: newUser.tags,
-            profilePhoto: newUser.profilePhoto, 
+            profilePhoto: newUser.profilePhoto || 'https://via.placeholder.com/150',
           };
         } else {
           // Login logic
@@ -48,6 +50,7 @@ export const authOptions = {
               email: user.email,
               id: user._id,
               username: user.username,
+              role: user.role, // Include role in the returned user object
               languagePreference: user.languagePreference,
               tags: user.tags,
               profilePhoto: user.profilePhoto || 'https://via.placeholder.com/150',
@@ -66,6 +69,7 @@ export const authOptions = {
         token.email = user.email;
         token.id = user.id;
         token.username = user.username;
+        token.role = user.role; // Store role in the JWT token
         token.languagePreference = user.languagePreference;
         token.tags = user.tags;
         token.profilePhoto = user.profilePhoto;
@@ -76,6 +80,7 @@ export const authOptions = {
       session.user.id = token.id;
       session.user.email = token.email;
       session.user.username = token.username;
+      session.user.role = token.role; // Include role in session
       session.user.languagePreference = token.languagePreference;
       session.user.tags = token.tags;
       session.user.profilePhoto = token.profilePhoto;

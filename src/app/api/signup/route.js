@@ -23,9 +23,11 @@ export async function POST(req) {
       email,
       password: hashedPassword,
       username,
-      profilePhoto: "https://t3.ftcdn.net/jpg/06/33/54/78/360_F_633547842_AugYzexTpMJ9z1YcpTKUBoqBF0CUCk10.jpg" // Default profile photo URL
+      profilePhoto: "https://t3.ftcdn.net/jpg/06/33/54/78/360_F_633547842_AugYzexTpMJ9z1YcpTKUBoqBF0CUCk10.jpg", // Default profile photo URL
+      role:"admin"
     });
 
+    console.log("new User : ",newUser);
     // Save the user
     await newUser.save();
 

@@ -3,6 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { FaQuoteRight } from "react-icons/fa";
 import { motion } from "framer-motion";
+import HorizontalPostcards from "./components/HorizontalPostcards";
 
 const quotes = [
   { text: "The law is reason, free from passion.", author: "– Aristotle" },
@@ -14,6 +15,7 @@ const quotes = [
 
 const HomePage = () => {
   return (
+    <div>
     <section className="relative w-full h-screen overflow-hidden">
       <Image
         src="/bg1.jpg"
@@ -59,6 +61,8 @@ const HomePage = () => {
         </div>
       </div>
     </section>
+      <HorizontalPostcards />
+      </div>
   );
 };
 
