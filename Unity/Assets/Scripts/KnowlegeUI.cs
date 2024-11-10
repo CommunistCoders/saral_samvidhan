@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+// Attached to UI Canvas
 public class KnowledgeUI : MonoBehaviour
 {
     public TMP_Text good;
@@ -10,9 +11,14 @@ public class KnowledgeUI : MonoBehaviour
     public float time;
     public bool onDisplay;
 
+    public bool trafficViolation;
+    public bool collisionViolation;
+
     void Start()
     {
         clear();
+        trafficViolation = false;
+        collisionViolation = false;
     }
 
     void Update()
@@ -28,14 +34,16 @@ public class KnowledgeUI : MonoBehaviour
     }
     public void setTrafficData()
     {
-        good.text = "Traffic not violated";
-        bad.text = "Traffic violated";
+        good.text = "You followed the rules and avoided being charged under Section 184 of Motor Vehicles Act";
+        bad.text = "Under Section 184 of Motor Vehicles Act, You have commited a offence by jumping a red light";
+        trafficViolation = true;
     }
 
     public void setCollisionData()
     {
         good.text = "";
-        bad.text = "Public property Damaged";
+        bad.text = "Under Section 184 of Motor Vehicles Act, You have commited a offence by reckless driving";
+        collisionViolation = true;
     }
 
     public void enableGood()
@@ -60,9 +68,11 @@ public class KnowledgeUI : MonoBehaviour
     void clear()
     {
         good.enabled = false;
+        good.text = "";
         goodPanel.gameObject.SetActive(false);
         badPanel.gameObject.SetActive(false);
         bad.enabled = false;
+        bad.text = "";
         time = 0;
         onDisplay = false;
     }

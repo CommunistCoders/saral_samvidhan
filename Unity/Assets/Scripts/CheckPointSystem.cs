@@ -11,6 +11,10 @@ public class CheckPointSystem : MonoBehaviour
     private int currentCheckpointIndex = 0;
     public float trafficViolations = 0;
 
+    public CarMovement cm;
+
+    public DriverFinishController dfc;
+
     public HashSet<int> signals = new HashSet<int> { 1, 3, 5, 6, 8 };
 
     void Start()
@@ -34,17 +38,28 @@ public class CheckPointSystem : MonoBehaviour
                 TrafficLight tl = trafficLights[currentCheckpointIndex].GetComponent<TrafficLight>();
                 if (tl != null)
                 {
-                    knowledgeUI.setTrafficData();
-                    if (tl.isRed)
+                    if (knowledgeUI.trafficViolation == false)
                     {
-                        trafficViolations += 1;
-                        knowledgeUI.enableBad();
+                        knowledgeUI.setTrafficData();
+                        if (tl.isRed)
+                        {
+                            trafficViolations += 1;
+                            knowledgeUI.enableBad();
+                        }
+                        else
+                        {
+                            knowledgeUI.enableGood();
+                        }
                     }
                     else
                     {
-                        knowledgeUI.enableGood();
+                        if (tl.isRed)
+                        {
+                            trafficViolations += 1;
+                        }
                     }
                 }
+
             }
             // Deactivate the current checkpoint
             checkpoints[currentCheckpointIndex].SetActive(false);
@@ -57,6 +72,18 @@ public class CheckPointSystem : MonoBehaviour
             {
                 arrowController.target = checkpoints[currentCheckpointIndex].GetComponent<Transform>();
                 checkpoints[currentCheckpointIndex].SetActive(true);
+            }
+            else
+            {
+                if (cm.buildingCollisions > 0 || trafficViolations > 0)
+                {
+                    dfc.Finish(false);
+                }
+                else
+                {
+                    dfc.Finish(true);
+                }
+
             }
         }
     }
