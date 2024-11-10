@@ -1,5 +1,7 @@
+// app/api/discussionforum/get/route.js
 import dbConnect from "@/lib/dbConnect";
 import dfPost from "@/app/models/dfPost";
+import User from "@/app/models/User";
 
 export async function GET(req) {
   try {
