@@ -22,7 +22,7 @@ const Page = () => {
   const loadPosts = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/discussionforum/get?page=${page}&limit=3`);
+      const response = await fetch(`/api/discussionforum/get?page=${page}&limit=10`);
       const newPosts = await response.json();
       setCardData(newPosts);
       setPage((prevPage) => prevPage + 1);
@@ -71,7 +71,7 @@ const Page = () => {
     <div className="grid grid-cols-1 md:grid-cols-5 h-screen overflow-hidden">
       {/* Left Column */}
       <div className="bg-black bg-opacity-95 p-4">
-        <div 
+        <div
           className='flex items-center p-2 rounded-lg hover:bg-amber-600 text-amber-600 hover:text-stone-900 transition duration-200 cursor-pointer '
           onClick={handleHomeClick}
         >
@@ -127,7 +127,7 @@ const Page = () => {
           <button
             onClick={handleNewPostClick}
             className='bg-amber-600 rounded-xl px-16 py-2 font-bold text-md text-center cursor-pointer'>
-              POST
+            POST
           </button>
         </div>
       </div>
@@ -145,29 +145,29 @@ const Page = () => {
           {showNewPost ? (
             <div>
               <NewPost />
-            </div>  
+            </div>
           ) : (
-              <div className="flex flex-col items-center space-y-4 p-4 rounded-lg ">
-                <h1 className="font-bold text-2xl text-stone-50  fixed z-[10] px-4 py-2 bg-black/70 rounded-lg shadow-md">
-                  Posts
-                </h1>
-                  {cardData.map((card, index) => (
-                    <Link href={`/discussionforum/posts/${card._id}`}  key={index}>
-                      <PostCard card={card} index={index}/>
-                    </Link>
-                  ))}
-                  {/* {isLoading && <p>Loading more posts...</p>} */}
-                  {isLoading && <Loading />}
-              </div>
+            <div className="flex flex-col items-center space-y-4 p-4 rounded-lg ">
+              <h1 className="font-bold text-2xl text-stone-50  fixed z-[10] px-4 py-2 bg-black/70 rounded-lg shadow-md">
+                Posts
+              </h1>
+              {cardData.map((card, index) => (
+                <Link href={`/discussionforum/posts/${card._id}`} key={index}>
+                  <PostCard card={card} index={index} />
+                </Link>
+              ))}
+              {/* {isLoading && <p>Loading more posts...</p>} */}
+              {isLoading && <Loading />}
+            </div>
           )}
         </div>
       </div>
 
       {/* Right Column - Hidden in New Post View */}
       {/* {!showNewPost && ( */}
-        <div className="bg-amber-900 opacity-85 p-4 hidden md:block">
-          <div className='max-w-full border border-amber-400 bg-black rounded-lg '>
-            {/* <div className='text-slate-800 p-3 text-sm'>
+      <div className="bg-amber-900 opacity-85 p-4 hidden md:block">
+        <div className='max-w-full border border-amber-400 bg-black rounded-lg '>
+          {/* <div className='text-slate-800 p-3 text-sm'>
               <p>POPULAR COMMUNITIES</p>
               {cardData.slice(0, visibleCommunities).map(card => (
                 <div key={card.id} className="flex items-center my-2">
@@ -186,8 +186,8 @@ const Page = () => {
                 <button className='text-blue-400 text-sm' onClick={handleShowLess}>Show less..</button>
               )}
             </div> */}
-          </div>
         </div>
+      </div>
       {/* )} */}
     </div>
   );
