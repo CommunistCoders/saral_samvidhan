@@ -11,6 +11,9 @@ module.exports = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      zIndex: {
+        '100': '100',
+      }
     },
   },
   plugins: [],

@@ -71,21 +71,7 @@ const HomePage = () => {
   }, []);
   return (
     <div>
-    {/* Flash News Section */}
-    <section className="bg-sky-100 z-50 fixed w-full py-4">
-      <div className="container mx-auto overflow-hidden">
-        <div className="ticker-wrapper">
-          <div className="ticker-content">
-            {news.map((item, index) => (
-              <span key={item.id} className="ticker-item">
-                {item.date}: {item.title}
-                {index < news.length - 1 && <span> | </span>}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
+
       <section className="relative w-full h-screen ">
         <Image
           src="/bg1.jpg"
