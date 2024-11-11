@@ -12,19 +12,23 @@ const PostCard = ({ card, index }) => {
   const { data: session } = useSession(); // Get the current session
   const [isLiked, setIsLiked] = useState(false); // Track like button state
   const [isDisliked, setIsDisliked] = useState(false); // Track dislike button state
+  const [likeCount, setLikeCount] = useState(card.likedBy.length);
+  const [dislikeCount, setDislikeCount] = useState(card.dislikedBy.length);
   const router = useRouter();
 
   useEffect(() => {
     if (session && card) {
       // Check if the post was initially liked by the user
-      let temp = card.likedBy.indexOf(session.user.id);
-      if (temp !== -1) {
-        setIsLiked(true); // Set as liked if user already liked the post
-      }
-      temp = card.dislikedBy.indexOf(session.user.id);
-      if (temp !== -1) {
-        setIsDisliked(true); // Set as liked if user already liked the post
-      }
+      // let temp = card.likedBy.indexOf(session.user.id);
+      // if (temp !== -1) {
+      //   setIsLiked(true); // Set as liked if user already liked the post
+      // }
+      // temp = card.dislikedBy.indexOf(session.user.id);
+      // if (temp !== -1) {
+      //   setIsDisliked(true); // Set as liked if user already liked the post
+      // }
+      if (card.likedBy.includes(session.user.id)) setIsLiked(true);
+      if (card.dislikedBy.includes(session.user.id)) setIsDisliked(true);
     }
   }, [session, card]); // Only run when session or card changes
 
@@ -49,9 +53,11 @@ const PostCard = ({ card, index }) => {
   
       if (response.ok) {
         setIsLiked(!isLiked);
+        setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
         if (isDisliked){
           // setIsDisliked(false); // Ensure dislike is cleared if like is toggled on
           handleDislikeClick();
+          setDislikeCount(dislikeCount - 1);
         } 
       } else {
         // If the response is not ok, log the error message from the server
@@ -87,9 +93,11 @@ const PostCard = ({ card, index }) => {
   
       if (response.ok) {
         setIsDisliked(!isDisliked);
+        setDislikeCount(isDisliked ? dislikeCount - 1 : dislikeCount + 1);
         if (isLiked){
           // setIsLiked(false); // Ensure dislike is cleared if like is toggled on
           handleLikeClick();
+          setLikeCount(likeCount - 1);
         }
       } else {
         // If the response is not ok, log the error message from the server
@@ -192,7 +200,7 @@ const PostCard = ({ card, index }) => {
                     isLiked ? 'text-green-500 fill-current' : 'text-green-600'
                   }`}
                 />
-                <span className="text-md text-green-500 font-semibold">{card.likedBy.length}</span>
+                <span className="text-md text-green-500 font-semibold">{likeCount}</span>
               </button>
 
               {/* Dislike Button */}
@@ -207,7 +215,7 @@ const PostCard = ({ card, index }) => {
                     isDisliked ? 'text-red-500 fill-current' : 'text-red-600'
                   }`}
                 />
-                <span className="text-md text-red-500 font-semibold">{card.dislikedBy.length}</span>
+                <span className="text-md text-red-500 font-semibold">{dislikeCount}</span>
               </button>
             </div>
           </div>
