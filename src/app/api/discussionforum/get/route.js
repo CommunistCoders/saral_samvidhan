@@ -8,16 +8,17 @@ export async function GET(req) {
     await dbConnect();
     
     const page = parseInt(req.nextUrl.searchParams.get('page')) || 1;
-    const limit = parseInt(req.nextUrl.searchParams.get('limit')) || 3;
+    const limit = parseInt(req.nextUrl.searchParams.get('limit')) || 30;
     const skip = (page - 1) * limit;
     
-    const userId = req.nextUrl.searchParams.get('userId'); // Get the userId from query params
-    const postId = req.nextUrl.searchParams.get('postId'); // Get the postId from query params
+    const userId = req.nextUrl.searchParams.get('userId');
+    const postId = req.nextUrl.searchParams.get('postId');
+    const tags = req.nextUrl.searchParams.getAll('tags'); // Get all 'tags' values from query params
 
-    let query = {}; // Initialize an empty query object
+    let query = {};
 
     if (postId) {
-      // If postId is provided, fetch only that post
+      // Fetch only the specified post by ID
       const post = await dfPost.findById(postId).populate('user');
       if (!post) {
         return new Response(JSON.stringify({ message: "Post not found" }), { status: 404 });
@@ -28,18 +29,23 @@ export async function GET(req) {
       });
     }
 
-    // Otherwise, continue to fetch posts by userId or all posts with pagination
     if (userId) {
-      query.user = userId; // If userId is provided, filter posts by userId
+      query.user = userId;
     }
 
-    // Fetch posts and populate the user field with the actual user document
+    // Add a condition to filter posts by tags if the tags array is provided
+    if (tags.length > 0) {
+      query.tags = { $in: tags }; // Matches any posts containing at least one of the specified tags
+    }
+
+    // Fetch posts matching the query and apply pagination
     const posts = await dfPost.find(query)
       .sort({ timestamp: -1 })
       .skip(skip)
       .limit(limit)
       .populate('user');
 
+    console.log("posts : ",posts);
     return new Response(JSON.stringify(posts), {
       status: 200,
       headers: { "Content-Type": "application/json" },

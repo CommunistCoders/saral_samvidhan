@@ -1,14 +1,15 @@
+//app/api/discussionforum/post/route.js
 import dbConnect from "@/lib/dbConnect";
 import dfPost from "@/app/models/dfPost";
 import User from "@/app/models/User";
 
 export async function POST(req) {
-  const { userId,title, content, location, imageUrl } = await req.json(); // Accept imageUrl as part of the request
+  const { userId,title, content, location, imageUrl, tags } = await req.json(); // Accept imageUrl as part of the request
 
   try {
     await dbConnect();
 
-    console.log("post image : ", imageUrl);  // Log image URL
+    console.log("tags : ", tags);  // Log image URL
 
     // Create a new post with the imageUrl
     const newPost = new dfPost({
@@ -17,6 +18,7 @@ export async function POST(req) {
       content,
       location,
       imageUrl: imageUrl,  // Ensure this field is included
+      tags: tags,
       timestamp: Date.now(),
     });
 

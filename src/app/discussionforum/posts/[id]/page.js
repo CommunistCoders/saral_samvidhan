@@ -18,6 +18,8 @@ const Page = ({params}) => {
   const [isTopicsOpen, setIsTopicsOpen] = useState(false);
   const [isLiked, setIsLiked] = useState(false); // Track like button state
   const [isDisliked, setIsDisliked] = useState(false); // Track dislike button state
+  const [likeCount, setLikeCount] = useState("");
+  const [dislikeCount, setDislikeCount] = useState("");
   const [isResourcesOpen, setIsResourcesOpen] = useState(false);
   const [showNewPost, setShowNewPost] = useState(false);
   const [card, setCard] = useState(null);
@@ -32,15 +34,8 @@ const Page = ({params}) => {
 
   useEffect(() => {
     if (session && card) {
-      // Check if the post was initially liked by the user
-      let temp = card.likedBy.indexOf(session.user.id);
-      if (temp !== -1) {
-        setIsLiked(true); // Set as liked if user already liked the post
-      }
-      temp = card.dislikedBy.indexOf(session.user.id);
-      if (temp !== -1) {
-        setIsDisliked(true); // Set as liked if user already liked the post
-      }
+      if (card.likedBy.includes(session.user.id)) setIsLiked(true);
+      if (card.dislikedBy.includes(session.user.id)) setIsDisliked(true);
     }
   }, [session, card]); // Only run when session or card changes
 
@@ -51,6 +46,8 @@ const Page = ({params}) => {
         .then((res) => res.json())
         .then((data) => {
           setCard(data);
+          setLikeCount(data.likedBy.length);
+          setDislikeCount(data.dislikedBy.length);
           console.log("Fetched data : ",data);
         })
         .catch((error) => console.error("Error fetching post:", error));
@@ -78,9 +75,11 @@ const Page = ({params}) => {
   
       if (response.ok) {
         setIsLiked(!isLiked);
+        setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
         if (isDisliked){
           // setIsDisliked(false); // Ensure dislike is cleared if like is toggled on
           handleDislikeClick();
+          setDislikeCount(dislikeCount - 1);
         } 
       } else {
         // If the response is not ok, log the error message from the server
@@ -116,9 +115,11 @@ const Page = ({params}) => {
   
       if (response.ok) {
         setIsDisliked(!isDisliked);
+        setDislikeCount(isDisliked ? dislikeCount - 1 : dislikeCount + 1);
         if (isLiked){
           // setIsLiked(false); // Ensure dislike is cleared if like is toggled on
           handleLikeClick();
+          setLikeCount(likeCount - 1);
         }
       } else {
         // If the response is not ok, log the error message from the server
@@ -275,7 +276,7 @@ const Page = ({params}) => {
                           isLiked ? 'text-green-500 fill-current' : 'text-green-600'
                         }`}
                       />
-                      <span className="text-md text-green-500 font-semibold">{card.likedBy.length}</span>
+                      <span className="text-md text-green-500 font-semibold">{likeCount}</span>
                     </button>
 
                     {/* Dislike Button */}
@@ -290,7 +291,7 @@ const Page = ({params}) => {
                           isDisliked ? 'text-red-500 fill-current' : 'text-red-600'
                         }`}
                       />
-                      <span className="text-md text-red-500 font-semibold">{card.dislikedBy.length}</span>
+                      <span className="text-md text-red-500 font-semibold">{dislikeCount}</span>
                     </button>
                     {/* Comment Button */}
                     <button className="flex items-center space-x-1 text-amber-600">
@@ -312,6 +313,23 @@ const Page = ({params}) => {
                 {/* Middle Section */}
                 <div className="flex-grow mx-8">
                     <h1 className="text-3xl font-bold text-white">{card.title}</h1>
+
+                      {/* Display tags below title */}
+                      {card.tags && card.tags.length > 0 && (
+                        <div className="px-4 py-2">
+                          <div className="flex flex-wrap gap-2">
+                            {card.tags.map((tag, index) => (
+                              <span
+                                key={index}
+                                className="text-sm text-amber-500 bg-amber-700/20 rounded-full px-3 py-1"
+                              >
+                                #{tag}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                       )}
+
                     <p className="text-gray-300 mt-4">{card.content}</p>
                 </div>
 
