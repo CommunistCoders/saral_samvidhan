@@ -1,5 +1,7 @@
 // app/models/User.js
 import mongoose from "mongoose";
+import dfPost from "./dfPost";
+import Community from "./Community";
 
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
@@ -8,7 +10,7 @@ const userSchema = new mongoose.Schema({
   profilePhoto: { type: String, default: "" }, // URL for the profile photo
   languagePreference: { type: String, default: "English" },
   tags: { type: [String], default: [] }, // Array of tags/interests
-  communitiesJoined: { type: [String], default: [] }, // Array of communities the user has joined
+  communitiesJoined: [{ type: mongoose.Schema.Types.ObjectId, ref: "Community",default: [] }],    // Array of communities the user has joined
   posts: [
     { type: mongoose.Schema.Types.ObjectId, ref: "dfPost" } // Reference to Post Schema
   ],

@@ -9,6 +9,7 @@ const dfPostSchema = new mongoose.Schema({
   likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", default: [] }], // Set default to an empty array
   dislikedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", default: [] }], // Set default to an empty array
   timestamp: { type: Date, default: Date.now },
+  tags: { type: [String], default: [] },
   sentimentMetrics: {
     type: Map,
     of: String, // Maps sentiment categories to values (e.g., positive, negative)
