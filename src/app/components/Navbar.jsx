@@ -1,7 +1,7 @@
 // src/components/Navbar.jsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";  // Import useRouter
@@ -14,7 +14,8 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { data: session } = useSession(); // Get session data
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const router = useRouter();  // Use router to get current path
+  const router = useRouter();  // Use router to get current path 
+  const [news, setNews] = useState([]);
 
   const toggleDropdown = () => {
     setDropdownOpen((prev) => !prev);
@@ -57,6 +58,30 @@ const Navbar = () => {
     // console.log("route : ",window.location.pathname);
     // return window.location.pathname === path ? " bg-amber-400 font-bold " : " hover:bg-amber-600 "; // Check if the link is active
   };
+
+  // Example useEffect to simulate fetching news from an API
+  useEffect(() => {
+    const fetchedNews = [
+      
+      {
+        id: 1,
+        title: "New Constitutional Amendment Passed",
+        date: "October 7, 2024",
+      },
+      {
+        id: 2,
+        title: "Supreme Court Ruling on Civil Rights",
+        date: "October 1, 2024",
+      },
+      {
+        id: 3,
+        title: "Criminal Law Reform Announced",
+        date: "September 25, 2024",
+      },
+    ];
+
+    setNews(fetchedNews);
+  }, []);
 
   return (
     <nav className="sticky top-0 z-50 bg-black border border-amber-200/30">
@@ -104,7 +129,7 @@ const Navbar = () => {
 
                 {/* Dropdown menu */}
                 {dropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg py-2 z-10">
+                  <div className="absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg py-2 z-100">
                     <Link
                       href="/profile"
                       className="block px-4 py-2 text-stone-50 hover:bg-gray-600"
@@ -196,8 +221,24 @@ const Navbar = () => {
           </Link>
         </div>
       )}
-
     </nav>
+
+      {/* Flash News Section */}
+      <section className="bg-sky-100 z-50 w-full py-4">
+        <div className="container mx-auto overflow-hidden">
+          <div className="ticker-wrapper">
+            <div className="ticker-content">
+              {news.map((item, index) => (
+                <span key={item.id} className="ticker-item">
+                  {item.date}: {item.title}
+                  {index < news.length - 1 && <span> | </span>}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+      </>
   );
 };
 

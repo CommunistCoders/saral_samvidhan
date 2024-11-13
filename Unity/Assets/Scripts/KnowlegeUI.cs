@@ -35,15 +35,21 @@ public class KnowledgeUI : MonoBehaviour
     public void setTrafficData()
     {
         good.text = "You followed the rules and avoided being charged under Section 184 of Motor Vehicles Act";
-        bad.text = "Under Section 184 of Motor Vehicles Act, You have commited a offence by jumping a red light";
+        bad.text = "Under Section 184 of Motor Vehicles Act, You have commited an offence by jumping a red light";
         trafficViolation = true;
     }
 
     public void setCollisionData()
     {
         good.text = "";
-        bad.text = "Under Section 184 of Motor Vehicles Act, You have commited a offence by reckless driving";
+        bad.text = "Under Section 184 of Motor Vehicles Act, You have commited an offence by reckless driving";
         collisionViolation = true;
+    }
+
+    public void setTrespassData()
+    {
+        good.text = "";
+        bad.text = "Under Section 329 of Bharatiya Nyaya Sanhita, You have commited a criminal trespass";
     }
 
     public void enableGood()

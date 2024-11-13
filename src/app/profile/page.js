@@ -1,7 +1,9 @@
+// app/profile/page.js
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useSession, signOut } from "next-auth/react";
 import PostCard from '../components/PostCard';
+import CreateCommunity from '../components/CreateCommunity';
 
 function Profile() {
   const { data: session, status } = useSession(); // Get session data and status
@@ -227,6 +229,7 @@ function Profile() {
         <button className="mt-4 bg-yellow-400 text-black py-2 px-6 rounded-md font-semibold hover:bg-yellow-500 transition duration-300">
           Edit Profile
         </button>
+        <CreateCommunity userId={session.user.id}/>
       </main>
     </div>
   );
