@@ -4,7 +4,7 @@ public class CarMovement : MonoBehaviour
 {
     public float moveSpeed = 200f;
     public float rotationSpeed = 100f;
-    private bool canDrive = false;
+    private bool canDrive = true;
     public GameObject player;
 
     public GameObject arrow;
@@ -13,6 +13,9 @@ public class CarMovement : MonoBehaviour
 
     private bool trespass;
     public float buildingCollisions = 0;
+    public int cargo = 0;
+
+    private bool accident = false;
     private Rigidbody rb;
     public Camera carCamera;
     void Start()
@@ -27,6 +30,7 @@ public class CarMovement : MonoBehaviour
         {
             arrow.gameObject.SetActive(false);
         }
+        EnableControls();
     }
 
     void FixedUpdate()
@@ -110,6 +114,27 @@ public class CarMovement : MonoBehaviour
                 kui.enableBad();
                 canDrive = true;
                 trespass = true;
+            }
+            if (collision.gameObject.CompareTag("Cargo"))
+            {
+                cargo += 50;
+                if (cargo == 200)
+                {
+                    kui.setCargoData();
+                    kui.enableBad();
+                }
+                collision.gameObject.SetActive(false);
+                canDrive = true;
+
+            }
+            if (collision.gameObject.CompareTag("car2"))
+            {
+                if (!accident)
+                {
+                    kui.setAccidentData();
+                    kui.enableBad();
+                    accident = true;
+                }
             }
         }
     }
