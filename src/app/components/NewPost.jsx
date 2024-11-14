@@ -192,7 +192,7 @@ export default function NewPost() {
     }
 
     const userId = session.user.id; // Assuming user ID is stored here in session
-    const tags = selectedTags.map(tag => tag.value); // Get the selected tag values
+    const tags = selectedTags; // Get the selected tag values
 
     const formData = new FormData();
     formData.append('file', newPhoto);
@@ -250,7 +250,7 @@ export default function NewPost() {
         <div>
           <input
             type="text"
-            className="w-full p-2 rounded-md bg-gray-700 text-stone-50 focus:outline-none"
+            className="w-full p-2 rounded-md bg-gray-700 mb-4 text-stone-50 focus:outline-none"
             placeholder="what is the title ?"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -300,94 +300,63 @@ export default function NewPost() {
           )}
         </div>
 
+        <div>
+          <h2 className="text-xl font-semibold mb-4">Select Tags</h2>
+          
+          {/* Search Bar */}
+          <input
+            type="text"
+            onClick={toggleDropdown}
+            placeholder="Search tags..."
+            className="w-full p-2 border bg-gray-700 rounded-lg mb-4"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
 
-      {/* <h2>Select Tags</h2>
-      <div>
-        {allTags.map((tag) => (
-          <div key={tag} className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id={tag}
-              value={tag}
-              onChange={handleTagChange}
-              checked={selectedTags.includes(tag)}
-            />
-            <label htmlFor={tag} className="text-gray-700">{tag}</label>
-          </div>
-        ))}
-      </div>
+          {/* Dropdown */}
+          {isDropdownOpen && (
+            <div className="relative">
+              <div className="absolute left-0 right-0 mt-1 max-h-60 overflow-auto border bg-white rounded-lg shadow-lg z-10">
+                {/* Close Button (X mark) */}
+                <button
+                  onClick={toggleDropdown}
+                  className="absolute top-2 right-2 text-xl text-gray-600"
+                >
+                  ×
+                </button>
 
-      <div>
-        <h3>Selected Tags:</h3>
-        <ul>
-          {selectedTags.map((tag) => (
-            <li key={tag}>{tag}</li>
-          ))}
-        </ul>
-      </div> */}
+                {/* Filtered Tags List */}
+                <ul className="p-2">
+                  {filteredTags.map((tag) => (
+                    <li key={tag} className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id={tag}
+                        value={tag}
+                        onChange={handleTagChange}
+                        checked={selectedTags.includes(tag)}
+                        className="form-checkbox h-4 w-4 text-blue-500"
+                      />
+                      <label htmlFor={tag} className="text-gray-700">{tag}</label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
 
-  <h2 className="text-xl font-semibold mb-4">Select Tags</h2>
-        
-        {/* Search Bar */}
-        <input
-          type="text"
-          placeholder="Search tags..."
-          className="w-full p-2 border rounded-lg mb-4"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-
-        {/* Button to toggle dropdown */}
-        <button
-          onClick={toggleDropdown}
-          className="w-full p-3 text-left border rounded-lg bg-white shadow-sm focus:outline-none mb-4"
-        >
-          {selectedTags.length === 0 ? 'Select Tags' : `Selected ${selectedTags.length} Tags`}
-        </button>
-
-        {/* Dropdown */}
-        {isDropdownOpen && (
-          <div className="relative">
-            <div className="absolute left-0 right-0 mt-1 max-h-60 overflow-auto border rounded-lg bg-white shadow-lg z-10">
-              {/* Close Button (X mark) */}
-              <button
-                onClick={toggleDropdown}
-                className="absolute top-2 right-2 text-xl text-gray-600"
-              >
-                ×
-              </button>
-
-              {/* Filtered Tags List */}
-              <ul className="p-2">
-                {filteredTags.map((tag) => (
-                  <li key={tag} className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      id={tag}
-                      value={tag}
-                      onChange={handleTagChange}
-                      checked={selectedTags.includes(tag)}
-                      className="form-checkbox h-4 w-4 text-blue-500"
-                    />
-                    <label htmlFor={tag} className="text-gray-700">{tag}</label>
-                  </li>
+          {/* Display Selected Tags */}
+          {selectedTags.length > 0 && (
+            <div className="mt-4">
+              <h3 className="text-lg font-semibold mb-2">Selected Tags:</h3>
+              <ul>
+                {selectedTags.map((tag) => (
+                  <li key={tag} className="text-white-700 mb-1">{tag}</li>
                 ))}
               </ul>
             </div>
-          </div>
-        )}
-
-        {/* Display Selected Tags */}
-        {selectedTags.length > 0 && (
-          <div className="mt-4">
-            <h3 className="text-lg font-semibold mb-2">Selected Tags:</h3>
-            <ul>
-              {selectedTags.map((tag) => (
-                <li key={tag} className="text-gray-700 mb-1">{tag}</li>
-              ))}
-            </ul>
-          </div>
-        )}
+          )}
+        </div>
 
         <button
           type="submit"

@@ -9,7 +9,7 @@ export async function POST(req) {
   try {
     await dbConnect();
 
-    console.log("post image : ", imageUrl);  // Log image URL
+    console.log("tags : ", tags);  // Log image URL
 
     // Create a new post with the imageUrl
     const newPost = new dfPost({

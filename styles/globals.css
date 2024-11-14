@@ -59,14 +59,12 @@ body {
 .ticker-content {
   display: inline-block;
   white-space: nowrap;
-  animation: ticker 15s linear infinite;
+  animation: ticker 30s linear infinite;
 }
 
-.ticker-item {
-  display: inline-block;
-  padding: 0 2rem;
-  font-size: 1.1rem;
-  color: #1e3a8a;
+.ticker-wrapper:hover .ticker-content {
+  animation-play-state: paused;
+  
 }
 
 @keyframes ticker {
@@ -103,8 +101,8 @@ body {
   display: flex;
   animation: moveCards 20s linear infinite;
 }
-.
-.ticker-container {
+
+/* .ticker-container {
   overflow: hidden;
   position: relative;
-}
+} */

@@ -71,7 +71,22 @@ const HomePage = () => {
   }, []);
   return (
     <div>
-
+    {/* Flash News Section */}
+    <section className=" bg-amber-100 w-full">
+      <div className="container mx-auto overflow-hidden">
+        <div className="ticker-wrapper">
+          <div className="ticker-content">
+            {news.map((item, index) => (
+              <span key={item.id} className="text-amber-950 cursor-pointer">
+                {item.date}: {item.title}
+                {index < news.length - 1 && <span> |  </span> }
+                
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
       <section className="relative w-full h-screen ">
         <Image
           src="/bg1.jpg"
@@ -81,7 +96,9 @@ const HomePage = () => {
           className="z-0"
         />
 
-        <div className="absolute inset-0 bg-black bg-opacity-50 z-10 flex flex-col justify-center items-center">
+
+
+        <div className="absolute inset-0 bg-black bg-opacity-50  flex flex-col justify-center items-center">
           <div className="my-10 text-white container mx-auto z-20 text-center">
             <motion.h1
               initial={{ opacity: 0, x: -50 }}
@@ -129,44 +146,44 @@ const HomePage = () => {
           <h2 className="text-3xl font-bold mb-8">Recent Articles</h2>
           <HorizontalPostcards />
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white shadow-lg rounded-lg p-6">
+            <div className="bg-amber-100 shadow-xl rounded-xl  p-6">
               <h3 className="text-2xl font-bold mb-4">Understanding Your Rights</h3>
-              <p className="text-gray-700">An overview of your constitutional rights under Indian law.</p>
+              <p className="text-amber-950">An overview of your constitutional rights under Indian law.</p>
             </div>
-            <div className="bg-white shadow-lg rounded-lg p-6">
+            <div className="bg-amber-100 shadow-lg rounded-xl p-6">
               <h3 className="text-2xl font-bold mb-4">The Role of the Supreme Court</h3>
-              <p className="text-gray-700">Insights into the Supreme Court's function in upholding justice.</p>
+              <p className="text-amber-950">Insights into the Supreme Court's function in upholding justice.</p>
             </div>
-            <div className="bg-white shadow-lg rounded-lg p-6">
+            <div className="bg-amber-100 shadow-lg rounded-xl p-6">
               <h3 className="text-2xl font-bold mb-4">Navigating Criminal Charges</h3>
-              <p className="text-gray-700">Key steps to take if you are facing criminal charges.</p>
+              <p className="text-amber-950">Key steps to take if you are facing criminal charges.</p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="bg-gradient-to-r from-yellow-400 to-yellow-500 py-16">
+      <section className=" py-16">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-4xl font-semibold text-gray-800 mb-4">Stay Updated with Our Newsletter</h2>
-          <p className="text-lg text-gray-600 mb-8">Get the latest legal insights, tips, and news directly to your inbox.</p>
+          <p className="text-lg text-amber-800 mb-8">Get the latest legal insights, tips, and news directly to your inbox.</p>
           
           <div className="flex justify-center items-center space-x-4">
             <input
               type="email"
               placeholder="Enter your email"
-              className="border-2 border-gray-300 rounded-md p-3 w-2/5 focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-300"
+              className="border-2 border-amber-100 rounded-md p-3 w-2/5 focus:outline-none focus:ring-2 focus:ring-amber-950 transition duration-300"
             />
-            <button className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-md shadow-lg hover:shadow-xl transition-all duration-300">
+            <button className="bg-amber-700 hover:bg-amber-800 text-white py-3 px-6 rounded-md shadow-lg hover:shadow-xl transition-all duration-300">
               Subscribe
             </button>
           </div>
           
-          <p className="mt-6 text-sm text-gray-500">
+          <p className="mt-6 text-sm text-amber-800">
             We respect your privacy and will never share your information.
           </p>
         </div>
       </section>
-
+      
   </div>
   );
 };

@@ -18,15 +18,6 @@ const PostCard = ({ card, index }) => {
 
   useEffect(() => {
     if (session && card) {
-      // Check if the post was initially liked by the user
-      // let temp = card.likedBy.indexOf(session.user.id);
-      // if (temp !== -1) {
-      //   setIsLiked(true); // Set as liked if user already liked the post
-      // }
-      // temp = card.dislikedBy.indexOf(session.user.id);
-      // if (temp !== -1) {
-      //   setIsDisliked(true); // Set as liked if user already liked the post
-      // }
       if (card.likedBy.includes(session.user.id)) setIsLiked(true);
       if (card.dislikedBy.includes(session.user.id)) setIsDisliked(true);
     }
@@ -166,11 +157,26 @@ const PostCard = ({ card, index }) => {
             <span className="text-stone-50 text-xs block">{card.location}</span>
           </div>
         </div>
+=
         <div className="px-4 py-3">
-
             <h1 className="text-2xl font-bold text-white shadow-md">
               {card.title}
             </h1>
+              {/* Display tags below title */}
+              {card.tags && card.tags.length > 0 && (
+                <div className="px-4 py-2">
+                  <div className="flex flex-wrap gap-2">
+                    {card.tags.map((tag, index) => (
+                      <span
+                        key={index}
+                        className="text-sm text-amber-500 bg-amber-700/20 rounded-full px-3 py-1"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             <p className="text-gray-300">{card.content}</p>
         </div>
         {/* Image Section - Conditionally Rendered if imageUrl is provided */}
