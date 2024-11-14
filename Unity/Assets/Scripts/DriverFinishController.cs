@@ -12,6 +12,9 @@ public class DriverFinishController : MonoBehaviour
     public TMP_Text trafficViolation;
     public TMP_Text trafficViolationFinal;
 
+    public TMP_Text cargo;
+    public TMP_Text cargoFinal;
+
     public GameObject exitButton;
 
     void Start()
@@ -29,6 +32,7 @@ public class DriverFinishController : MonoBehaviour
         badMessage.SetActive(!good);
         collisionFinal.text = collision.text;
         trafficViolationFinal.text = trafficViolation.text;
+        cargoFinal.text = cargo.text;
         exitButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => { SceneManager.LoadScene("MenuScene"); });
     }
 }

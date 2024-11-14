@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";  // Import useRouter
 import { RxHamburgerMenu } from "react-icons/rx";
 import { FaBars } from 'react-icons/fa6';
 import { FaTimes } from 'react-icons/fa';
+import TranslateComponent from "./TranslateComponent";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,13 +46,13 @@ const Navbar = () => {
   const handleTranslateClick = () => {
     setIsOpen((prev) => !prev);
   };
-  
+
   const handleSignOut = async () => {
     await signOut({ redirect: false });
     // Optionally, you could update the UI or add custom logic after logging out
   };
 
-  const deafultProfilePhoto = "https://t3.ftcdn.net/jpg/06/33/54/78/360_F_633547842_AugYzexTpMJ9z1YcpTKUBoqBF0CUCk10.jpg"; 
+  const deafultProfilePhoto = "https://t3.ftcdn.net/jpg/06/33/54/78/360_F_633547842_AugYzexTpMJ9z1YcpTKUBoqBF0CUCk10.jpg";
 
   const isActive = (path) => {
     // console.log("route : ",window.location.pathname);
@@ -83,8 +84,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <>
-    <nav className="sticky left-0 right-0 top-0 z-50 bg-black border border-amber-200/30  transition duration-300">
+    <nav className="sticky top-0 z-50 bg-black border border-amber-200/30">
 
       <div className="max-w-7xl mx-auto px-4  sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-6">
@@ -97,22 +97,22 @@ const Navbar = () => {
 
           {/* Links and Search Form */}
           <div className="hidden md:flex space-x-4 items-center">
-            <Link href="/" className={`px-4 py-2 text-stone-50 rounded-md text-white ${isActive('/')}`}>
+            <Link href="/" className={`px-4 py-2 text-stone-50 hover:text-amber-600 rounded-md  ${isActive('/')}`}>
               Home
             </Link>
-            <Link href="/Chatbot" className={`px-4 py-2 text-stone-50 rounded-md text-white ${isActive('/Chatbot')}`}>
+            <Link href="/Chatbot" className={`px-4 py-2 text-stone-50 hover:text-amber-600 rounded-md  ${isActive('/Chatbot')}`}>
               Chatbot
             </Link>
-            <Link href="/discussionforum" className={`px-4 py-2 text-stone-50 rounded-md text-white ${isActive('/discussionforum')}`}>
+            <Link href="/discussionforum" className={`px-4 py-2 text-stone-50 hover:text-amber-600 rounded-md  ${isActive('/discussionforum')}`}>
               Discussion Forum
             </Link>
-            <Link href="/news" className={`px-4 py-2 text-stone-50 rounded-md text-white ${isActive('/news')}`}>
+            <Link href="/news" className={`px-4 py-2 text-stone-50 hover:text-amber-600 rounded-md  ${isActive('/news')}`}>
               News
             </Link>
             <Link href="/game2" className={`text-gray-50 hover:text-amber-600 ${isActive('/game2')}`}>
               Game
             </Link>
-            <Link href="/lawchronicles" className={`px-4 py-2 text-stone-50 rounded-md text-white ${isActive('/lawchronicles')}`}>
+            <Link href="/lawchronicles" className={`px-4 py-2 text-stone-50 hover:text-amber-600 rounded-md  ${isActive('/lawchronicles')}`}>
               Law Chronicles
             </Link>
 
@@ -148,7 +148,7 @@ const Navbar = () => {
                     ) : null}
                     <button
                       onClick={handleSignOut}
-                      className="block w-full text-left px-4 py-2 text-stone-50 hover:bg-gray-600 ${isActive('/')}"
+                      className="block w-full text-left px-4 py-2 text-stone-50 hover:bg-amber-600 ${isActive('/')}"
                     >
                       Logout
                     </button>
@@ -156,11 +156,13 @@ const Navbar = () => {
                 )}
               </div>
             ) : (
-              <Link href="/login" className={`px-4 py-2 text-stone-50 rounded-md text-white ${isActive('/login')}`}>
+              <Link href="/login" className={`px-4 py-2 text-stone-50 rounded-md  ${isActive('/login')}`}>
                 Login
               </Link>
             )}
-
+             {/* language translator */}
+            <div className="  w-28 overflow-x-auto overflow-y-hidden h-11 rounded-lg "><TranslateComponent /></div>
+            
           </div>
 
           {/* Hamburger Menu for Mobile */}
@@ -182,8 +184,8 @@ const Navbar = () => {
           >
             Home
           </Link>
-          <Link 
-            href="/Chatbot" 
+          <Link
+            href="/Chatbot"
             className={`block px-3 py-2 rounded-md text-base font-medium text-stone-50  hover:bg-amber-600 ${isActive('/Chatbot')}`}>
             Chatbot
           </Link>
