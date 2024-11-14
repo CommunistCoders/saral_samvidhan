@@ -1,7 +1,7 @@
 // src/components/Navbar.jsx
 "use client";
 
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";  // Import useRouter
@@ -62,7 +62,7 @@ const Navbar = () => {
   // Example useEffect to simulate fetching news from an API
   useEffect(() => {
     const fetchedNews = [
-      
+
       {
         id: 1,
         title: "New Constitutional Amendment Passed",
@@ -84,144 +84,145 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="sticky top-0 z-50 bg-black border border-amber-200/30">
+    <>
+      <nav className="sticky top-0 z-50 bg-black border border-amber-200/30">
 
-      <div className="max-w-7xl mx-auto px-4  sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 gap-6">
+        <div className="max-w-7xl mx-auto px-4  sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 gap-6">
 
-          <div className="flex-shrink-0">
-            <Link href="/" className="text-3xl font-bold text-amber-400">
-              Saral Samvidhan
-            </Link>
-          </div>
+            <div className="flex-shrink-0">
+              <Link href="/" className="text-3xl font-bold text-amber-400">
+                Saral Samvidhan
+              </Link>
+            </div>
 
-          {/* Links and Search Form */}
-          <div className="hidden md:flex space-x-4 items-center">
-            <Link href="/" className={`px-4 py-2 text-stone-50 hover:text-amber-600 rounded-md  ${isActive('/')}`}>
-              Home
-            </Link>
-            <Link href="/Chatbot" className={`px-4 py-2 text-stone-50 hover:text-amber-600 rounded-md  ${isActive('/Chatbot')}`}>
-              Chatbot
-            </Link>
-            <Link href="/discussionforum" className={`px-4 py-2 text-stone-50 hover:text-amber-600 rounded-md  ${isActive('/discussionforum')}`}>
-              Discussion Forum
-            </Link>
-            <Link href="/news" className={`px-4 py-2 text-stone-50 hover:text-amber-600 rounded-md  ${isActive('/news')}`}>
-              News
-            </Link>
-            <Link href="/game2" className={`text-gray-50 hover:text-amber-600 ${isActive('/game2')}`}>
-              Game
-            </Link>
-            <Link href="/lawchronicles" className={`px-4 py-2 text-stone-50 hover:text-amber-600 rounded-md  ${isActive('/lawchronicles')}`}>
-              Law Chronicles
-            </Link>
+            {/* Links and Search Form */}
+            <div className="hidden md:flex space-x-4 items-center">
+              <Link href="/" className={`px-4 py-2 text-stone-50 hover:text-amber-600 rounded-md  ${isActive('/')}`}>
+                Home
+              </Link>
+              <Link href="/Chatbot" className={`px-4 py-2 text-stone-50 hover:text-amber-600 rounded-md  ${isActive('/Chatbot')}`}>
+                Chatbot
+              </Link>
+              <Link href="/discussionforum" className={`px-4 py-2 text-stone-50 hover:text-amber-600 rounded-md  ${isActive('/discussionforum')}`}>
+                Discussion Forum
+              </Link>
+              <Link href="/news" className={`px-4 py-2 text-stone-50 hover:text-amber-600 rounded-md  ${isActive('/news')}`}>
+                News
+              </Link>
+              <Link href="/game2" className={`text-gray-50 hover:text-amber-600 ${isActive('/game2')}`}>
+                Game
+              </Link>
+              <Link href="/lawchronicles" className={`px-4 py-2 text-stone-50 hover:text-amber-600 rounded-md  ${isActive('/lawchronicles')}`}>
+                Law Chronicles
+              </Link>
 
-            {session ? (
-              <div className="relative">
-                {/* Profile photo */}
-                <button onClick={toggleDropdown} className="flex items-center">
-                  <img
-                    src={session.user.profilePhoto === deafultProfilePhoto ? deafultProfilePhoto : `/api/images/${session.user.profilePhoto}`}
-                    alt="Profile"
-                    className="w-8 h-8 rounded-full border border-stone-50"
-                  />
-                </button>
+              {session ? (
+                <div className="relative">
+                  {/* Profile photo */}
+                  <button onClick={toggleDropdown} className="flex items-center">
+                    <img
+                      src={session.user.profilePhoto === deafultProfilePhoto ? deafultProfilePhoto : `/api/images/${session.user.profilePhoto}`}
+                      alt="Profile"
+                      className="w-8 h-8 rounded-full border border-stone-50"
+                    />
+                  </button>
 
-                {/* Dropdown menu */}
-                {dropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg py-2 z-100">
-                    <Link
-                      href="/profile"
-                      className="block px-4 py-2 text-stone-50 hover:bg-gray-600"
-                      onClick={() => setDropdownOpen(false)}
-                    >
-                      Profile
-                    </Link>
-                    {session?.user?.role === 'admin' ? (
+                  {/* Dropdown menu */}
+                  {dropdownOpen && (
+                    <div className="absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg py-2 z-100">
                       <Link
-                        href="/admin"
+                        href="/profile"
                         className="block px-4 py-2 text-stone-50 hover:bg-gray-600"
                         onClick={() => setDropdownOpen(false)}
                       >
-                        Admin Dashboard
+                        Profile
                       </Link>
-                    ) : null}
-                    <button
-                      onClick={handleSignOut}
-                      className="block w-full text-left px-4 py-2 text-stone-50 hover:bg-amber-600 ${isActive('/')}"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <Link href="/login" className={`px-4 py-2 text-stone-50 rounded-md  ${isActive('/login')}`}>
-                Login
-              </Link>
-            )}
-             {/* language translator */}
-            <div className="  w-28 overflow-x-auto overflow-y-hidden h-11 rounded-lg "><TranslateComponent /></div>
-            
-          </div>
+                      {session?.user?.role === 'admin' ? (
+                        <Link
+                          href="/admin"
+                          className="block px-4 py-2 text-stone-50 hover:bg-gray-600"
+                          onClick={() => setDropdownOpen(false)}
+                        >
+                          Admin Dashboard
+                        </Link>
+                      ) : null}
+                      <button
+                        onClick={handleSignOut}
+                        className="block w-full text-left px-4 py-2 text-stone-50 hover:bg-amber-600 ${isActive('/')}"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link href="/login" className={`px-4 py-2 text-stone-50 rounded-md  ${isActive('/login')}`}>
+                  Login
+                </Link>
+              )}
+              {/* language translator */}
+              <div className="  w-28 overflow-x-auto overflow-y-hidden h-11 rounded-lg "><TranslateComponent /></div>
 
-          {/* Hamburger Menu for Mobile */}
-          <div className="-mr-2 flex md:hidden">
-            <button
-              onClick={() => setIsOpen(!isOpen)} className="text-white">
-              {isOpen ? <FaTimes className='m-2 h-6 w-5' /> : <FaBars className='m-2 h-6 w-5' />}
-            </button>
+            </div>
+
+            {/* Hamburger Menu for Mobile */}
+            <div className="-mr-2 flex md:hidden">
+              <button
+                onClick={() => setIsOpen(!isOpen)} className="text-white">
+                {isOpen ? <FaTimes className='m-2 h-6 w-5' /> : <FaBars className='m-2 h-6 w-5' />}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Mobile Menu */}
-      {isOpen && (
-        <div className="md:hidden px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          <Link
-            href="/"
-            className={`block px-3 py-2 rounded-md text-base font-medium text-stone-50  hover:bg-amber-600 ${isActive('/')}`}
-          >
-            Home
-          </Link>
-          <Link
-            href="/Chatbot"
-            className={`block px-3 py-2 rounded-md text-base font-medium text-stone-50  hover:bg-amber-600 ${isActive('/Chatbot')}`}>
-            Chatbot
-          </Link>
-          <Link
-            href="/discussionforum"
-            className={`block px-3 py-2 rounded-md text-base font-medium text-stone-50  hover:bg-amber-600 ${isActive('/discussionforum')}`}
-          >
-            Discussion Forum
-          </Link>
-          <Link
-            href="/news"
-            className={`block px-3 py-2 rounded-md text-base font-medium text-stone-50  hover:bg-amber-600 ${isActive('/news')}`}
-          >
-            News
-          </Link>
-          <Link
-            href="/game2"
-            className={`block px-3 py-2 rounded-md text-base font-medium text-stone-50  hover:bg-amber-600 ${isActive('/game2')}`}
-          >
-            Game
-          </Link>
-          <Link
-            href="/login"
-            className={`block px-3 py-2 rounded-md text-base font-medium text-stone-50 hover:bg-amber-600 ${isActive('/login')}`}
-          >
-            Login
-          </Link>
-          <Link
-            href="/profile"
-            className={`block px-3 py-2 rounded-md text-base font-medium text-stone-50 hover:bg-amber-600 ${isActive('/profile')}`}
-          >
-            Profile
-          </Link>
-        </div>
-      )}
-    </nav>
+        {/* Mobile Menu */}
+        {isOpen && (
+          <div className="md:hidden px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <Link
+              href="/"
+              className={`block px-3 py-2 rounded-md text-base font-medium text-stone-50  hover:bg-amber-600 ${isActive('/')}`}
+            >
+              Home
+            </Link>
+            <Link
+              href="/Chatbot"
+              className={`block px-3 py-2 rounded-md text-base font-medium text-stone-50  hover:bg-amber-600 ${isActive('/Chatbot')}`}>
+              Chatbot
+            </Link>
+            <Link
+              href="/discussionforum"
+              className={`block px-3 py-2 rounded-md text-base font-medium text-stone-50  hover:bg-amber-600 ${isActive('/discussionforum')}`}
+            >
+              Discussion Forum
+            </Link>
+            <Link
+              href="/news"
+              className={`block px-3 py-2 rounded-md text-base font-medium text-stone-50  hover:bg-amber-600 ${isActive('/news')}`}
+            >
+              News
+            </Link>
+            <Link
+              href="/game2"
+              className={`block px-3 py-2 rounded-md text-base font-medium text-stone-50  hover:bg-amber-600 ${isActive('/game2')}`}
+            >
+              Game
+            </Link>
+            <Link
+              href="/login"
+              className={`block px-3 py-2 rounded-md text-base font-medium text-stone-50 hover:bg-amber-600 ${isActive('/login')}`}
+            >
+              Login
+            </Link>
+            <Link
+              href="/profile"
+              className={`block px-3 py-2 rounded-md text-base font-medium text-stone-50 hover:bg-amber-600 ${isActive('/profile')}`}
+            >
+              Profile
+            </Link>
+          </div>
+        )}
+      </nav>
 
       {/* Flash News Section */}
       <section className="bg-sky-100 z-50 w-full py-4">
@@ -238,7 +239,7 @@ const Navbar = () => {
           </div>
         </div>
       </section>
-      </>
+    </>
   );
 };
 
