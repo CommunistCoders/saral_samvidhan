@@ -41,6 +41,7 @@ export const authOptions = {
             languagePreference: newUser.languagePreference,
             tags: newUser.tags,
             profilePhoto: newUser.profilePhoto || 'https://via.placeholder.com/150',
+            chatbotConversations: newUser.chatbotConversations || [], // Include chatbotConversations
           };
         } else {
           // Login logic
@@ -54,6 +55,7 @@ export const authOptions = {
               languagePreference: user.languagePreference,
               tags: user.tags,
               profilePhoto: user.profilePhoto || 'https://via.placeholder.com/150',
+              chatbotConversations: user.chatbotConversations || [], // Include chatbotConversations
             };
           }
           throw new Error('Invalid email or password');
@@ -73,6 +75,7 @@ export const authOptions = {
         token.languagePreference = user.languagePreference;
         token.tags = user.tags;
         token.profilePhoto = user.profilePhoto;
+        token.chatbotConversations = user.chatbotConversations || []; // Add chatbotConversations to JWT token
       }
       return token;
     },
@@ -84,6 +87,7 @@ export const authOptions = {
       session.user.languagePreference = token.languagePreference;
       session.user.tags = token.tags;
       session.user.profilePhoto = token.profilePhoto;
+      session.user.chatbotConversations = token.chatbotConversations || []; // Add chatbotConversations to session
       return session;
     },
   },
