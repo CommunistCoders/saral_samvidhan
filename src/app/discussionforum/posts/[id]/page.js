@@ -253,7 +253,8 @@ const Page = ({params}) => {
                 <div className="flex flex-col items-center space-y-4">
                     <img
                     className="h-16 w-16 rounded-full border border-amber-600/40"
-                    src={`/api/images/${card.user.profilePhoto}`}
+                    // src={`/api/images/${card.user.profilePhoto}`}
+                    src={card.user.profilePhoto=="https://t3.ftcdn.net/jpg/06/33/54/78/360_F_633547842_AugYzexTpMJ9z1YcpTKUBoqBF0CUCk10.jpg" ? `${card.user.profilePhoto}` : `/api/images/${card.user.profilePhoto}`}
                     alt="User Avatar"
                     />
                     <span className="text-stone-50 font-semibold">
