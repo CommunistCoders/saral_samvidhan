@@ -53,17 +53,17 @@ const HomePage = () => {
       {
         id: 1,
         title: "New Constitutional Amendment Passed",
-        date: "October 7, 2024",
+        date: "November 15, 2024",
       },
       {
         id: 2,
         title: "Supreme Court Ruling on Civil Rights",
-        date: "October 1, 2024",
+        date: "November 15, 2024",
       },
       {
         id: 3,
         title: "Criminal Law Reform Announced",
-        date: "September 25, 2024",
+        date: "November 15, 2024",
       },
     ];
 
@@ -71,22 +71,6 @@ const HomePage = () => {
   }, []);
   return (
     <div>
-    {/* Flash News Section */}
-    <section className=" bg-amber-100 w-full">
-      <div className="container mx-auto overflow-hidden">
-        <div className="ticker-wrapper">
-          <div className="ticker-content">
-            {news.map((item, index) => (
-              <span key={item.id} className="text-amber-950 cursor-pointer">
-                {item.date}: {item.title}
-                {index < news.length - 1 && <span> |  </span> }
-                
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
       <section className="relative w-full h-screen ">
         <Image
           src="/bg1.jpg"

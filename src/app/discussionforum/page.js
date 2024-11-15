@@ -18,6 +18,8 @@ const Page = () => {
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [communities,setCommunityData] = useState([]);
+  const [isVertical, setIsVertical] = useState(true); // Toggle between vertical and horizontal layout
+
 
   // const communities = [
   //   {
@@ -296,15 +298,34 @@ const Page = () => {
             </div>
           ) : (
             <div className="flex flex-col items-center space-y-4 p-4 rounded-lg ">
-              <h1 className="font-bold text-2xl text-stone-50  fixed z-[10] px-4 py-2 bg-black/70 rounded-lg shadow-md">
-                Posts
-              </h1>
-              {cardData.map((card, index) => (
-                <Link href={`/discussionforum/posts/${card._id}`} key={index}>
-                  <PostCard card={card} index={index} />
-                </Link>
-              ))}
-              {/* {isLoading && <p>Loading more posts...</p>} */}
+              {/* Toggle Button */}
+              <div className="font-bold text-2xl text-stone-50 fixed z-[10] px-4 py-2 rounded-lg shadow-md">
+                Posts : 
+                <button
+                  onClick={() => setIsVertical(!isVertical)}
+                  className="my-4 px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600"
+                >
+                  Current Layout : {isVertical ? "Vertical" : "Horizontal"}
+                </button>
+              </div>
+
+
+              {/* PostCard Layout */}
+              <div
+                className={`${
+                  isVertical
+                    ? "flex flex-col items-center space-y-4" // Vertical Layout
+                    : "flex flex-row space-x-4 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400"
+                } w-full`}
+              >
+                {cardData.map((card, index) => (
+                  <Link href={`/discussionforum/posts/${card._id}`} key={index}>
+                    <PostCard card={card} index={index} />
+                  </Link>
+                ))}
+              </div>
+
+              {/* Loading Spinner */}
               {isLoading && <Loading />}
             </div>
           )}
