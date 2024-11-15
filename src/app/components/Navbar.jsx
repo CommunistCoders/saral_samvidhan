@@ -21,27 +21,7 @@ const Navbar = () => {
     setDropdownOpen((prev) => !prev);
   };
 
-  // useEffect(() => {
-  //   // Load Google Translate script once
-  //   const addGoogleTranslateScript = () => {
-  //     if (!window.google || !window.google.translate) {
-  //       const script = document.createElement("script");
-  //       script.type = "text/javascript";
-  //       script.src =
-  //         "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-  //       document.body.appendChild(script);
-
-  //       window.googleTranslateElementInit = () => {
-  //         new window.google.translate.TranslateElement(
-  //           { pageLanguage: "en" },
-  //           "google_translate_element"
-  //         );
-  //       };
-  //     }
-  //   };
-
-  //   addGoogleTranslateScript();
-  // }, []);
+  
 
   const handleTranslateClick = () => {
     setIsOpen((prev) => !prev);
@@ -223,22 +203,7 @@ const Navbar = () => {
       )}
     </nav>
 
-      {/* Flash News Section */}
-      <section className="bg-sky-100 z-50 w-full py-4">
-        <div className="container mx-auto overflow-hidden">
-          <div className="ticker-wrapper">
-            <div className="ticker-content">
-              {news.map((item, index) => (
-                <span key={item.id} className="ticker-item">
-                  {item.date}: {item.title}
-                  {index < news.length - 1 && <span> | </span>}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-      </>
+      
   );
 };
 
