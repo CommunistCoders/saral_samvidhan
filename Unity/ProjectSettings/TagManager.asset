@@ -8,6 +8,8 @@ TagManager:
   - BuildingColliders
   - Checkpoint
   - Trespassing
+  - Cargo
+  - car2
   layers:
   - Default
   - TransparentFX

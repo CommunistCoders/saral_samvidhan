@@ -49,7 +49,19 @@ public class KnowledgeUI : MonoBehaviour
     public void setTrespassData()
     {
         good.text = "";
-        bad.text = "Under Section 329 of Bharatiya Nyaya Sanhita, You have commited a criminal trespass";
+        bad.text = "Under Section 329 of Bharatiya Nyaya Sanhita, You have commited criminal trespass";
+    }
+
+    public void setCargoData()
+    {
+        good.text = "";
+        bad.text = "Under Section 113 of the Motor Vehicles Act, You have commited a crime by carrying too much cargo";
+    }
+
+    public void setAccidentData()
+    {
+        good.text = "";
+        bad.text = "Under Section 281 of BNS, You have commited an offense by rash and negligent driving";
     }
 
     public void enableGood()
