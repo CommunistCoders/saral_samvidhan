@@ -228,7 +228,7 @@ const Page = () => {
           <GoHome className='h-7 w-7' />
           <p className='px-2 font-bold'>Home</p>
         </div>
-        <div className="flex items-center p-2 rounded-lg hover:bg-amber-600 text-amber-600 hover:text-stone-900 transition duration-200 cursor-pointer">
+        {/* <div className="flex items-center p-2 rounded-lg hover:bg-amber-600 text-amber-600 hover:text-stone-900 transition duration-200 cursor-pointer">
           <TbCircleArrowUpRight className='h-7 w-7' />
           <p className='px-2 font-bold'>Popular</p>
         </div>
@@ -272,7 +272,7 @@ const Page = () => {
           <p>Help</p>
           <p>Blog</p>
           <p>Privacy Policy</p>
-        </div>
+        </div> */}
         <div className='flex flex-col mt-24'>
           <button
             onClick={handleNewPostClick}
@@ -297,13 +297,15 @@ const Page = () => {
               <NewPost />
             </div>
           ) : (
-            <div className="flex flex-col items-center space-y-4 p-4 rounded-lg ">
+            <div className="flex relative flex-col items-center space-y-4 p-4 rounded-lg">
               {/* Toggle Button */}
-              <div className="font-bold text-2xl text-stone-50 fixed z-[10] px-4 py-2 rounded-lg shadow-md">
-                Posts : 
+              <div className='flex top-[8rem] fixed top-28 left-25 z-10'>
+                <div className="font-bold text-2xl text-stone-50 px-4 py-2 rounded-lg shadow-md mb-2">
+                  Posts : 
+                </div>
                 <button
                   onClick={() => setIsVertical(!isVertical)}
-                  className="my-4 px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600"
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600"
                 >
                   Current Layout : {isVertical ? "Vertical" : "Horizontal"}
                 </button>
@@ -314,10 +316,9 @@ const Page = () => {
               <div
                 className={`${
                   isVertical
-                    ? "flex flex-col items-center space-y-4" // Vertical Layout
+                    ? "flex flex-col items-center space-y-4 mt-[50]" // Vertical Layout
                     : "flex flex-row space-x-4 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400"
-                } w-full`}
-              >
+                } w-full `}   >
                 {cardData.map((card, index) => (
                   <Link href={`/discussionforum/posts/${card._id}`} key={index}>
                     <PostCard card={card} index={index} />
