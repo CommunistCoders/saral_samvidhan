@@ -175,20 +175,25 @@ function App() {
       const currentQuestion = input;
   
       // Update conversation history in the frontend
-      const updatedConversations = [...conversations];
-      const updatedConversation = updatedConversations[currentConversationIndex];
-  
+      const updatedConversations = [...conversations];    // shallow copy of the conversations
+      let updatedConversation = updatedConversations[currentConversationIndex];
+
+      // If conversation doesn't exist, create a new one
       if (!updatedConversation) {
         updatedConversation = [];
+        updatedConversations[currentConversationIndex] = updatedConversation; // Create a new entry in the array
       }
-  
+
+      // Push new question/answer to the conversation
       updatedConversation.push({
         question: currentQuestion,
         answer: response,
       });
-  
+
+      // Update the state with the new conversations
       setConversations(updatedConversations);
-  
+      console.log("here : ",updatedConversations);
+        
       // Send only the updated conversation to the backend
       const saveResponse = await fetch("/api/chatbot/save", {
         method: "POST",
