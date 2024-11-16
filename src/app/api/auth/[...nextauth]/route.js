@@ -40,9 +40,7 @@ export const authOptions = {
             role: newUser.role, // Include role in the returned user object
             languagePreference: newUser.languagePreference,
             tags: newUser.tags,
-            profilePhoto: newUser.profilePhoto || 'https://via.placeholder.com/150',
-            chatbotConversations: newUser.chatbotConversations || [], // Include chatbotConversations
-          };
+            profilePhoto: newUser.profilePhoto || 'https://via.placeholder.com/150', };
         } else {
           // Login logic
           const user = await User.findOne({ email: credentials.email });
@@ -55,7 +53,6 @@ export const authOptions = {
               languagePreference: user.languagePreference,
               tags: user.tags,
               profilePhoto: user.profilePhoto || 'https://via.placeholder.com/150',
-              chatbotConversations: user.chatbotConversations || [], // Include chatbotConversations
             };
           }
           throw new Error('Invalid email or password');
@@ -75,7 +72,6 @@ export const authOptions = {
         token.languagePreference = user.languagePreference;
         token.tags = user.tags;
         token.profilePhoto = user.profilePhoto;
-        token.chatbotConversations = user.chatbotConversations || []; // Add chatbotConversations to JWT token
       }
       return token;
     },
@@ -87,7 +83,6 @@ export const authOptions = {
       session.user.languagePreference = token.languagePreference;
       session.user.tags = token.tags;
       session.user.profilePhoto = token.profilePhoto;
-      session.user.chatbotConversations = token.chatbotConversations || []; // Add chatbotConversations to session
       return session;
     },
   },
