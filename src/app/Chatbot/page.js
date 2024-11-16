@@ -46,6 +46,31 @@ function App() {
     }
   }, [session]);
 
+  useEffect(() => {
+    // If the user is logged in, fetch chatbot conversations
+    const fetchChatbotConversations = async () => {
+      try {
+        const response = await fetch(`/api/chatbot/get?userId=${session?.user.id}`);
+        if (!response.ok) {
+          throw new Error(`Error fetching chatbot conversations: ${response.statusText}`);
+        }
+        const data = await response.json();
+        console.log("fetched data : ", data);
+        setConversations(data); // Set fetched conversations
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false); // Stop loading
+      }
+    };
+  
+    if (session) {
+      fetchChatbotConversations();
+    }
+  }, [session]);
+
+
+
   const PROMPT = `
     You are a helpful AI assistant, called the "Communist Lawyer", who helps students understand the Indian Constitution in simple language. You should only answer questions pertaining to Constitution of India.
 
@@ -138,52 +163,69 @@ function App() {
   const handleSubmit = async () => {
     if (!input || loading) return;
     setLoading(true);
-
+  
     try {
       const FINAL_PROMPT = `${PROMPT}
-        Here is the sample input:
-        ${input}
-        Here is the sample output:`;
-
+          Here is the sample input:
+          ${input}
+          Here is the sample output:`;
+  
       const result = await geminiModel.generateContent(FINAL_PROMPT);
-      const response = result.response.text();
+      const response = await result.response.text(); // Make sure to await this
       const currentQuestion = input;
-      // Update conversation history with question and response
-      let prevConversations = conversations;
-      const updatedConversations = [...prevConversations];
-      console.log("hello dude");
-      updatedConversations[currentConversationIndex].history.push({
+  
+      // Update conversation history in the frontend
+      const updatedConversations = [...conversations];
+      const updatedConversation = updatedConversations[currentConversationIndex];
+  
+      if (!updatedConversation) {
+        updatedConversation = [];
+      }
+  
+      updatedConversation.push({
         question: currentQuestion,
         answer: response,
       });
+  
       setConversations(updatedConversations);
-      console.log("bye");
-
+  
+      // Send only the updated conversation to the backend
+      const saveResponse = await fetch("/api/chatbot/save", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: session.user.id,
+          conversationId: currentConversationIndex, // Specify the conversation index to update
+          prompt: currentQuestion,
+          reply: response,
+        }),
+      });
+  
+      if (!saveResponse.ok) {
+        throw new Error("Failed to save conversation.");
+      }
+  
       setInput("");
       setError("");
     } catch (error) {
-      console.error("Error", error);
+      console.log("Error:", error);
       setError("An error occurred while generating the response.");
     } finally {
       setLoading(false);
-      // Scroll to the bottom after updating
       chatEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-    // Prevent duplicate submissions
-    // Save the current question before the API call
   };
 
   const startNewConversation = () => {
-    const newConversation = {
-      name: `Conversation ${conversations.length + 1}`,
-      history: [],
-    };
+    const newConversation = {};
     setConversations([...conversations, newConversation]);
     setCurrentConversationIndex(conversations.length);
     setInput("");
     setError("");
   };
-
+  
   const renameConversation = (index) => {
     const newName = prompt("Enter a new name for this conversation:");
     if (newName) {
@@ -212,6 +254,15 @@ function App() {
     });
   };
 
+  // // Only update chat-history and scroll to the bottom when a new prompt is submitted
+  // useEffect(() => {
+  //   // Scroll to the bottom when new conversation history is added
+  //   if (chatEndRef.current) {
+  //     chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+  //   }
+  // }, [conversations[currentConversationIndex]]); // Dependency is on the history of the current conversation
+
+
   // Unauthorized access message with countdown
   if (!session) {
     return (
@@ -236,12 +287,15 @@ function App() {
               key={index}
               onClick={() => setCurrentConversationIndex(index)}
               className={currentConversationIndex === index ? "active" : ""}
-              onDoubleClick={() => renameConversation(index)}
             >
-              {conversation.name}
+              {/* Dynamically generating the name based on index */}
+              Conversation #{index + 1}
               <button
                 className="delete-button"
-                onClick={() => deleteConversation(index)}
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent triggering setCurrentConversationIndex
+                  deleteConversation(index);
+                }}
               >
                 🗑️
               </button>
@@ -251,32 +305,25 @@ function App() {
       </div>
 
       <div className="chat-container">
-        <h1>{conversations[currentConversationIndex].name}</h1>
+        <h1>Conversation #{currentConversationIndex + 1}</h1>
         <div className="chat-history" ref={chatEndRef}>
-          {conversations[currentConversationIndex].history.map(
-            (chat, index) => (
-              <div key={index} className="chat-message fade-in">
+          {/* Check if conversations[currentConversationIndex] exists and is an array */}
+          {Array.isArray(conversations[currentConversationIndex]) ? (
+            conversations[currentConversationIndex].map((chat, index) => (
+              <div key={chat._id || index} className="chat-message fade-in">
                 <div className="user-question">
-                  <p>
-                    <strong>You:</strong> {chat.question}
-                  </p>
+                  <p><strong>You:</strong> {chat.prompt}</p>
                 </div>
                 <div className="bot-answer">
-                  <p>
-                    <strong>AI:</strong> {chat.answer}
-                  </p>
+                  <p><strong>AI:</strong> {chat.reply}</p>
                 </div>
               </div>
-            )
+            ))
+          ) : (
+            <p>Loading conversation...</p>
           )}
         </div>
 
-        {error && (
-          <div className="chat-error fade-in">
-            <h3>Error:</h3>
-            <p>{error}</p>
-          </div>
-        )}
 
         <textarea
           className="chat-input"
