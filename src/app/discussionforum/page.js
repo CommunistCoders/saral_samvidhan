@@ -19,6 +19,7 @@ const Page = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [communities,setCommunityData] = useState([]);
   const [isVertical, setIsVertical] = useState(true); // Toggle between vertical and horizontal layout
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
 
   // const communities = [
@@ -216,80 +217,122 @@ const Page = () => {
   const handleHomeClick = () => {
     setShowNewPost(false);
   };
+  
+  const handleToggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-5 h-screen overflow-hidden">
-      {/* Left Column */}
-      <div className="bg-black bg-opacity-95 p-4">
+    <div className="grid grid-cols-1 md:grid-cols-5 h-screen overflow-hidden relative">
+
+      {/* Left Sidebar for Desktop */}
+      <div className="hidden md:block bg-black bg-opacity-95 p-4 md:col-span-1">
+
+        {/* Home Button */}
         <div
-          className='flex items-center p-2 rounded-lg hover:bg-amber-600 text-amber-600 hover:text-stone-900 transition duration-200 cursor-pointer '
+          className="flex items-center p-2 rounded-lg hover:bg-amber-600 text-amber-600 hover:text-stone-900 transition duration-200 cursor-pointer"
           onClick={handleHomeClick}
         >
-          <GoHome className='h-7 w-7' />
-          <p className='px-2 font-bold'>Home</p>
+          <GoHome className="h-7 w-7" />
+          <p className="px-2 font-bold">Home</p>
         </div>
-        <div className="flex items-center p-2 rounded-lg hover:bg-amber-600 text-amber-600 hover:text-stone-900 transition duration-200 cursor-pointer">
-          <TbCircleArrowUpRight className='h-7 w-7' />
-          <p className='px-2 font-bold'>Popular</p>
-        </div>
-        <div className={`flex items-center p-2 rounded-lg hover:bg-amber-600 text-amber-600 hover:text-stone-900 transition duration-200 cursor-pointer`}>
-          <IoSearch className="h-7 w-7" />
-          <p className='px-2 font-bold'>Explore</p>
-        </div>
-        <div className='flex items-center p-2 rounded-lg hover:bg-amber-600 text-amber-600 hover:text-stone-900 transition duration-200 cursor-pointer'>
-          <IoMail className='h-6 w-6' />
-          <p className='px-2 font-bold'>Message</p>
-        </div>
-        <hr className="my-4 border-slate-950" />
-        <div className='px-2 font-semibold cursor-pointer p-2 rounded-lg hover:bg-amber-600 text-amber-600 hover:text-stone-900 transition duration-200' onClick={() => setIsTopicsOpen(!isTopicsOpen)}>
-          <p className='flex flex-row items-center justify-between'>
-            <span>Topic</span>
-            <RiArrowDownWideFill className='h-6 w-6' />
-          </p>
-        </div>
-        {isTopicsOpen && (
-          <div className="px-2 pl-4 text-stone-50">
-            <p>Topic 1</p>
-            <p>Topic 2</p>
-            <p>Topic 3</p>
+
+        {/* Communities Section */}
+        <div className="bg-gradient-to-r mt-5 from-amber-900 to-black/70 p-4 rounded-lg shadow-lg">
+          <div className="max-w-full border border-amber-400 bg-black rounded-lg overflow-hidden">
+            <div className="text-white p-4 text-sm">
+              <p className="text-lg font-semibold text-amber-400 mb-4">COMMUNITIES</p>
+              {communities ? (
+                <div className="overflow-y-auto pr-2 max-h-[50vh]">
+                  {communities.map((community, index) => (
+                    <Link href={`/discussionforum/community/${community._id}`} key={index}>
+                      <div className="flex items-start my-2 p-3 rounded-lg transition-all duration-150 hover:bg-black/30 cursor-pointer">
+                        <img
+                          className="h-10 w-10 md:h-12 md:w-12 rounded-full border-2 border-amber-400"
+                          src={community.imageUrl}
+                          alt={`${community.name}`}
+                        />
+                        <div className="ml-3 text-amber-200">
+                          <p className="font-semibold text-sm md:text-md">{community.name}</p>
+                          <p className="text-xs font-light text-amber-400">{community.members.length} Members</p>
+                          <p className="text-xs mt-1 text-gray-300 hidden md:block">{community.description}</p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <Loading />
+              )}
+            </div>
           </div>
-        )}
-        <div className='px-2 font-semibold text-stone-50 cursor-pointer p-2 rounded-lg hover:bg-amber-600 hover:text-stone-900 transition duration-200' onClick={() => setIsResourcesOpen(!isResourcesOpen)}>
-          <p className='flex flex-row items-center justify-between'>
-            <span>Resources</span>
-            <RiArrowDownWideFill className='h-6 w-6 ' />
-          </p>
         </div>
-        {isResourcesOpen && (
-          <div className="px-2 pl-4 text-stone-50">
-            <a href="https://hi.wikipedia.org/wiki/%E0%A4%AD%E0%A4%BE%E0%A4%B0%E0%A4%A4_%E0%A4%95%E0%A4%BE_%E0%A4%B8%E0%A4%82%E0%A4%B5%E0%A4%BF%E0%A4%A7%E0%A4%BE%E0%A4%A8">Wikipedia</a>
-            <p><a href="https://www.youtube.com/watch?v=K65DEXrR9As">Youtube</a></p>
-            <p>Resource 3</p>
-          </div>
-        )}
-        <hr className="my-4 border-slate-400" />
-        <div className='px-2 font-semibold text-slate-50'>
-          <p>Help</p>
-          <p>Blog</p>
-          <p>Privacy Policy</p>
-        </div>
-        <div className='flex flex-col mt-24'>
+
+        {/* Post Button */}
+        <div className="flex flex-col mt-5">
           <button
             onClick={handleNewPostClick}
-            className='bg-amber-600 rounded-xl px-16 py-2 font-bold text-md text-center cursor-pointer'>
+            className="bg-amber-600 rounded-xl px-16 py-2 font-bold text-md text-center cursor-pointer"
+          >
             POST
           </button>
         </div>
+
+        {/* Layout Button */}
+        <button
+          onClick={() => setIsVertical(!isVertical)}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 fixed bottom-20 right-20 z-20"
+        >
+          Current Layout : {isVertical ? "Vertical" : "Horizontal"}
+        </button>
+
       </div>
 
-      {/* Conditional Middle Column */}
-      <div className="col-span-1 md:col-span-3 flex flex-col overflow-hidden">
+      {/* Slide-in Sidebar for Mobile */}
+      <div
+        className={`fixed left-0 h-full w-3/4 bg-black bg-opacity-95 p-4 transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-300 ease-in-out z-40`}
+      >
+        <div className="mt-5 bg-gradient-to-r from-amber-900 to-black/70 p-4 rounded-lg shadow-lg">
+          <div className="max-w-full border border-amber-400 bg-black rounded-lg overflow-hidden">
+            <div className="text-white p-4 text-sm">
+              <p className="text-lg font-semibold text-amber-400 mb-4">COMMUNITIES</p>
+              {communities ? (
+                <div className="overflow-y-auto pr-2 max-h-[70vh]">
+                  {communities.map((community, index) => (
+                    <Link href={`/discussionforum/community/${community._id}`} key={index}>
+                      <div className="flex items-start my-2 p-3 rounded-lg transition-all duration-150 hover:bg-black/30 cursor-pointer">
+                        <img
+                          className="h-10 w-10 rounded-full border-2 border-amber-400"
+                          src={community.imageUrl}
+                          alt={`${community.name}`}
+                        />
+                        <div className="ml-3 text-amber-200">
+                          <p className="font-semibold text-sm">{community.name}</p>
+                          <p className="text-xs font-light text-amber-400">{community.members.length} Members</p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <Loading />
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex flex-col overflow-hidden md:col-span-4">
         <div
           className="flex-grow overflow-y-auto p-4"
           style={{
-            backgroundImage: 'url(/bg3.jpg)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
+            backgroundImage: "url(/bg3.jpg)",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
           }}
         >
           {showNewPost ? (
@@ -297,24 +340,14 @@ const Page = () => {
               <NewPost />
             </div>
           ) : (
-            <div className="flex flex-col items-center space-y-4 p-4 rounded-lg ">
-              {/* Toggle Button */}
-              <div className="font-bold text-2xl text-stone-50 fixed z-[10] px-4 py-2 rounded-lg shadow-md">
-                Posts : 
-                <button
-                  onClick={() => setIsVertical(!isVertical)}
-                  className="my-4 px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600"
-                >
-                  Current Layout : {isVertical ? "Vertical" : "Horizontal"}
-                </button>
+            <div className="flex relative flex-col items-center space-y-4 p-4 rounded-lg">
+              <div className="font-bold text-lg text-stone-50 px-4 py-2 rounded-lg shadow-md mb-2">
+                Posts:
               </div>
-
-
-              {/* PostCard Layout */}
               <div
                 className={`${
                   isVertical
-                    ? "flex flex-col items-center space-y-4" // Vertical Layout
+                    ? "flex flex-wrap gap-4 justify-center items-center mt-[50px]" // Vertical Layout
                     : "flex flex-row space-x-4 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400"
                 } w-full`}
               >
@@ -324,54 +357,51 @@ const Page = () => {
                   </Link>
                 ))}
               </div>
-
-              {/* Loading Spinner */}
               {isLoading && <Loading />}
             </div>
           )}
         </div>
       </div>
 
-      {/* Right Column - Hidden in New Post View */}
-      {/* {!showNewPost && ( */}
-      <div className="bg-gradient-to-r from-amber-900 to-black/70 p-4 hidden md:block rounded-lg shadow-lg">
-        <div className="max-w-full border border-amber-400 bg-black rounded-lg overflow-hidden">
-          <div className="text-white p-4 text-sm">
-            <p className="text-lg font-semibold text-amber-400 mb-4">COMMUNITIES</p>
-            {communities ? (
-              <div className="overflow-y-auto max-h-[600px] pr-2">
-                {communities.map((community,index) => (
-                  <Link href={`/discussionforum/community/${community._id}`} key={index}>
-                    <div 
-                      className="flex items-start my-2 p-3 rounded-lg transition-all duration-150 hover:bg-black/30 cursor-pointer"
-                    >
-                      <img 
-                        className="h-12 w-12 rounded-full border-2 border-amber-400" 
-                        src={community.imageUrl} 
-                        alt={`${community.name}`} 
-                      />
-                      <div className="ml-3 text-amber-200">
-                        <p className="font-semibold text-md">{community.name}</p>
-                        <p className="text-xs font-light text-amber-400">{community.members.length} Members</p>
-                        <p className="text-xs mt-1 text-gray-300">{community.description}</p>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            ):(
-            <Loading />
-            )}
+      {/* Fixed Action Buttons */}
+      <div className="fixed bottom-10 left-4 md:hidden right-4 z-50 flex justify-between">
 
-          </div>
-        </div>
+        {/* Home Button */}
+        <button
+          onClick={handleHomeClick}
+          className="bg-amber-600 text-white p-3 rounded-full shadow-lg w-14 h-14 flex items-center justify-center"
+        >
+          <GoHome className="h-6 w-6" />
+        </button>
+
+        {/* Post Button */}
+        <button
+          onClick={handleNewPostClick}
+          className="bg-amber-600 text-white p-3 rounded-full shadow-lg w-14 h-14 flex items-center justify-center"
+        >
+          <span className="text-lg font-bold">+</span>
+        </button>
+
+
+        {/* Sidebar Communities Toggle Button for Mobile */}
+        <button
+          onClick={handleToggleSidebar}
+          className="md:hidden fixed top-40 left-0 bg-amber-600 text-white p-3 rounded-r-lg shadow-md z-50"
+        >
+          {isSidebarOpen ? "Close" : "Communities"}
+        </button>
+
+        {/* Layout Change Button */}
+        <button
+          onClick={() => setIsVertical(!isVertical)}
+          className="bg-blue-500 text-white p-3 rounded-full shadow-lg w-14 h-14 flex items-center justify-center"
+        >
+          {isVertical ? "V" : "H"}
+        </button>
       </div>
-
-
-
-      {/* )} */}
     </div>
   );
+  
 };
 
 export default Page;

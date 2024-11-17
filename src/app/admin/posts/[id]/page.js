@@ -10,6 +10,9 @@ export default function PostReviewPage({ params }) {
   const router = useRouter();
   const [post, setPost] = useState(null);
   const [metrics, setMetrics] = useState(null);
+  const [deletingPostId, setDeletingPostId] = useState(null);
+  const [isApproving, setIsApproving] = useState(false);
+
 
   // Fetch post details and sentiment metrics
   useEffect(() => {
@@ -26,17 +29,64 @@ export default function PostReviewPage({ params }) {
 
   if (!post) return <div>Loading...</div>;
 
+  const handleDelete = async (postId) => {
+    try {
+      setDeletingPostId(postId); // Set the post being deleted
+      const response = await fetch(`/api/discussionforum/delete?postId=${postId}`, {
+        method: 'DELETE',
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert(result.message);
+        router.push('/admin'); 
+      } else {
+        alert(result.message);
+      }
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      alert('Error deleting post');
+    } finally {
+      setDeletingPostId(null); // Reset the deleting state after the operation
+    }
+  };
+  const handleApprove = async (postId) => {
+    try {
+      setIsApproving(true); // Set loading state
+  
+      const response = await fetch(`/api/discussionforum/approvepost?postId=${postId}`, {
+        method: 'POST',
+      });
+  
+      const result = await response.json();
+  
+      if (response.ok) {
+        alert(result.message); // Success message
+        router.push('/admin'); 
+      } else {
+        alert(result.message); // Error message
+      }
+    } catch (error) {
+      console.error('Error approving post:', error);
+      alert('Error approving post');
+    } finally {
+      setIsApproving(false); // Reset loading state
+    }
+  };
+  
+
   // Calculate the final verdict based on the metrics
   const calculateVerdict = () => {
     if (!metrics) return null;
     let positives = 0;
-    let negatives = 0;
+    let Negatives = 0;
     Object.values(metrics).forEach((status) => {
-      if (status === 'positive') positives++;
-      if (status === 'negative') negatives++;
+      if (status === 'Positive') positives++;
+      if (status === 'Negative') Negatives++;
     });
 
-    return positives > negatives ? 'Post Approved' : 'Post Needs Review';
+    return positives > Negatives ? 'Post Approved' : 'Post Needs Review';
   };
 
   return (
@@ -74,7 +124,7 @@ export default function PostReviewPage({ params }) {
               {metrics ? Object.entries(metrics).map(([metric, status], index) => (
                 <tr key={index}>
                   <td className="p-2 border-b border-orange-600">{metric}</td>
-                  <td className={`p-2 border-b border-orange-600 ${status === 'positive' ? 'text-green-500' : 'text-red-500'}`}>
+                  <td className={`p-2 border-b border-orange-600 ${status === 'Positive' ? 'text-green-500' : 'text-red-500'}`}>
                     {status}
                   </td>
                 </tr>
@@ -98,9 +148,22 @@ export default function PostReviewPage({ params }) {
 
           {/* Action buttons */}
           <div className="flex justify-end space-x-4 mt-4">
-            <button className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded transition">Approve Post</button>
-            <button className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded transition">Warn User</button>
-            <button className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded transition">Delete Post</button>
+            {/* <button className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded transition">Approve Post</button> */}
+            <button
+              className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded transition"
+              onClick={() => handleApprove(id)}
+              disabled={isApproving} // Disable button while approving
+            >
+              {isApproving ? 'Approving...' : 'Approve Post'}
+            </button>
+            <button
+              className="px-3 py-1 bg-red-600 text-white rounded"
+              onClick={() => handleDelete(id)}
+              disabled={deletingPostId === id} // Disable the button for the post being deleted
+            >
+              {deletingPostId === id ? 'Deleting...' : 'Delete'}
+            </button>
+            {/* <button className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded transition">Delete Post</button> */}
           </div>
         </div>
       </div>

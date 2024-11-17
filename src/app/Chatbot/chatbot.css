@@ -224,3 +224,112 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+    .main-container {
+      flex-direction: column;
+      height: auto; /* Allow height to adjust to content */
+    }
+  
+    .sidebar {
+      width: 100%; /* Sidebar takes full width */
+      border-bottom: 1px solid #ccc; /* Add separator */
+      padding: 10px; /* Adjust padding */
+      overflow-y: hidden; /* Prevent excessive scrolling */
+    }
+  
+    .sidebar h2 {
+      font-size: 1.2rem; /* Smaller heading size */
+    }
+  
+    .sidebar ul {
+      display: flex; /* Make conversations list scrollable */
+      flex-direction: row;
+      overflow-x: auto; /* Horizontal scroll for smaller screens */
+      padding: 5px 0;
+      gap: 10px;
+    }
+  
+    .sidebar li {
+      flex: 0 0 auto; /* Prevent list items from shrinking */
+      padding: 10px;
+      font-size: 0.9rem; /* Smaller font */
+      border-radius: 5px;
+    }
+  
+    .sidebar li.active {
+      background-color: #d1e7dd; /* Keep active state visible */
+    }
+  
+    .sidebar .delete-button {
+      font-size: 0.8rem;
+      margin-left: 10px; /* Add spacing */
+    }
+  
+    .chat-container {
+      padding: 15px;
+      width: 100%; /* Chat container takes full width */
+    }
+  
+    .chat-container h1 {
+      font-size: 1.2rem; /* Adjust font size */
+    }
+  
+    .chat-history {
+      max-height: 50vh; /* Limit chat history height */
+      margin-bottom: 10px;
+      padding-right: 5px;
+    }
+  
+    .chat-message {
+      font-size: 0.9rem; /* Adjust chat message size */
+    }
+  
+    .chat-input {
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+  
+    .chat-submit-button {
+      font-size: 0.9rem;
+      padding: 8px 12px; /* Smaller padding */
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .sidebar h2 {
+      font-size: 1rem;
+    }
+  
+    .sidebar ul {
+      gap: 5px; /* Reduce gap between list items */
+    }
+  
+    .sidebar li {
+      padding: 8px;
+      font-size: 0.8rem; /* Smaller font size */
+    }
+  
+    .sidebar .delete-button {
+      font-size: 0.7rem; /* Smaller delete button */
+    }
+  
+    .chat-container h1 {
+      font-size: 1rem; /* Smaller font size for headings */
+    }
+  
+    .chat-message {
+      font-size: 0.8rem;
+    }
+  
+    .chat-input {
+      font-size: 0.8rem;
+    }
+  
+    .chat-submit-button {
+      font-size: 0.8rem;
+      padding: 6px 10px; /* Smaller padding */
+    }
+  }
+  

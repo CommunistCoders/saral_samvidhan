@@ -13,7 +13,9 @@ const TranslateComponent = () => {
                 clearInterval(intervalId);
                 new window.google.translate.TranslateElement(
                     {
-                        pageLanguage: 'en', layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+                        pageLanguage: 'en',
+                        includedLanguages: 'hi,bn,te,mr,ta,ur,gu,ml,kn,pa,or,as,ma,kok,sd,ne,bho,mwr,sat,doi,ks,mni,tcy,sa,hif,mai,raj',
+                         layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
                     },
                     googleTranslateRef.current
                 );

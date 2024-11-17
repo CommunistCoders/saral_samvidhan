@@ -23,14 +23,34 @@ const Page = ({params}) => {
   const [isResourcesOpen, setIsResourcesOpen] = useState(false);
   const [showNewPost, setShowNewPost] = useState(false);
   const [card, setCard] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [communities,setCommunityData] = useState([]);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
 
   const handleNewPostClick = () => {
     setShowNewPost(true);
   };
 
-  const handleHomeClick = () => {
-    setShowNewPost(false);
+
+  // Function to load communities
+  const loadCommunities = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/community/get`);
+      const newCommunities = await response.json();
+      setCommunityData(newCommunities);
+    } catch (error) {
+      console.error("Error loading communities:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  // Initial load
+  useEffect(() => {
+    loadCommunities();
+  }, []);
 
   useEffect(() => {
     if (session && card) {
@@ -39,6 +59,7 @@ const Page = ({params}) => {
     }
   }, [session, card]); // Only run when session or card changes
 
+  
   // Fetch post details and sentiment metrics
   useEffect(() => {
     if (id) {
@@ -53,6 +74,10 @@ const Page = ({params}) => {
         .catch((error) => console.error("Error fetching post:", error));
     }
   }, [id]);
+
+  const handleToggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   const handleLikeClick = async () => {
     // Check if the user is logged in
@@ -163,72 +188,98 @@ const Page = ({params}) => {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-5 h-screen overflow-hidden">
-      {/* Left Column */}
-      <div className="bg-black bg-opacity-95 p-4">
-      <Link href={`/discussionforum`}>
-          <div 
-            className='flex items-center p-2 rounded-lg hover:bg-amber-600 text-amber-600 hover:text-stone-900 transition duration-200 cursor-pointer '
-            // onClick={handleHomeClick}
-          >
-            <GoHome className='h-7 w-7' />
-              <p className='px-2 font-bold'>Home</p>
+    <div className="grid grid-cols-1 md:grid-cols-5 h-screen overflow-hidden relative">
+      
+      {/* Left Sidebar for Desktop */}
+      <div className="hidden md:block bg-black bg-opacity-95 p-4 md:col-span-1">
+
+        {/* Home Button */}
+        <Link href={`/discussionforum/`}>
+          <div className="flex items-center p-2 rounded-lg hover:bg-amber-600 text-amber-600 hover:text-stone-900 transition duration-200 cursor-pointer">
+            <GoHome className="h-7 w-7" />
+            <p className="px-2 font-bold">Home</p>
           </div>
         </Link>
-        <div className="flex items-center p-2 rounded-lg hover:bg-amber-600 text-amber-600 hover:text-stone-900 transition duration-200 cursor-pointer">
-          <TbCircleArrowUpRight className='h-7 w-7' />
-          <p className='px-2 font-bold'>Popular</p>
-        </div>
-        <div className={`flex items-center p-2 rounded-lg hover:bg-amber-600 text-amber-600 hover:text-stone-900 transition duration-200 cursor-pointer`}>
-          <IoSearch className="h-7 w-7" />
-          <p className='px-2 font-bold'>Explore</p>
-        </div>
-        <div className='flex items-center p-2 rounded-lg hover:bg-amber-600 text-amber-600 hover:text-stone-900 transition duration-200 cursor-pointer'>
-          <IoMail className='h-6 w-6' />
-          <p className='px-2 font-bold'>Message</p>
-        </div>
-        <hr className="my-4 border-slate-950" />
-        <div className='px-2 font-semibold cursor-pointer p-2 rounded-lg hover:bg-amber-600 text-amber-600 hover:text-stone-900 transition duration-200' onClick={() => setIsTopicsOpen(!isTopicsOpen)}>
-          <p className='flex flex-row items-center justify-between'>
-            <span>Topic</span>
-            <RiArrowDownWideFill className='h-6 w-6' />
-          </p>
-        </div>
-        {isTopicsOpen && (
-          <div className="px-2 pl-4 text-stone-50">
-            <p>Topic 1</p>
-            <p>Topic 2</p>
-            <p>Topic 3</p>
+
+        {/* Communities Section */}
+        <div className="bg-gradient-to-r mt-5 from-amber-900 to-black/70 p-4 rounded-lg shadow-lg">
+          <div className="max-w-full border border-amber-400 bg-black rounded-lg overflow-hidden">
+            <div className="text-white p-4 text-sm">
+              <p className="text-lg font-semibold text-amber-400 mb-4">COMMUNITIES</p>
+              {communities ? (
+                <div className="overflow-y-auto pr-2 max-h-[50vh]">
+                  {communities.map((community, index) => (
+                    <Link href={`/discussionforum/community/${community._id}`} key={index}>
+                      <div className="flex items-start my-2 p-3 rounded-lg transition-all duration-150 hover:bg-black/30 cursor-pointer">
+                        <img
+                          className="h-10 w-10 md:h-12 md:w-12 rounded-full border-2 border-amber-400"
+                          src={community.imageUrl}
+                          alt={`${community.name}`}
+                        />
+                        <div className="ml-3 text-amber-200">
+                          <p className="font-semibold text-sm md:text-md">{community.name}</p>
+                          <p className="text-xs font-light text-amber-400">{community.members.length} Members</p>
+                          <p className="text-xs mt-1 text-gray-300 hidden md:block">{community.description}</p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <Loading />
+              )}
+            </div>
           </div>
-        )}
-        <div className='px-2 font-semibold text-stone-50 cursor-pointer p-2 rounded-lg hover:bg-amber-600 hover:text-stone-900 transition duration-200' onClick={() => setIsResourcesOpen(!isResourcesOpen)}>
-          <p className='flex flex-row items-center justify-between'>
-            <span>Resources</span>
-            <RiArrowDownWideFill className='h-6 w-6 ' />
-          </p>
         </div>
-        {isResourcesOpen && (
-          <div className="px-2 pl-4 text-stone-50">
-            <a href="https://hi.wikipedia.org/wiki/%E0%A4%AD%E0%A4%BE%E0%A4%B0%E0%A4%A4_%E0%A4%95%E0%A4%BE_%E0%A4%B8%E0%A4%82%E0%A4%B5%E0%A4%BF%E0%A4%A7%E0%A4%BE%E0%A4%A8">Wikipedia</a>
-            <p><a href="https://www.youtube.com/watch?v=K65DEXrR9As">Youtube</a></p>
-            <p>Resource 3</p>
-          </div>
-        )}
-        <hr className="my-4 border-slate-400" />
-        <div className='px-2 font-semibold text-slate-50'>
-          <p>Help</p>
-          <p>Blog</p>
-          <p>Privacy Policy</p>
-        </div>
-        <div className='flex flex-col mt-24'>
+
+        {/* Post Button */}
+        <div className="flex flex-col mt-5">
           <button
             onClick={handleNewPostClick}
-            className='bg-amber-600 rounded-xl px-16 py-2 font-bold text-md text-center cursor-pointer'>
-              POST
+            className="bg-amber-600 rounded-xl px-16 py-2 font-bold text-md text-center cursor-pointer"
+          >
+            POST
           </button>
         </div>
+
       </div>
 
+      {/* Slide-in Sidebar for Mobile */}
+      <div
+        className={`fixed left-0 h-full w-3/4 bg-black bg-opacity-95 p-4 transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-300 ease-in-out z-40`}
+      >
+        <div className="mt-5 bg-gradient-to-r from-amber-900 to-black/70 p-4 rounded-lg shadow-lg">
+          <div className="max-w-full border border-amber-400 bg-black rounded-lg overflow-hidden">
+            <div className="text-white p-4 text-sm">
+              <p className="text-lg font-semibold text-amber-400 mb-4">COMMUNITIES</p>
+              {communities ? (
+                <div className="overflow-y-auto pr-2 max-h-[70vh]">
+                  {communities.map((community, index) => (
+                    <Link href={`/discussionforum/community/${community._id}`} key={index}>
+                      <div className="flex items-start my-2 p-3 rounded-lg transition-all duration-150 hover:bg-black/30 cursor-pointer">
+                        <img
+                          className="h-10 w-10 rounded-full border-2 border-amber-400"
+                          src={community.imageUrl}
+                          alt={`${community.name}`}
+                        />
+                        <div className="ml-3 text-amber-200">
+                          <p className="font-semibold text-sm">{community.name}</p>
+                          <p className="text-xs font-light text-amber-400">{community.members.length} Members</p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <Loading />
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+      
       {/* Conditional Middle Column */}
       <div className="col-span-4 md:col-span-4 flex flex-col overflow-hidden">
         <div
@@ -239,81 +290,81 @@ const Page = ({params}) => {
             backgroundPosition: 'center',
           }}
         >
-        {showNewPost ? (
-          <div>
-            <NewPost />
-          </div>  
-        ) : (
-          card ? (
-            <>
-            {/* Detailed Post Card */}
-            <div className="relative z-50 inset-0 w-full bg-zinc-950 bg-opacity-95 rounded-xl border border-amber-600/40 p-6">
-                <div className="flex">
-                {/* Left Side */}
-                <div className="flex flex-col items-center space-y-4">
-                    <img
-                    className="h-16 w-16 rounded-full border border-amber-600/40"
-                    // src={`/api/images/${card.user.profilePhoto}`}
-                    src={card.user.profilePhoto=="https://t3.ftcdn.net/jpg/06/33/54/78/360_F_633547842_AugYzexTpMJ9z1YcpTKUBoqBF0CUCk10.jpg" ? `${card.user.profilePhoto}` : `/api/images/${card.user.profilePhoto}`}
-                    alt="User Avatar"
-                    />
-                    <span className="text-stone-50 font-semibold">
-                    {card.user.username}
-                    </span>
-                    <span className="text-stone-300 text-xs">
-                    {card.timestamp}
-                    </span>
-
-                    <div className="flex flex-col items-center space-y-2">
-                    {/* Like Button */}
-                    <button
-                      onClick={handleLikeClick}
-                      className={`flex items-center space-x-1 p-2 rounded-full transition-all duration-200 ease-in-out ${
-                        isLiked ? 'bg-green-700/20' : 'hover:bg-green-700/20'
-                      }`}
-                    >
-                      <LuArrowBigUp
-                        className={`h-8 w-8 ${
-                          isLiked ? 'text-green-500 fill-current' : 'text-green-600'
-                        }`}
+          {showNewPost ? (
+            <div>
+              <NewPost />
+            </div>  
+          ) : (
+            card ? (
+              <>
+                {/* Detailed Post Card */}
+                <div className="relative inset-0 w-full bg-zinc-950 bg-opacity-95 rounded-xl border border-amber-600/40 p-6">
+                  <div className="flex flex-col md:flex-row">
+                    {/* Left Side - Profile and Interaction Buttons */}
+                    <div className="flex flex-col items-center space-y-4 md:w-1/3">
+                      <img
+                        className="h-16 w-16 rounded-full border border-amber-600/40"
+                        src={card.user.profilePhoto=="https://t3.ftcdn.net/jpg/06/33/54/78/360_F_633547842_AugYzexTpMJ9z1YcpTKUBoqBF0CUCk10.jpg" ? `${card.user.profilePhoto}` : `/api/images/${card.user.profilePhoto}`}
+                        alt="User Avatar"
                       />
-                      <span className="text-md text-green-500 font-semibold">{likeCount}</span>
-                    </button>
+                      <span className="text-stone-50 font-semibold">
+                        {card.user.username}
+                      </span>
+                      <span className="text-stone-300 text-xs">
+                        {card.timestamp}
+                      </span>
 
-                    {/* Dislike Button */}
-                    <button
-                      onClick={handleDislikeClick}
-                      className={`flex items-center space-x-1 p-2 rounded-full transition-all duration-200 ease-in-out ${
-                        isDisliked ? 'bg-red-700/20' : 'hover:bg-red-700/20'
-                      }`}
-                    >
-                      <LuArrowBigDown
-                        className={`h-8 w-8 ${
-                          isDisliked ? 'text-red-500 fill-current' : 'text-red-600'
-                        }`}
-                      />
-                      <span className="text-md text-red-500 font-semibold">{dislikeCount}</span>
-                    </button>
-                    {/* Comment Button */}
-                    <button className="flex items-center space-x-1 text-amber-600">
-                        <FaRegComment className="h-8 w-8" />
-                        <span className="font-semibold">20</span>
-                    </button>
+                      <div className="flex lg:flex-col md:flex-row items-center space-y-2">
+                        {/* Like Button */}
+                        <button
+                          onClick={handleLikeClick}
+                          className={`flex items-center space-x-1 p-2 rounded-full transition-all duration-200 ease-in-out ${
+                            isLiked ? 'bg-green-700/20' : 'hover:bg-green-700/20'
+                          }`}
+                        >
+                          <LuArrowBigUp
+                            className={`h-8 w-8 ${
+                              isLiked ? 'text-green-500 fill-current' : 'text-green-600'
+                            }`}
+                          />
+                          <span className="text-md text-green-500 font-semibold">{likeCount}</span>
+                        </button>
 
-                    {/* Share Button */}
-                    <button 
-                      className="flex items-center space-x-1 p-2 rounded-full text-amber-600 hover:bg-amber-700/20 transition-all duration-200 ease-in-out"
-                      onClick={handleShare}
-                    >
-                      <PiShareFatBold className="h-8 w-8" />
-                      <span className="text-sm font-semibold">Share</span>
-                    </button>
+                        {/* Dislike Button */}
+                        <button
+                          onClick={handleDislikeClick}
+                          className={`flex items-center space-x-1 p-2 rounded-full transition-all duration-200 ease-in-out ${
+                            isDisliked ? 'bg-red-700/20' : 'hover:bg-red-700/20'
+                          }`}
+                        >
+                          <LuArrowBigDown
+                            className={`h-8 w-8 ${
+                              isDisliked ? 'text-red-500 fill-current' : 'text-red-600'
+                            }`}
+                          />
+                          <span className="text-md text-red-500 font-semibold">{dislikeCount}</span>
+                        </button>
+                        
+                        {/* Comment Button */}
+                        <button className="flex items-center space-x-1 text-amber-600">
+                          <FaRegComment className="h-8 w-8" />
+                          <span className="font-semibold">20</span>
+                        </button>
+
+                        {/* Share Button */}
+                        <button 
+                          className="flex items-center space-x-1 p-2 rounded-full text-amber-600 hover:bg-amber-700/20 transition-all duration-200 ease-in-out"
+                          onClick={handleShare}
+                        >
+                          <PiShareFatBold className="h-8 w-8" />
+                          <span className="text-sm font-semibold">Share</span>
+                        </button>
+                      </div>
                     </div>
-                </div>
 
-                {/* Middle Section */}
-                <div className="flex-grow mx-8">
-                    <h1 className="text-3xl font-bold text-white">{card.title}</h1>
+                    {/* Middle Section - Post Content */}
+                    <div className="flex-grow mx-8 mt-4 md:mt-0 md:w-2/3">
+                      <h1 className="text-3xl font-bold text-white">{card.title}</h1>
 
                       {/* Display tags below title */}
                       {card.tags && card.tags.length > 0 && (
@@ -329,31 +380,61 @@ const Page = ({params}) => {
                             ))}
                           </div>
                         </div>
-                       )}
+                      )}
 
-                    <p className="text-gray-300 mt-4">{card.content}</p>
-                </div>
-
-                {/* Right Side */}
-                {card.imageUrl && (
-                    <div className="w-1/3">
-                    <img
-                        className="w-full h-full object-cover rounded-lg border border-amber-600/40"
-                        src={`/api/images/${card.imageUrl}`}
-                        alt="Post Image"
-                    />
+                      <p className="text-gray-300 mt-4">{card.content}</p>
                     </div>
-                )}
+
+                    {/* Right Side - Image */}
+                    {card.imageUrl && (
+                      <div className="w-full md:w-1/3 mt-4 md:mt-0">
+                        <img
+                          className="w-full h-full object-cover rounded-lg border border-amber-600/40"
+                          src={`/api/images/${card.imageUrl}`}
+                          alt="Post Image"
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
-            </div>
-            </>
-          ) : (
-            <div><Loading /></div>
-          )
-        )}
+              </>
+            ) : (
+              <div><Loading /></div>
+            )
+          )}
         </div>
       </div>
- 
+
+      {/* Fixed Action Buttons */}
+      <div className="fixed bottom-10 left-4 md:hidden right-4 z-50 flex justify-between">
+
+        {/* Home Button */}
+        <Link href={`/discussionforum/`}>
+          <button
+            className="bg-amber-600 text-white p-3 rounded-full shadow-lg w-14 h-14 flex items-center justify-center"
+          >
+            <GoHome className="h-6 w-6" />
+          </button>
+        </Link>
+
+        {/* Post Button */}
+        <button
+          onClick={handleNewPostClick}
+          className="bg-amber-600 text-white p-3 rounded-full shadow-lg w-14 h-14 flex items-center justify-center"
+        >
+          <span className="text-lg font-bold">+</span>
+        </button>
+
+
+        {/* Sidebar Communities Toggle Button for Mobile */}
+        <button
+          onClick={handleToggleSidebar}
+          className="md:hidden fixed top-40 left-0 bg-amber-600 text-white p-3 rounded-r-lg shadow-md z-50"
+        >
+          {isSidebarOpen ? "Close" : "Communities"}
+        </button>
+      </div>
+
     </div>
   );
 };

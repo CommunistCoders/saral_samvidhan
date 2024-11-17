@@ -10,6 +10,9 @@ export default function AdminPage() {
   const [page, setPage] = useState(1);
   const { data: session } = useSession();
   const [countdown, setCountdown] = useState(5);
+  const [deletingPostId, setDeletingPostId] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State to control sidebar visibility
+
 
   // If the user is not an admin, start countdown to redirect
   useEffect(() => {
@@ -55,19 +58,20 @@ export default function AdminPage() {
     setIsLoading(true);
     try {
       for (const post of cardData) {
-        const response = await fetch("/api/sentimentanalysis", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            content: post.content,
-            postId: post._id,
-          }),
-        });
-
-        const result = await response.json();
-        console.log("Sentiment analysis result:", result);
+        if (!post.isReviewed) {
+          const response = await fetch("/api/sentimentanalysis", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              content: post.content,
+              postId: post._id,
+            }),
+          });
+          const result = await response.json();
+          console.log("Sentiment analysis result:", result);
+        }
       }
       // After sentiment analysis is done, reload the posts to get updated metrics
       loadPosts();
@@ -82,6 +86,37 @@ export default function AdminPage() {
   useEffect(() => {
     loadPosts();
   }, []);
+  
+  const handleDelete = async (postId) => {
+    try {
+      setDeletingPostId(postId); // Set the post being deleted
+      const response = await fetch(`/api/discussionforum/delete?postId=${postId}`, {
+        method: 'DELETE',
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert(result.message);
+        // Optionally, remove the deleted post from the UI
+        // For example, you can filter out the deleted post from cardData
+        setCardData((prevData) => prevData.filter(card => card._id !== postId));
+      } else {
+        alert(result.message);
+      }
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      alert('Error deleting post');
+    } finally {
+      setDeletingPostId(null); // Reset the deleting state after the operation
+    }
+  };
+  
+  const reviewedPosts = cardData.filter(post => post.isReviewed);
+  
+  const handleSidebarToggle = () => {
+    setIsSidebarOpen(!isSidebarOpen); // Toggle sidebar visibility
+  };
 
   // Unauthorized access message with countdown
   if (!session || session.user.role !== "admin") {
@@ -98,95 +133,116 @@ export default function AdminPage() {
     );
   }
 
-  return (
-    <div className="relative w-full h-screen overflow-hidden">
-    <Image
-      src="/bg1.jpg"
-      alt="Background Image"
-      layout="fill"
-      objectFit="cover"
-      className="z-0"
-    />
-      <div className="min-h-screen absolute inset-0 bg-black bg-opacity-50 z-10 text-white flex">
-        {/* Sidebar */}
-        <aside className="w-1/5 bg-black text-orange-400 p-4">
-          <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
-          <nav className="space-y-6">
-            <a href="#" className="hover:text-orange-200">Dashboard</a>
-            <a href="#" className="hover:text-orange-200">Flagged Posts</a>
-            <a href="#" className="hover:text-orange-200">Users</a>
-            <a href="#" className="hover:text-orange-200">Settings</a>
-          </nav>
-        </aside>
+  return (    <div className="relative w-full h-screen overflow-hidden">
+  {/* Background Image */}
+  <Image
+    src="/bg1.jpg"
+    alt="Background Image"
+    layout="fill"
+    objectFit="cover"
+    className="z-0"
+  />
 
-        {/* Main Content */}
-        <main className="flex-1 p-8">
-          {/* Header with Search and Filter */}
-          <div className="flex justify-between items-center mb-8">
-            <input
-              type="text"
-              placeholder="Search posts, users..."
-              className="px-4 py-2 bg-black text-orange-400 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-            />
-            <select className="px-4 py-2 bg-black text-orange-400 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
-              <option>Filter by</option>
-              <option>Flagged Posts</option>
-              <option>Recent Posts</option>
-              <option>Warnings Sent</option>
-            </select>
-          </div>
+  {/* Main Container */}
+  <div className="min-h-screen absolute inset-0 bg-black bg-opacity-50 z-10 text-white flex">
+    {/* Sidebar */}
+    <aside
+  className={`w-1/5 bg-black text-orange-400 p-4 fixed md:relative transform ${
+    isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+  } transition-transform md:translate-x-0 z-20 md:w-1/5 md:block hidden`}
+>
+  <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
 
-          {/* Sentiment Analysis Button */}
-          <button
-            onClick={runSentimentAnalysis}
-            className="mb-8 px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-500 focus:outline-none"
-            disabled={isLoading}
-          >
-            {isLoading ? "Running..." : "Run Sentiment Analysis"}
-          </button>
+  {/* Table to show reviewed posts */}
+  <div className="mt-8">
+    <h2 className="text-xl font-bold">Reviewed Posts</h2>
+    <table className="w-full mt-4 text-left text-sm">
+      <thead>
+        <tr>
+          <th className="border-b border-orange-600 p-2">Title</th>
+          <th className="border-b border-orange-600 p-2">User</th>
+          <th className="border-b border-orange-600 p-2">Content</th>
+        </tr>
+      </thead>
+      <tbody>
+        {reviewedPosts.length > 0 ? (
+          reviewedPosts.map((post, index) => (
+            <tr key={index}>
+              <td className="border-b border-orange-600 p-2">{post.title}</td>
+              <td className="border-b border-orange-600 p-2">{post.user?.username || "Unknown"}</td>
+              <td className="border-b border-orange-600 p-2">{post.content.substring(0, 20)}...</td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="3" className="border-b border-orange-600 p-2 text-center">No reviewed posts found</td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+  </div>
+</aside>
 
-          {/* Posts Table */}
-          <div className="bg-black bg-opacity-50 p-6 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-semibold mb-4">Posts</h2>
-            <table className="w-full text-left">
-              <thead>
-                <tr>
-                  <th className="border-b border-orange-400 p-4">User ID</th>
-                  <th className="border-b border-orange-400 p-4">Post Content</th>
-                  <th className="border-b border-orange-400 p-4">Status</th>
-                  <th className="border-b border-orange-400 p-4">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {cardData.map((card, index) => (
+    {/* Main Content */}
+    <main className="flex-1 p-8 md:ml-1/5">
+      {/* Sentiment Analysis Button */}
+      <button
+        onClick={runSentimentAnalysis}
+        className="mb-8 px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-500 focus:outline-none"
+        disabled={isLoading}
+      >
+        {isLoading ? "Running..." : "Run Sentiment Analysis"}
+      </button>
+
+      {/* Posts Table */}
+      <div className="bg-black bg-opacity-50 p-6 rounded-lg shadow-lg">
+        <h2 className="text-2xl font-semibold mb-4">Posts</h2>
+        <div className="overflow-x-auto"> {/* Added horizontal scroll for tables on small screens */}
+          <table className="w-full text-left">
+            <thead>
+              <tr>
+                <th className="border-b border-orange-400 p-4">User Name</th>
+                {/* Hidden on mobile */}
+                <th className="border-b border-orange-400 p-4 hidden md:table-cell">Post Content</th>
+                <th className="border-b border-orange-400 p-4 hidden md:table-cell">Status</th>
+                <th className="border-b border-orange-400 p-4">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cardData
+                .filter(card => !card.isReviewed) // Filter out posts that are reviewed
+                .map((card, index) => (
                   <tr key={index}>
                     <td className="border-b border-orange-600 p-4">
                       {card.user?.username || "Unknown"}
                     </td>
-                    <td className="border-b border-orange-600 p-4">
+                    {/* Hidden on mobile */}
+                    <td className="border-b border-orange-600 p-4 hidden md:table-cell">
                       {card.content.substring(0, 20)}...
                     </td>
-                    <td className="border-b border-orange-600 p-4">Flagged</td>
-                    <td className="border-b border-orange-600 p-4 space-x-2">
+                    <td className="border-b border-orange-600 p-4 hidden md:table-cell">Flagged</td>
+                    <td className="border-b flex border-orange-600 p-4 space-x-2">
                       <Link href={`/admin/posts/${card._id}`}>
                         <button className="px-3 py-1 bg-orange-600 text-white rounded">
                           Review
                         </button>
                       </Link>
-                      <button className="px-3 py-1 bg-orange-600 text-white rounded">
-                        Warn
-                      </button>
-                      <button className="px-3 py-1 bg-red-600 text-white rounded">
-                        Delete
+                      <button
+                        className="px-3 py-1 bg-red-600 text-white rounded"
+                        onClick={() => handleDelete(card._id)}
+                        disabled={deletingPostId === card._id} // Disable the button for the post being deleted
+                      >
+                        {deletingPostId === card._id ? 'Deleting...' : 'Delete'}
                       </button>
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </main>
-      </div>  
-    </div>
-  );
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+  )
 }
