@@ -40,10 +40,17 @@ export const authOptions = {
             role: newUser.role, // Include role in the returned user object
             languagePreference: newUser.languagePreference,
             tags: newUser.tags,
-            profilePhoto: newUser.profilePhoto || 'https://via.placeholder.com/150', };
+            profilePhoto: newUser.profilePhoto,
+            communitiesJoined: newUser.communitiesJoined,
+            aboutMe: newUser.aboutMe, // Include `aboutMe`
+          };
         } else {
           // Login logic
-          const user = await User.findOne({ email: credentials.email });
+          const user = await User.findOne({ email: credentials.email })
+          .populate({
+            path: 'communitiesJoined',
+            select: 'name', // Populate only the `name` field of communities
+          });
           if (user && await bcrypt.compare(credentials.password, user.password)) {
             return {
               email: user.email,
@@ -52,12 +59,14 @@ export const authOptions = {
               role: user.role, // Include role in the returned user object
               languagePreference: user.languagePreference,
               tags: user.tags,
-              profilePhoto: user.profilePhoto || 'https://via.placeholder.com/150',
+              profilePhoto: user.profilePhoto,
+              communitiesJoined: user.communitiesJoined,
+              aboutMe: user.aboutMe, // Include `aboutMe`
             };
           }
           throw new Error('Invalid email or password');
         }
-      },
+      }      
     }),
   ],
   session: { strategy: 'jwt' },
@@ -72,6 +81,8 @@ export const authOptions = {
         token.languagePreference = user.languagePreference;
         token.tags = user.tags;
         token.profilePhoto = user.profilePhoto;
+        token.communitiesJoined = user.communitiesJoined; 
+        token.aboutMe = user.aboutMe; // Include `aboutMe` in token
       }
       return token;
     },
@@ -83,6 +94,8 @@ export const authOptions = {
       session.user.languagePreference = token.languagePreference;
       session.user.tags = token.tags;
       session.user.profilePhoto = token.profilePhoto;
+      session.user.communitiesJoined = token.communitiesJoined;
+      session.user.aboutMe = token.aboutMe; // Include `aboutMe` in session
       return session;
     },
   },
