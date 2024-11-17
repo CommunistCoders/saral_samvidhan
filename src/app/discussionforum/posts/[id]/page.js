@@ -246,7 +246,7 @@ const Page = ({params}) => {
 
       {/* Slide-in Sidebar for Mobile */}
       <div
-        className={`fixed left-0 h-full w-3/4 bg-black bg-opacity-95 p-4 transform ${
+        className={`fixed left-0 top-10b h-full w-3/4 bg-black bg-opacity-95 p-4 transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out z-40`}
       >
