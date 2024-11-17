@@ -63,6 +63,23 @@ const Navbar = () => {
     setNews(fetchedNews);
   }, []);
 
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch("/api/news/headlines");
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const result = await response.json();
+        setNews(result);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setError(error.message);
+      }
+    }
+    fetchData();
+  }, []);
+
   return (
     <>
       <nav className="sticky top-0 z-50 bg-black border border-amber-200/30">
@@ -216,9 +233,9 @@ const Navbar = () => {
           <div className="ticker-wrapper">
             <div className="ticker-content">
               {news.map((item, index) => (
-                <span key={item.id} className="ticker-item">
-                  {item.date}: {item.title}
-                  {index < news.length - 1 && <span> | </span>}
+                <span key={item.title} className="ticker-item">
+                  {item.publishedAt} : {item.title}
+                  {index < news.length - 1 && <span>  |  </span>}
                 </span>
               ))}
             </div>

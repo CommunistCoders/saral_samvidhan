@@ -224,23 +224,19 @@ const PostCard = ({ card, index }) => {
                 />
                 <span className="text-md text-red-500 font-semibold">{dislikeCount}</span>
               </button>
+
+              {/* Share Button */}
+              <button 
+                className="flex items-center space-x-1 p-2 rounded-full text-amber-600 hover:bg-amber-700/20 transition-all duration-200 ease-in-out"
+                onClick={handleShare}
+              >
+                <PiShareFatBold className="h-8 w-8" />
+                <span className="text-sm font-semibold">Share</span>
+              </button>
             </div>
           </div>
 
-            {/* Comment Button */}
-            <button className="flex items-center space-x-1 p-2 rounded-full text-amber-600 hover:bg-amber-700/20 transition-all duration-200 ease-in-out">
-              <FaRegComment className="h-8 w-8" />
-              <span className="text-sm font-semibold">20</span>
-            </button>
 
-            {/* Share Button */}
-            <button 
-              className="flex items-center space-x-1 p-2 rounded-full text-amber-600 hover:bg-amber-700/20 transition-all duration-200 ease-in-out"
-              onClick={handleShare}
-            >
-              <PiShareFatBold className="h-8 w-8" />
-              <span className="text-sm font-semibold">Share</span>
-            </button>
           </div>
         </div>
       </div>

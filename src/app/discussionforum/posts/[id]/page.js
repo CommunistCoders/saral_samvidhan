@@ -314,7 +314,7 @@ const Page = ({params}) => {
                         {card.timestamp}
                       </span>
 
-                      <div className="flex lg:flex-col md:flex-row items-center space-y-2">
+                      <div className="flex lg:flex-col md:flex-row space-y-2">
                         {/* Like Button */}
                         <button
                           onClick={handleLikeClick}
@@ -343,12 +343,6 @@ const Page = ({params}) => {
                             }`}
                           />
                           <span className="text-md text-red-500 font-semibold">{dislikeCount}</span>
-                        </button>
-                        
-                        {/* Comment Button */}
-                        <button className="flex items-center space-x-1 text-amber-600">
-                          <FaRegComment className="h-8 w-8" />
-                          <span className="font-semibold">20</span>
                         </button>
 
                         {/* Share Button */}
