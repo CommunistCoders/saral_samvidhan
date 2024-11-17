@@ -30,6 +30,10 @@ const userSchema = new mongoose.Schema({
     type: String, 
     enum: ['user', 'admin'], // Only allow 'user' or 'admin'
     default: 'user' // Default role is 'user'
+  },
+  aboutMe: {
+    type: String, // A short bio or description about the user
+    default: "This user hasn't added anything about themselves yet." // Default value
   }
 });
 

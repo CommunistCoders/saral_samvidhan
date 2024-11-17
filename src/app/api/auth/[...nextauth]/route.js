@@ -43,7 +43,11 @@ export const authOptions = {
             profilePhoto: newUser.profilePhoto || 'https://via.placeholder.com/150', };
         } else {
           // Login logic
-          const user = await User.findOne({ email: credentials.email });
+          const user = await User.findOne({ email: credentials.email })
+          .populate({
+            path: 'communitiesJoined',
+            select: 'name', // Populate only the `name` field of communities
+          });
           if (user && await bcrypt.compare(credentials.password, user.password)) {
             return {
               email: user.email,
@@ -53,6 +57,7 @@ export const authOptions = {
               languagePreference: user.languagePreference,
               tags: user.tags,
               profilePhoto: user.profilePhoto || 'https://via.placeholder.com/150',
+              communitiesJoined: user.communitiesJoined, // Include communitiesJoined
             };
           }
           throw new Error('Invalid email or password');
@@ -72,6 +77,7 @@ export const authOptions = {
         token.languagePreference = user.languagePreference;
         token.tags = user.tags;
         token.profilePhoto = user.profilePhoto;
+        token.communitiesJoined = user.communitiesJoined; 
       }
       return token;
     },
@@ -83,6 +89,7 @@ export const authOptions = {
       session.user.languagePreference = token.languagePreference;
       session.user.tags = token.tags;
       session.user.profilePhoto = token.profilePhoto;
+      session.user.communitiesJoined = token.communitiesJoined;
       return session;
     },
   },
