@@ -19,6 +19,7 @@ const Page = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [communities,setCommunityData] = useState([]);
   const [isVertical, setIsVertical] = useState(true); // Toggle between vertical and horizontal layout
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
 
   // const communities = [
@@ -216,11 +217,19 @@ const Page = () => {
   const handleHomeClick = () => {
     setShowNewPost(false);
   };
+  
+  const handleToggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-5 h-screen overflow-hidden">
-      {/* Left Column */}
-      <div className="bg-black bg-opacity-95 p-4 md:col-span-1">
+    <div className="grid grid-cols-1 md:grid-cols-5 h-screen overflow-hidden relative">
+
+      {/* Left Sidebar for Desktop */}
+      <div className="hidden md:block bg-black bg-opacity-95 p-4 md:col-span-1">
+
+        {/* Home Button */}
         <div
           className="flex items-center p-2 rounded-lg hover:bg-amber-600 text-amber-600 hover:text-stone-900 transition duration-200 cursor-pointer"
           onClick={handleHomeClick}
@@ -228,25 +237,26 @@ const Page = () => {
           <GoHome className="h-7 w-7" />
           <p className="px-2 font-bold">Home</p>
         </div>
-  
-        <div className="bg-gradient-to-r mt-5 from-amber-900 to-black/70 p-4 hidden md:block rounded-lg shadow-lg">
+
+        {/* Communities Section */}
+        <div className="bg-gradient-to-r mt-5 from-amber-900 to-black/70 p-4 rounded-lg shadow-lg">
           <div className="max-w-full border border-amber-400 bg-black rounded-lg overflow-hidden">
             <div className="text-white p-4 text-sm">
               <p className="text-lg font-semibold text-amber-400 mb-4">COMMUNITIES</p>
               {communities ? (
-                <div className="overflow-y-auto pr-2">
+                <div className="overflow-y-auto pr-2 max-h-[50vh]">
                   {communities.map((community, index) => (
                     <Link href={`/discussionforum/community/${community._id}`} key={index}>
                       <div className="flex items-start my-2 p-3 rounded-lg transition-all duration-150 hover:bg-black/30 cursor-pointer">
                         <img
-                          className="h-12 w-12 rounded-full border-2 border-amber-400"
+                          className="h-10 w-10 md:h-12 md:w-12 rounded-full border-2 border-amber-400"
                           src={community.imageUrl}
                           alt={`${community.name}`}
                         />
                         <div className="ml-3 text-amber-200">
-                          <p className="font-semibold text-md">{community.name}</p>
+                          <p className="font-semibold text-sm md:text-md">{community.name}</p>
                           <p className="text-xs font-light text-amber-400">{community.members.length} Members</p>
-                          <p className="text-xs mt-1 text-gray-300">{community.description}</p>
+                          <p className="text-xs mt-1 text-gray-300 hidden md:block">{community.description}</p>
                         </div>
                       </div>
                     </Link>
@@ -258,6 +268,8 @@ const Page = () => {
             </div>
           </div>
         </div>
+
+        {/* Post Button */}
         <div className="flex flex-col mt-5">
           <button
             onClick={handleNewPostClick}
@@ -267,14 +279,53 @@ const Page = () => {
           </button>
         </div>
 
+        {/* Layout Button */}
         <button
           onClick={() => setIsVertical(!isVertical)}
           className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 fixed bottom-20 right-20 z-20"
         >
           Current Layout : {isVertical ? "Vertical" : "Horizontal"}
         </button>
+
       </div>
 
+      {/* Slide-in Sidebar for Mobile */}
+      <div
+        className={`fixed top-0 left-0 h-full w-3/4 bg-black bg-opacity-95 p-4 transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-300 ease-in-out z-40`}
+      >
+        <div className="mt-5 bg-gradient-to-r from-amber-900 to-black/70 p-4 rounded-lg shadow-lg">
+          <div className="max-w-full border border-amber-400 bg-black rounded-lg overflow-hidden">
+            <div className="text-white p-4 text-sm">
+              <p className="text-lg font-semibold text-amber-400 mb-4">COMMUNITIES</p>
+              {communities ? (
+                <div className="overflow-y-auto pr-2 max-h-[70vh]">
+                  {communities.map((community, index) => (
+                    <Link href={`/discussionforum/community/${community._id}`} key={index}>
+                      <div className="flex items-start my-2 p-3 rounded-lg transition-all duration-150 hover:bg-black/30 cursor-pointer">
+                        <img
+                          className="h-10 w-10 rounded-full border-2 border-amber-400"
+                          src={community.imageUrl}
+                          alt={`${community.name}`}
+                        />
+                        <div className="ml-3 text-amber-200">
+                          <p className="font-semibold text-sm">{community.name}</p>
+                          <p className="text-xs font-light text-amber-400">{community.members.length} Members</p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <Loading />
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
       <div className="flex flex-col overflow-hidden md:col-span-4">
         <div
           className="flex-grow overflow-y-auto p-4"
@@ -290,18 +341,13 @@ const Page = () => {
             </div>
           ) : (
             <div className="flex relative flex-col items-center space-y-4 p-4 rounded-lg">
-              {/* Toggle Button */}
-              <div className="flex top-[8rem] fixed top-28 left-25 z-10">
-                <div className="font-bold text-2xl text-stone-50 px-4 py-2 rounded-lg shadow-md mb-2">
-                  Posts :
-                </div>
+              <div className="font-bold text-lg text-stone-50 px-4 py-2 rounded-lg shadow-md mb-2">
+                Posts:
               </div>
-  
-              {/* PostCard Layout */}
               <div
                 className={`${
                   isVertical
-                    ? "flex flex-wrap gap-5 justify-center items-center space-y-4 mt-[50]" // Vertical Layout
+                    ? "flex flex-wrap gap-4 justify-center items-center mt-[50px]" // Vertical Layout
                     : "flex flex-row space-x-4 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400"
                 } w-full`}
               >
@@ -311,12 +357,47 @@ const Page = () => {
                   </Link>
                 ))}
               </div>
-  
-              {/* Loading Spinner */}
               {isLoading && <Loading />}
             </div>
           )}
         </div>
+      </div>
+
+      {/* Fixed Action Buttons */}
+      <div className="fixed bottom-10 left-4 md:hidden right-4 z-50 flex justify-between">
+
+        {/* Home Button */}
+        <button
+          onClick={handleHomeClick}
+          className="bg-amber-600 text-white p-3 rounded-full shadow-lg w-14 h-14 flex items-center justify-center"
+        >
+          <GoHome className="h-6 w-6" />
+        </button>
+
+        {/* Post Button */}
+        <button
+          onClick={handleNewPostClick}
+          className="bg-amber-600 text-white p-3 rounded-full shadow-lg w-14 h-14 flex items-center justify-center"
+        >
+          <span className="text-lg font-bold">+</span>
+        </button>
+
+
+        {/* Sidebar Communities Toggle Button for Mobile */}
+        <button
+          onClick={handleToggleSidebar}
+          className="md:hidden fixed top-40 left-0 bg-amber-600 text-white p-3 rounded-r-lg shadow-md z-50"
+        >
+          {isSidebarOpen ? "Close" : "Communities"}
+        </button>
+
+        {/* Layout Change Button */}
+        <button
+          onClick={() => setIsVertical(!isVertical)}
+          className="bg-blue-500 text-white p-3 rounded-full shadow-lg w-14 h-14 flex items-center justify-center"
+        >
+          {isVertical ? "V" : "H"}
+        </button>
       </div>
     </div>
   );
