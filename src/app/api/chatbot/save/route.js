@@ -38,14 +38,15 @@ export async function POST(req) {
     let conversation;
     if (conversationId !== undefined && user.chatbotConversations[conversationId]) {
       conversation = user.chatbotConversations[conversationId];
+      // Append the new prompt-reply pair to the conversation
+      conversation.push({ prompt, reply });
     } else {
       // If conversation ID is not provided or invalid, create a new conversation
       conversation = [];
+      // Append the new prompt-reply pair to the conversation
+      conversation.push({ prompt, reply });
       user.chatbotConversations.push(conversation);
     }
-
-    // Append the new prompt-reply pair to the conversation
-    conversation.push({ prompt, reply });
 
     // Save the user document
     await user.save();

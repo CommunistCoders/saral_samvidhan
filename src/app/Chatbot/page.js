@@ -178,21 +178,20 @@ function App() {
       const updatedConversations = [...conversations];    // shallow copy of the conversations
       let updatedConversation = updatedConversations[currentConversationIndex];
 
-      // If conversation doesn't exist, create a new one
-      if (!updatedConversation) {
+      // If the conversation doesn't exist or isn't an array, create a new one
+      if (!Array.isArray(updatedConversation)) {
         updatedConversation = [];
         updatedConversations[currentConversationIndex] = updatedConversation; // Create a new entry in the array
       }
 
       // Push new question/answer to the conversation
       updatedConversation.push({
-        question: currentQuestion,
-        answer: response,
+        prompt: currentQuestion,
+        reply: response,
       });
 
       // Update the state with the new conversations
       setConversations(updatedConversations);
-      console.log("here : ",updatedConversations);
         
       // Send only the updated conversation to the backend
       const saveResponse = await fetch("/api/chatbot/save", {
@@ -258,15 +257,6 @@ function App() {
       return updatedConversations;
     });
   };
-
-  // // Only update chat-history and scroll to the bottom when a new prompt is submitted
-  // useEffect(() => {
-  //   // Scroll to the bottom when new conversation history is added
-  //   if (chatEndRef.current) {
-  //     chatEndRef.current.scrollIntoView({ behavior: "smooth" });
-  //   }
-  // }, [conversations[currentConversationIndex]]); // Dependency is on the history of the current conversation
-
 
   // Unauthorized access message with countdown
   if (!session) {
