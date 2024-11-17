@@ -23,8 +23,14 @@ const articles = [
 const HomePage = () => {
   const [quote, setQuote] = useState(null);  
   const [news, setNews] = useState([]);
-
+  const [isSubscribed, setIsSubscribed] = useState(false);
   
+  const handleSubscribe = () => {
+    setIsSubscribed(true); // Update state to show the thank-you message
+    setTimeout(() => setIsSubscribed(false), 3000); // Optionally, hide the message after 3 seconds
+  };
+
+
   // Function to get a random quote
   const getRandomQuote = () => {
     const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
@@ -146,27 +152,46 @@ const HomePage = () => {
         </div>
       </section>
 
-      <section className=" py-16">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl font-semibold text-gray-800 mb-4">Stay Updated with Our Newsletter</h2>
-          <p className="text-lg text-amber-800 mb-8">Get the latest legal insights, tips, and news directly to your inbox.</p>
-          
-          <div className="flex justify-center items-center space-x-4">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="border-2 border-amber-100 rounded-md p-3 w-2/5 focus:outline-none focus:ring-2 focus:ring-amber-950 transition duration-300"
-            />
-            <button className="bg-amber-700 hover:bg-amber-800 text-white py-3 px-6 rounded-md shadow-lg hover:shadow-xl transition-all duration-300">
-              Subscribe
-            </button>
-          </div>
-          
-          <p className="mt-6 text-sm text-amber-800">
-            We respect your privacy and will never share your information.
-          </p>
+      <section className="py-16">
+      <div className="container mx-auto px-6 text-center">
+        <h2 className="text-4xl font-semibold text-gray-800 mb-4">
+          Stay Updated with Our Newsletter
+        </h2>
+        <p className="text-lg text-amber-800 mb-8">
+          Get the latest legal insights, tips, and news directly to your inbox.
+        </p>
+
+        {/* Subscription Form */}
+        <div className="flex justify-center items-center space-x-4">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            className="border-2 border-amber-100 rounded-md p-3 w-2/5 focus:outline-none focus:ring-2 focus:ring-amber-950 transition duration-300"
+            disabled={isSubscribed} // Disable input when subscribed
+          />
+          <button
+            onClick={handleSubscribe}
+            className={`bg-amber-700 hover:bg-amber-800 text-white py-3 px-6 rounded-md shadow-lg hover:shadow-xl transition-all duration-300 ${
+              isSubscribed ? 'cursor-not-allowed' : ''
+            }`}
+            disabled={isSubscribed} // Disable button when subscribed
+          >
+            {isSubscribed ? 'Subscribed!' : 'Subscribe'}
+          </button>
         </div>
-      </section>
+
+        {/* Thank You Message */}
+        {isSubscribed && (
+          <p className="mt-6 text-lg text-green-600 font-semibold">
+            Thanks for subscribing!
+          </p>
+        )}
+
+        <p className="mt-6 text-sm text-amber-800">
+          We respect your privacy and will never share your information.
+        </p>
+      </div>
+    </section>
       
   </div>
   );

@@ -246,7 +246,7 @@ const Page = ({params}) => {
 
       {/* Slide-in Sidebar for Mobile */}
       <div
-        className={`fixed left-0 h-full w-3/4 bg-black bg-opacity-95 p-4 transform ${
+        className={`fixed left-0 top-10b h-full w-3/4 bg-black bg-opacity-95 p-4 transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out z-40`}
       >
@@ -314,7 +314,7 @@ const Page = ({params}) => {
                         {card.timestamp}
                       </span>
 
-                      <div className="flex lg:flex-col md:flex-row items-center space-y-2">
+                      <div className="flex lg:flex-col md:flex-row space-y-2">
                         {/* Like Button */}
                         <button
                           onClick={handleLikeClick}
@@ -343,12 +343,6 @@ const Page = ({params}) => {
                             }`}
                           />
                           <span className="text-md text-red-500 font-semibold">{dislikeCount}</span>
-                        </button>
-                        
-                        {/* Comment Button */}
-                        <button className="flex items-center space-x-1 text-amber-600">
-                          <FaRegComment className="h-8 w-8" />
-                          <span className="font-semibold">20</span>
                         </button>
 
                         {/* Share Button */}

@@ -138,7 +138,7 @@ const Page = ({params}) => {
             .then((res) => res.json())
             .then((data) => {
             setCommunity(data);
-            console.log("Fetched data : ",data);
+            // console.log("Fetched data : ",data);
             })
             .catch((error) => console.error("Error fetching post:", error));
         }
@@ -155,7 +155,7 @@ const Page = ({params}) => {
             // Fetch posts with the tags as query parameters
             const response = await fetch(`/api/discussionforum/get?${tagsQuery}`);
             const newPosts = await response.json();
-            console.log(newPosts);
+            // console.log(newPosts);
             setPosts(newPosts);
         } catch (error) {
             console.error("Error loading posts:", error);
@@ -283,7 +283,7 @@ const Page = ({params}) => {
                             <div className="flex space-x-4 text-xl sm:text-2xl text-yellow-400 font-semibold">
                                 <span>{Community.members.length} Members</span>
                                 <span>|</span>
-                                <span>{Community.posts.length} Posts</span>
+                                <span>{Posts.length} Posts</span>
                             </div>
                             <p className="text-gray-300 text-base sm:text-lg max-w-prose">
                                 {Community.description}

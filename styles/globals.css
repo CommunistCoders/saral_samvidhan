@@ -59,7 +59,7 @@ body {
 .ticker-content {
   display: inline-block;
   white-space: nowrap;
-  animation: ticker 30s linear infinite;
+  animation: ticker 90s linear infinite;
 }
 
 .ticker-wrapper:hover .ticker-content {
