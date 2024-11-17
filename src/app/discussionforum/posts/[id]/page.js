@@ -212,7 +212,7 @@ const Page = ({params}) => {
                     <Link href={`/discussionforum/community/${community._id}`} key={index}>
                       <div className="flex items-start my-2 p-3 rounded-lg transition-all duration-150 hover:bg-black/30 cursor-pointer">
                         <img
-                          className="h-10 w-10 md:h-12 md:w-12 rounded-full border-2 border-amber-400"
+                          className="h-10 w-10 md:h-12 md:w-12 rounded-full border-2 border-amber-400 object-cover"
                           src={community.imageUrl}
                           alt={`${community.name}`}
                         />
@@ -260,7 +260,7 @@ const Page = ({params}) => {
                     <Link href={`/discussionforum/community/${community._id}`} key={index}>
                       <div className="flex items-start my-2 p-3 rounded-lg transition-all duration-150 hover:bg-black/30 cursor-pointer">
                         <img
-                          className="h-10 w-10 rounded-full border-2 border-amber-400"
+                          className="h-10 w-10 rounded-full border-2 border-amber-400 object-cover"
                           src={community.imageUrl}
                           alt={`${community.name}`}
                         />
@@ -303,7 +303,7 @@ const Page = ({params}) => {
                     {/* Left Side - Profile and Interaction Buttons */}
                     <div className="flex flex-col items-center space-y-4 md:w-1/3">
                       <img
-                        className="h-16 w-16 rounded-full border border-amber-600/40"
+                        className="h-16 w-16 rounded-full border border-amber-600/40 object-cover"
                         src={card.user.profilePhoto=="https://t3.ftcdn.net/jpg/06/33/54/78/360_F_633547842_AugYzexTpMJ9z1YcpTKUBoqBF0CUCk10.jpg" ? `${card.user.profilePhoto}` : `/api/images/${card.user.profilePhoto}`}
                         alt="User Avatar"
                       />

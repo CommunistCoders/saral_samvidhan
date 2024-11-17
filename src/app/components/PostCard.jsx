@@ -145,7 +145,7 @@ const PostCard = ({ card, index }) => {
       <div className="bg-zinc-950 bg-opacity-75 backdrop-blur-3xl border rounded-xl border-amber-600/40 cursor-pointer transform transition-all duration-200 ease-in-out hover:scale-95">
         <div className="flex items-center px-4 py-3">
         <img
-          className="h-10 w-10 rounded-full border border-amber-600/40"
+          className="h-10 w-10 object-cover rounded-full border border-amber-600/40"
           src={card.user.profilePhoto=="https://t3.ftcdn.net/jpg/06/33/54/78/360_F_633547842_AugYzexTpMJ9z1YcpTKUBoqBF0CUCk10.jpg" ? `${card.user.profilePhoto}` : `/api/images/${card.user.profilePhoto}`}
           alt="Avatar"
         />
