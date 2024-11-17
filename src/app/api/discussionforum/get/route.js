@@ -44,8 +44,6 @@ export async function GET(req) {
       .skip(skip)
       .limit(limit)
       .populate('user');
-
-    console.log("posts : ",posts);
     return new Response(JSON.stringify(posts), {
       status: 200,
       headers: { "Content-Type": "application/json" },

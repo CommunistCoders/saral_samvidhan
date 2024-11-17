@@ -20,7 +20,8 @@ const dfPostSchema = new mongoose.Schema({
       "Sexual Content": "negative",
       "Spam and Scams": "negative"
     }
-  }
+  },
+  isReviewed: { type: Boolean, default: false } // Add the isReviewed field with a default of false
 });
 
 export default mongoose.models.dfPost || mongoose.model("dfPost", dfPostSchema);
